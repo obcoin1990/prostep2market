@@ -70,9 +70,9 @@
 **Requirements:** DNA-01, DNA-02, DNA-03, DNA-04, DNA-05, DNA-06, DNA-07, DNA-08, DNA-09, DNA-10
 
 **Plans:**
-- [ ] 02-01-PLAN.md — Assessment Data & Types
-- [ ] 02-02-PLAN.md — Assessment Wizard UI
-- [ ] 02-03-PLAN.md — Profile Generation & Storage
+- [x] 02-01-PLAN.md — Assessment Data & Types
+- [x] 02-02-PLAN.md — Assessment Wizard UI
+- [x] 02-03-PLAN.md — Profile Generation & Storage
 - [ ] 02-04-PLAN.md — Dashboard Personalization
 
 ---
@@ -121,9 +121,9 @@
 **Requirements:** INTL-04, INTL-05, INTL-06, INTL-07, INTL-08, INTL-09, DASH-04, DASH-05, DASH-06, DASH-07
 
 **Plans:**
-- [ ] 04-01-PLAN.md — Analysis Engine Core (pattern detection, risk metrics, performance analytics)
-- [ ] 04-02-PLAN.md — Database & Analytics Schema (trade_analyses table, daily_analytics table, API endpoints)
-- [ ] 04-03-PLAN.md — Dashboard Widgets (AI Alerts, Trade Stats, Heatmap, Insights Panel)
+- [x] 04-01-PLAN.md — Analysis Engine Core (pattern detection, risk metrics, performance analytics)
+- [x] 04-02-PLAN.md — Database & Analytics Schema (trade_analyses table, daily_analytics table, API endpoints)
+- [x] 04-03-PLAN.md — Dashboard Widgets (AI Alerts, Trade Stats, Heatmap, Insights Panel)
 - [ ] 04-04-PLAN.md — PDF Reports & Insight Generation (exportable reports, AI insight generation)
 
 ---
