@@ -38,30 +38,34 @@ export default async function DashboardPage() {
     recommendations: [],
   } : null
 
+  // Get the base URL for API calls
+  const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http'
+  const host = process.env.VERCEL_URL || 'localhost:3000'
+  const baseUrl = `${protocol}://${host}`
+
+  // Get session for auth header
+  const { data: { session } } = await supabase.auth.getSession()
+  const headers: Record<string, string> = {}
+  if (session?.access_token) {
+    headers['Authorization'] = `Bearer ${session.access_token}`
+  }
+
   // Fetch initial dashboard data in parallel
   const dashboardDataPromise = Promise.all([
-    fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/scores`, {
-      headers: {
-        'cookie': (await supabase.auth.getSession()).data.session?.access_token || '',
-      },
+    fetch(`${baseUrl}/api/scores`, {
+      headers,
     }).then(res => res.json()).catch(() => null),
     
-    fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/scores/history?days=30`, {
-      headers: {
-        'cookie': (await supabase.auth.getSession()).data.session?.access_token || '',
-      },
+    fetch(`${baseUrl}/api/scores/history?days=30`, {
+      headers,
     }).then(res => res.json()).catch(() => null),
     
-    fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/analytics/dashboard?days=7`, {
-      headers: {
-        'cookie': (await supabase.auth.getSession()).data.session?.access_token || '',
-      },
+    fetch(`${baseUrl}/api/analytics/dashboard?days=7`, {
+      headers,
     }).then(res => res.json()).catch(() => null),
     
-    fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/leaderboard?period=monthly`, {
-      headers: {
-        'cookie': (await supabase.auth.getSession()).data.session?.access_token || '',
-      },
+    fetch(`${baseUrl}/api/leaderboard?period=monthly`, {
+      headers,
     }).then(res => res.json()).catch(() => null),
   ])
 
