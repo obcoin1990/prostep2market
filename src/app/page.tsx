@@ -5,6 +5,8 @@ import {
   SolutionSection,
   FeaturesGrid,
   DashboardPreview,
+  TraderDNASection,
+  AIRiskGuardianSection,
   HowItWorks,
   Testimonials,
   PricingTeaser,
@@ -24,6 +26,8 @@ export default function Home() {
       <SolutionSection />
       <FeaturesGrid />
       <DashboardPreview />
+      <TraderDNASection />
+      <AIRiskGuardianSection />
       <HowItWorks />
       <Testimonials />
       <PricingTeaser />

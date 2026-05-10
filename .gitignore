@@ -37,3 +37,4 @@ coverage/
 *.log
 *.tsbuildinfo
 next-env.d.ts
+.vercel

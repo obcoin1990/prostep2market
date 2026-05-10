@@ -1,0 +1,17 @@
+﻿{
+    "base_tree":  "66adc1a1d046ffc9dde87d79ec593187a9448822",
+    "tree":  [
+                 {
+                     "path":  "src/app/layout.tsx",
+                     "type":  "blob",
+                     "mode":  "100644",
+                     "sha":  "5e59579496fdf73f19e8268d4218aa458cb7bfc6"
+                 },
+                 {
+                     "path":  "src/app/%28public%29/layout.tsx",
+                     "type":  "blob",
+                     "mode":  "100644",
+                     "sha":  "67aab2c355676dbaabfec965c09acf5fe9beb651"
+                 }
+             ]
+}

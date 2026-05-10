@@ -1,7 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import { Sidebar } from '@/components/dashboard/sidebar'
-import { Header } from '@/components/dashboard/header'
+import { DashboardLayoutClient } from '@/components/dashboard/DashboardLayoutClient'
 
 export default async function DashboardLayout({
   children,
@@ -39,19 +38,8 @@ export default async function DashboardLayout({
   } : null
 
   return (
-    <div className="flex h-screen overflow-hidden">
-      {/* Desktop Sidebar */}
-      <div className="hidden md:block">
-        <Sidebar />
-      </div>
-
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <Header profile={profile} />
-        <main className="flex-1 overflow-y-auto bg-[#F5F7FA] p-4 md:p-6">
-          {children}
-        </main>
-      </div>
-    </div>
+    <DashboardLayoutClient profile={profile}>
+      {children}
+    </DashboardLayoutClient>
   )
 }
