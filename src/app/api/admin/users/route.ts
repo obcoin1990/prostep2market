@@ -1,3 +1,4 @@
+import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -8,9 +9,8 @@ import { NextRequest, NextResponse } from 'next/server'
  */
 export async function POST(request: NextRequest) {
   try {
+    // First, check if the requesting user is authenticated and is an admin
     const supabase = await createClient()
-
-    // Check if user is authenticated
     const {
       data: { user: authUser },
     } = await supabase.auth.getUser()
@@ -22,15 +22,8 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Check if user is admin (you can add role check here)
-    const { data: userData } = await supabase
-      .from('trader_profiles')
-      .select('*')
-      .eq('id', authUser.id)
-      .single()
-
-    // For now, allow the first user to be admin, or check email whitelist
-    const adminEmails = ['ob6013@gmail.com'] // Add your admin emails here
+    // Check if user is admin (email whitelist)
+    const adminEmails = ['ob6013@gmail.com']
     if (!adminEmails.includes(authUser.email || '')) {
       return NextResponse.json(
         { error: 'Forbidden: Only admins can create users' },
@@ -38,6 +31,8 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Now use the admin client to create users
+    const adminSupabase = createAdminClient()
     const body = await request.json()
     const { email, password, profile_type, full_name } = body
 
@@ -50,7 +45,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create auth user via Admin API
-    const { data: newUser, error: authError } = await supabase.auth.admin.createUser({
+    const { data: newUser, error: authError } = await adminSupabase.auth.admin.createUser({
       email,
       password,
       email_confirm: true, // Auto-confirm email
@@ -62,6 +57,13 @@ export async function POST(request: NextRequest) {
     if (authError) {
       return NextResponse.json(
         { error: `Auth error: ${authError.message}` },
+        { status: 400 }
+      )
+    }
+
+    if (!newUser.user) {
+      return NextResponse.json(
+        { error: 'Failed to create user' },
         { status: 400 }
       )
     }
@@ -88,14 +90,14 @@ export async function POST(request: NextRequest) {
       updated_at: new Date().toISOString(),
     }
 
-    const { data: profile, error: profileError } = await supabase
+    const { data: profile, error: profileError } = await adminSupabase
       .from('trader_profiles')
       .insert([profileData])
       .select()
 
     if (profileError) {
       // Delete the auth user if profile creation fails
-      await supabase.auth.admin.deleteUser(newUser.user.id)
+      await adminSupabase.auth.admin.deleteUser(newUser.user.id)
       return NextResponse.json(
         { error: `Profile error: ${profileError.message}` },
         { status: 400 }
@@ -117,7 +119,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Error creating user:', error)
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: `Internal server error: ${error instanceof Error ? error.message : 'Unknown error'}` },
       { status: 500 }
     )
   }
@@ -129,9 +131,8 @@ export async function POST(request: NextRequest) {
  */
 export async function GET(request: NextRequest) {
   try {
-    const supabase = await createClient()
-
     // Check if user is authenticated
+    const supabase = await createClient()
     const {
       data: { user: authUser },
     } = await supabase.auth.getUser()
@@ -152,8 +153,9 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Fetch all trader profiles
-    const { data: profiles, error } = await supabase
+    // Use admin client to fetch profiles
+    const adminSupabase = createAdminClient()
+    const { data: profiles, error } = await adminSupabase
       .from('trader_profiles')
       .select('*')
       .order('created_at', { ascending: false })
