@@ -1,21 +1,26 @@
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import type { Metadata } from "next";
+import "./globals.css";
+import { Navbar } from '@/components/landing/Navbar'
 import { Providers } from './providers'
-import './globals.css'
-
-const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title:       'ProStep — Corporate Learning Platform',
-  description: 'AI-powered personalized learning for teams',
-}
+  title: "Prostep2market",
+  description: "Trading Discipline Platform",
+};
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <Providers>{children}</Providers>
+      <body>
+        <Providers>
+          <Navbar />
+          {children}
+        </Providers>
       </body>
     </html>
-  )
+  );
 }
