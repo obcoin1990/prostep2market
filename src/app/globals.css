@@ -1,103 +1,12 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@theme {
-  /* Brand Colors */
-  --color-brand-red: #E53935;
-  --color-brand-green: #2E7D32;
-  --color-brand-black: #0B0B0B;
-  --color-white: #FFFFFF;
-
-  /* Supporting Colors */
-  --color-dark-gray: #1F2933;
-  --color-muted-gray: #F5F7FA;
-  --color-muted-red: #F8D7D6;
-  --color-muted-green: #E8F5E9;
-
-  /* Border Radius */
-  --radius-sm: 6px;
-  --radius-md: 12px;
-
-  /* Typography */
-  --font-sans: 'Inter', 'Poppins', system-ui, sans-serif;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
+@layer base {
+  body {
+    @apply bg-gray-50 text-gray-900 antialiased;
   }
-  to {
-    opacity: 1;
+  * {
+    @apply box-border;
   }
-}
-
-@keyframes slideInUp {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@layer utilities {
-  .animate-fade-in {
-    animation: fadeIn 0.3s ease-in-out;
-  }
-
-  .animate-slide-in-up {
-    animation: slideInUp 0.3s ease-in-out;
-  }
-
-  .animate-slide-in-down {
-    animation: slideInDown 0.3s ease-in-out;
-  }
-
-  .animate-slide-in-left {
-    animation: slideInLeft 0.3s ease-in-out;
-  }
-
-  .animate-slide-in-right {
-    animation: slideInRight 0.3s ease-in-out;
-  }
-}
-
-body {
-  font-family: var(--font-sans);
-  color: var(--color-brand-black);
-  background-color: var(--color-white);
 }

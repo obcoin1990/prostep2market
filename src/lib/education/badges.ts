@@ -1,9 +1,9 @@
 // Badges - Badge awarding logic
-import { createClient } from '@/lib/supabase/client';
+import { createClient } from '@/lib/supabase/server';
 import { Badge, BadgeRow } from '@/types/education';
 
 export async function getUserBadges(userId: string): Promise<Badge[]> {
-  const supabase = createClient();
+  const supabase = await createClient();
   
   const { data, error } = await supabase
     .from('badges')
@@ -24,7 +24,7 @@ export async function checkAndAwardBadge(
   type: Badge['type'], 
   courseId?: string
 ): Promise<Badge | null> {
-  const supabase = createClient();
+  const supabase = await createClient();
   
   // Check if badge already exists
   const { data: existing } = await supabase
@@ -71,7 +71,7 @@ export async function checkQuizPerfect(userId: string, courseId: string): Promis
 }
 
 export async function checkPathComplete(userId: string, path: string): Promise<Badge | null> {
-  const supabase = createClient();
+  const supabase = await createClient();
   
   // Get all courses in path
   const { data: courses } = await supabase

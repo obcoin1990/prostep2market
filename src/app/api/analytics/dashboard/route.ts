@@ -3,7 +3,6 @@ import { createClient } from '@/lib/supabase/server';
 import { getDailyAnalytics, getAlertsForDashboard } from '@/lib/supabase/analytics';
 import { calculatePairPerformance } from '@/lib/analysis/performance/pairs';
 import { calculateSessionPerformance } from '@/lib/analysis/performance/sessions';
-import { createClient as createBrowserClient } from '@/lib/supabase/client';
 import type { PairStats } from '@/types/analysis';
 
 export async function GET(request: NextRequest) {
@@ -80,7 +79,7 @@ export async function GET(request: NextRequest) {
 }
 
 async function loadRecentTrades(userId: string, startDate: Date, endDate: Date) {
-  const supabase = createBrowserClient();
+  const supabase = await createClient();
   const { data } = await supabase
     .from('trades')
     .select('*')

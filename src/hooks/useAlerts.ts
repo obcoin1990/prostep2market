@@ -5,6 +5,17 @@ import { useCallback } from 'react';
 import { Alert } from '@/types/guardian';
 
 /**
+ * Parse raw API alert (dates arrive as ISO strings) into the typed Alert shape.
+ */
+function parseAlert(raw: Record<string, unknown>): Alert {
+  return {
+    ...(raw as unknown as Alert),
+    triggeredAt: new Date(raw.triggeredAt as string),
+    acknowledgedAt: raw.acknowledgedAt ? new Date(raw.acknowledgedAt as string) : undefined,
+  };
+}
+
+/**
  * Fetch alerts from API
  */
 async function fetchAlerts(userId: string, options?: { acknowledged?: boolean; limit?: number; type?: string }): Promise<Alert[]> {
@@ -18,7 +29,7 @@ async function fetchAlerts(userId: string, options?: { acknowledged?: boolean; l
     throw new Error('Failed to fetch alerts');
   }
   const data = await response.json();
-  return data.alerts;
+  return (data.alerts as Record<string, unknown>[]).map(parseAlert);
 }
 
 /**
@@ -33,7 +44,7 @@ async function acknowledgeAlert(alertId: string): Promise<Alert> {
     throw new Error('Failed to acknowledge alert');
   }
   const data = await response.json();
-  return data.alert;
+  return parseAlert(data.alert as Record<string, unknown>);
 }
 
 /**

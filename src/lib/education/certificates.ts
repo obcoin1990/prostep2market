@@ -1,6 +1,6 @@
 // Certificates - PDF generation using pdf-lib
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
-import { createClient } from '@/lib/supabase/client';
+import { createClient } from '@/lib/supabase/server';
 import { CertificateData } from '@/types/education';
 
 export async function generateCertificate(data: CertificateData): Promise<Uint8Array> {
@@ -138,7 +138,7 @@ export async function issueCertificate(
   userName: string,
   courseName: string
 ): Promise<string> {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   // Generate certificate ID
   const certificateId = `CERT-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
@@ -200,7 +200,7 @@ export async function getUserCertificates(userId: string): Promise<Array<{
   certificateUrl: string;
   completedAt: Date;
 }>> {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const { data, error } = await supabase
     .from('course_progress')

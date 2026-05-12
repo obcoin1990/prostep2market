@@ -7,7 +7,9 @@ import { InsightsPanel } from '@/components/dashboard/InsightsPanel';
 import { TradeQualityCard } from '@/components/analysis/TradeQualityCard';
 import { BehavioralPatternsCard } from '@/components/analysis/BehavioralPatterns';
 import { RiskMetricsCard } from '@/components/analysis/RiskMetricsCard';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { createClient } from '@/lib/supabase/client';
 import { generateReport } from '@/lib/analysis/reports/generator';
 
 interface DashboardData {
@@ -39,7 +41,7 @@ export function AnalysisPageClient({
 }: AnalysisPageClientProps) {
   const [exportLoading, setExportLoading] = useState(false);
 
-  const handleExportPDF = async () => {
+  const handleExportReport = async () => {
     setExportLoading(true);
     try {
       await generateReport({
@@ -65,11 +67,11 @@ export function AnalysisPageClient({
             {dateRange.start.toLocaleDateString()} - {dateRange.end.toLocaleDateString()}
           </div>
           <button
-            onClick={handleExportPDF}
+            onClick={handleExportReport}
             disabled={exportLoading}
             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
           >
-            {exportLoading ? 'Generating...' : 'Export PDF'}
+            {exportLoading ? 'Generating...' : 'Export Report'}
           </button>
         </div>
       </div>
@@ -96,13 +98,78 @@ export function AnalysisPageClient({
 }
 
 export default function AnalysisPage() {
+  const router = useRouter();
   const now = new Date();
   const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-  
+
+  const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
+  const [analysisData, setAnalysisData] = useState<AnalysisData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        // Auth guard - redirect unauthenticated visitors to login
+        const supabase = createClient();
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+          router.replace('/login');
+          return;
+        }
+
+        // Fetch dashboard analytics (alerts, trade stats, heatmap, insights)
+        const dashRes = await fetch('/api/analytics/dashboard?days=30');
+        if (dashRes.ok) {
+          const data = await dashRes.json();
+          setDashboardData(data);
+        }
+
+        // Fetch AI analysis (trade quality, behavioral patterns, risk metrics)
+        const analysisRes = await fetch('/api/ai/analyze', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            startDate: thirtyDaysAgo.toISOString(),
+            endDate: now.toISOString(),
+          }),
+        });
+        if (analysisRes.ok) {
+          const data = await analysisRes.json();
+          // Map the response shape to what AnalysisPageClient expects
+          setAnalysisData({
+            tradeAnalyses: data.analysis?.tradeAnalyses || data.analysis?.trades || [],
+            behavioralPatterns: data.analysis?.behavioralPatterns || data.analysis?.patterns || null,
+            aggregatedRisk: data.analysis?.aggregatedRisk || data.analysis?.risk || null,
+          });
+        }
+      } catch (err) {
+        console.error('Failed to load analysis data:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="space-y-6 animate-pulse">
+        <div className="h-8 bg-gray-200 rounded w-48" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="h-48 bg-gray-200 rounded-lg" />
+          <div className="h-48 bg-gray-200 rounded-lg" />
+        </div>
+        <div className="h-64 bg-gray-200 rounded-lg" />
+        <div className="h-48 bg-gray-200 rounded-lg" />
+      </div>
+    );
+  }
+
   return (
     <AnalysisPageClient
-      dashboardData={null}
-      analysisData={null}
+      dashboardData={dashboardData}
+      analysisData={analysisData}
       dateRange={{ start: thirtyDaysAgo, end: now }}
     />
   );

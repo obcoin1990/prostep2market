@@ -1,9 +1,9 @@
 // Progress tracking - Data access and manipulation
-import { createClient } from '@/lib/supabase/client';
+import { createClient } from '@/lib/supabase/server';
 import { CourseProgress, CourseProgressRow } from '@/types/education';
 
 export async function getCourseProgress(userId: string, courseId: string): Promise<CourseProgress | null> {
-  const supabase = createClient();
+  const supabase = await createClient();
   
   const { data, error } = await supabase
     .from('course_progress')
@@ -20,7 +20,7 @@ export async function getCourseProgress(userId: string, courseId: string): Promi
 }
 
 export async function getAllUserProgress(userId: string): Promise<CourseProgress[]> {
-  const supabase = createClient();
+  const supabase = await createClient();
   
   const { data, error } = await supabase
     .from('course_progress')
@@ -35,8 +35,8 @@ export async function getAllUserProgress(userId: string): Promise<CourseProgress
   return (data || []).map(mapCourseProgressRow);
 }
 
-export async function markLessonComplete(userId: string, courseId: string, lessonId: string): Promise<CourseProgress> {
-  const supabase = createClient();
+export async function markLessonComplete(userId: string, courseId: string, lessonId: string): Promise<CourseProgress | null> {
+  const supabase = await createClient();
   
   // Get current progress or create new
   const { data: existing } = await supabase
@@ -58,7 +58,7 @@ export async function markLessonComplete(userId: string, courseId: string, lesso
         .eq('user_id', userId)
         .eq('course_id', courseId)
         .single();
-      return data ? mapCourseProgressRow(data) : null as any;
+      return data ? mapCourseProgressRow(data) : null;
     }
     lessonsCompleted = [...existing.lessons_completed, lessonId];
   } else {
@@ -92,7 +92,7 @@ export async function updateQuizScore(
   score: number, 
   attempts: number
 ): Promise<CourseProgress> {
-  const supabase = createClient();
+  const supabase = await createClient();
   
   const { data, error } = await supabase
     .from('course_progress')
@@ -116,7 +116,7 @@ export async function updateQuizScore(
 }
 
 export async function markCourseCompleted(userId: string, courseId: string): Promise<CourseProgress> {
-  const supabase = createClient();
+  const supabase = await createClient();
   
   const { data, error } = await supabase
     .from('course_progress')
@@ -139,7 +139,7 @@ export async function markCourseCompleted(userId: string, courseId: string): Pro
 }
 
 export async function calculatePathProgress(userId: string, path: string): Promise<number> {
-  const supabase = createClient();
+  const supabase = await createClient();
   
   // Get all courses for this path
   const { data: courses } = await supabase

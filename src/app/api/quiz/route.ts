@@ -57,7 +57,7 @@ export async function GET(request: NextRequest) {
   // Fetch questions (without correct answers)
   const { data: questions, error: questionsError } = await supabase
     .from('quiz_questions')
-    .select('id, question_text, options, explanation, order_index')
+    .select('id, question_text, options, order_index')
     .eq('quiz_id', quizId)
     .order('order_index', { ascending: true });
 
@@ -85,7 +85,6 @@ export async function GET(request: NextRequest) {
       id: q.id,
       text: q.question_text,
       options: q.options,
-      explanation: q.explanation,
     })),
     attempts: courseProgress?.quiz_attempts || 0,
     previousScore: courseProgress?.quiz_score || null,

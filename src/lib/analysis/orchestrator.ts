@@ -11,7 +11,7 @@ import { calculateTradeQuality } from './metrics/quality';
 import { calculateSessionPerformance, identifyWorstConditions, buildHeatmapData } from './performance/sessions';
 import { calculatePairPerformance } from './performance/pairs';
 import { generateInsights } from './insights/generator';
-import { createClient } from '@/lib/supabase/client';
+import { createClient } from '@/lib/supabase/server';
 
 /**
  * Orchestrates the full analysis pipeline.
@@ -124,7 +124,7 @@ export async function runFullAnalysis(
  */
 async function loadTrades(request: AnalysisRequest): Promise<Trade[]> {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
 
     let query = supabase
       .from('trades')

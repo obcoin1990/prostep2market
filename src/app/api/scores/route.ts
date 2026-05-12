@@ -63,7 +63,7 @@ export async function GET() {
       .select('*', { count: 'exact', head: true })
       .eq('user_id', user.id);
 
-    if (count === 0) {
+    if ((count ?? 0) === 0) {
       return NextResponse.json({
         score: null,
         isNewUser: true,
@@ -155,12 +155,21 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: tradesError.message }, { status: 500 });
   }
 
-  // Fetch alert count for emotional stability calculation
-  const { count: alertCount } = await supabase
+  // Fetch alert timestamps to accurately count trades placed after an alert
+  const { data: alertRows } = await supabase
     .from('alerts')
-    .select('*', { count: 'exact', head: true })
+    .select('triggered_at')
     .eq('user_id', user.id)
-    .gte('created_at', startDate.toISOString());
+    .gte('triggered_at', startDate.toISOString());
+
+  const alertTimestamps = (alertRows || []).map(a => new Date(a.triggered_at).getTime());
+
+  // A trade "after an alert" = entry_time falls within 30 min of any alert trigger
+  const POST_ALERT_WINDOW_MS = 30 * 60 * 1000;
+  const tradesAfterAlerts = (trades || []).filter(t => {
+    const entryMs = new Date(t.entry_time).getTime();
+    return alertTimestamps.some(alertMs => entryMs >= alertMs && entryMs <= alertMs + POST_ALERT_WINDOW_MS);
+  }).length;
 
   // Calculate journaling days (unique dates with trades)
   const tradeDates = new Set(
@@ -183,9 +192,9 @@ export async function POST(request: Request) {
     {
       accountSize,
       maxDrawdown,
-      alertCount: alertCount || 0,
+      alertCount: alertTimestamps.length,
       calmTrades: trades?.filter(t => !['fear', 'panic', 'frustration'].includes(t.emotional_state?.toLowerCase() || '')).length || 0,
-      tradesAfterAlerts: trades?.length || 0,
+      tradesAfterAlerts,
       journalingDays: tradeDates.size,
     }
   );

@@ -12,7 +12,7 @@ import { calculateProfile } from '@/data/trader-dna/scoring';
 import { ProgressBar } from './progress-bar';
 import { QuestionCard } from './question-card';
 import { ProfileSummary } from './profile-summary';
-import { saveTraderProfile } from '@/lib/trader-profile';
+// Profile is saved via POST /api/profile to avoid importing server-only modules in a client component
 
 export function AssessmentWizard() {
   const [currentStep, setCurrentStep] = useState(0);
@@ -51,10 +51,15 @@ export function AssessmentWizard() {
       setProfile(calculatedProfile);
       setIsComplete(true);
 
-      // Save profile to database
+      // Save profile via API route (avoids importing server-only module from client)
       setSaving(true);
       try {
-        await saveTraderProfile(calculatedProfile);
+        const res = await fetch('/api/profile', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(calculatedProfile),
+        });
+        if (!res.ok) throw new Error('Save failed');
         setSaveError(null);
       } catch (error) {
         console.error('Failed to save profile:', error);

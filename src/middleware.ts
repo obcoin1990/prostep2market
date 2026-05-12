@@ -26,8 +26,19 @@ export async function middleware(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser()
 
   // Define protected routes
-  const isProtectedRoute = request.nextUrl.pathname.startsWith('/dashboard') &&
-    !request.nextUrl.pathname.startsWith('/dashboard/login')
+  const protectedPrefixes = [
+    '/dashboard',
+    '/journal',
+    '/analysis',
+    '/strategy-lab',
+    '/education',
+    '/profile',
+    '/trader-dna',
+    '/admin',
+  ]
+  const isProtectedRoute = protectedPrefixes.some(prefix =>
+    request.nextUrl.pathname.startsWith(prefix)
+  )
 
   // Define auth routes (should redirect to dashboard if already logged in)
   const isAuthRoute = request.nextUrl.pathname.startsWith('/login') ||

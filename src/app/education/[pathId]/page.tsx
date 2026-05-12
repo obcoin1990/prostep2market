@@ -2,9 +2,10 @@
 import { getLearningPath, getAllPathIds } from '@/lib/education/paths';
 import { getCoursesByPath } from '@/lib/education/courses';
 import { CourseCard } from '@/components/education/CourseCard';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { ArrowLeft, BookOpen } from 'lucide-react';
 import Link from 'next/link';
+import { createClient } from '@/lib/supabase/server';
 
 interface PathPageProps {
   params: Promise<{ pathId: string }>;
@@ -31,6 +32,12 @@ export async function generateMetadata({ params }: PathPageProps) {
 
 export default async function PathPage({ params }: PathPageProps) {
   const resolvedParams = await params;
+
+  // Auth guard
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect('/login');
+
   const path = await getLearningPath(resolvedParams.pathId);
 
   if (!path) {
@@ -41,6 +48,18 @@ export default async function PathPage({ params }: PathPageProps) {
   const totalMinutes = courses.reduce((sum, c) => sum + c.durationMinutes, 0);
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
+
+  // Fetch which courses this user has started/enrolled in
+  const courseIds = courses.map((c) => c.id);
+  let enrolledCourseIds = new Set<string>();
+  if (courseIds.length > 0) {
+    const { data: progressRows } = await supabase
+      .from('course_progress')
+      .select('course_id')
+      .eq('user_id', user!.id)
+      .in('course_id', courseIds);
+    enrolledCourseIds = new Set((progressRows || []).map((r: any) => r.course_id));
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -105,7 +124,7 @@ export default async function PathPage({ params }: PathPageProps) {
               <CourseCard 
                 key={course.id} 
                 course={course}
-                isEnrolled={false}
+                isEnrolled={enrolledCourseIds.has(course.id)}
               />
             ))}
           </div>

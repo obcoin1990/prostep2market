@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from '@/lib/supabase/server';
 import { 
   Alert, 
   AlertType, 
@@ -14,10 +14,6 @@ import { detectEmotionalInstability } from './rules/emotional';
 import { detectRiskEscalation, detectExposureWarning } from './rules/exposure';
 import { detectOvertrading } from './rules/overtrading';
 import { getActiveSession } from './session-tracker';
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 // Cooldown map to prevent alert spam
 const alertCooldowns: Map<string, number> = new Map();
@@ -66,6 +62,8 @@ export async function runFullCheck(
   settings: RiskGuardianSettings
 ): Promise<Alert[]> {
   try {
+    const supabase = await createClient();
+
     // Fetch recent trades (last 50, last 24 hours)
     const { data: trades, error } = await supabase
       .from('trades')
@@ -162,6 +160,7 @@ export function createAlert(params: {
  */
 export async function getUserSettings(userId: string): Promise<RiskGuardianSettings> {
   try {
+    const supabase = await createClient();
     const { data, error } = await supabase
       .from('risk_guardian_settings')
       .select('*')

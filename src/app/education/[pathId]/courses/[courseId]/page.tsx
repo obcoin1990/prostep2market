@@ -1,9 +1,9 @@
 // Course Player Page
-import { getCourseById, getLessonsByCourse, getQuizByCourse } from '@/lib/education/courses';
-import { getCourseProgress, markLessonComplete } from '@/lib/education/progress';
-import { LessonPlayer } from '@/components/education/LessonPlayer';
+import { getCourseById } from '@/lib/education/courses';
+import { getCourseProgress } from '@/lib/education/progress';
+import { createClient } from '@/lib/supabase/server';
 import { ClientLessonPlayer } from './ClientLessonPlayer';
-import { notFound } from 'next/navigation';
+import { redirect, notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, ChevronRight, CheckCircle, Circle, Clock, BookOpen } from 'lucide-react';
 
@@ -11,10 +11,11 @@ interface CoursePageProps {
   params: Promise<{ pathId: string; courseId: string }>;
 }
 
-// Mock user ID - in production, this would come from auth
-const MOCK_USER_ID = '00000000-0000-0000-0000-000000000001';
-
 export default async function CoursePage({ params }: CoursePageProps) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect('/login');
+
   const resolvedParams = await params;
   const course = await getCourseById(resolvedParams.courseId);
 
@@ -23,9 +24,9 @@ export default async function CoursePage({ params }: CoursePageProps) {
   }
 
   const lessons = course.lessons || [];
-  
-  // Get user progress (mock for now)
-  const progress = await getCourseProgress(MOCK_USER_ID, course.id);
+
+  // Get real user progress
+  const progress = await getCourseProgress(user.id, course.id);
   const completedLessons = progress?.lessonsCompleted || [];
   
   // Get the first incomplete lesson, or the first lesson

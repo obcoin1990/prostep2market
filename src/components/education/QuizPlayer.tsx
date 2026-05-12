@@ -180,7 +180,7 @@ export function QuizPlayer({ quizId, passingScore, maxAttempts }: QuizPlayerProp
                 <input
                   type="radio"
                   value={oIndex}
-                  {...form.register(`answers.${question.id}`)}
+                  {...form.register(`answers.${question.id}`, { valueAsNumber: true })}
                   className="h-4 w-4 text-primary"
                 />
                 <span>{option}</span>

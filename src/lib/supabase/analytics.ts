@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/client';
+import { createClient } from '@/lib/supabase/server';
 
 export interface TradeAnalysis {
   tradeId: string;
@@ -28,7 +28,7 @@ export interface DailyAnalyticsRecord {
 }
 
 export async function getTradeAnalysis(tradeId: string) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from('trade_analyses')
     .select('*')
@@ -40,7 +40,7 @@ export async function getTradeAnalysis(tradeId: string) {
 }
 
 export async function saveTradeAnalysis(analysis: TradeAnalysis) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from('trade_analyses')
     .upsert(
@@ -69,7 +69,7 @@ export async function getDailyAnalytics(
   startDate: Date,
   endDate: Date
 ) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from('daily_analytics')
     .select('*')
@@ -83,7 +83,7 @@ export async function getDailyAnalytics(
 }
 
 export async function saveDailyAnalytics(daily: DailyAnalyticsRecord) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from('daily_analytics')
     .upsert(
@@ -110,7 +110,7 @@ export async function saveDailyAnalytics(daily: DailyAnalyticsRecord) {
 }
 
 export async function getAlertsForDashboard(userId: string, limit = 5) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from('daily_analytics')
     .select('date, behavioral_flags')

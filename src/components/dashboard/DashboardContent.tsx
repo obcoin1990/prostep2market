@@ -23,7 +23,7 @@ interface InitialData {
 
 interface DashboardContentProps {
   profile: TraderProfile | null
-  user: { email: string }
+  user: { id: string; email: string }
   initialData: InitialData
 }
 
@@ -62,13 +62,13 @@ export function DashboardContent({
   })
 
   // Real-time alerts
-  const { alerts, loading: alertsLoading } = useAlerts(user.email || '')
+  const { alerts, loading: alertsLoading } = useAlerts(user.id)
 
   // Pause mode state
-  const { isPaused, pauseInfo } = usePauseMode(user.email || '')
+  const { isPaused, pauseInfo } = usePauseMode(user.id)
 
   // Subscribe to real-time alerts
-  useAlertSubscription(user.email || '')
+  useAlertSubscription(user.id)
 
   // Hydration safety
   useEffect(() => {
@@ -148,7 +148,7 @@ export function DashboardContent({
       <div className="dashboard-grid">
         <DashboardGrid
           profile={profile}
-          userId={user.email || ''}
+          userId={user.id}
           loading={dashboardData.isLoading}
           error={dashboardData.isError}
           edgeScore={dashboardData.edgeScore}

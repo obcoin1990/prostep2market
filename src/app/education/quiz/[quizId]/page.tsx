@@ -1,7 +1,8 @@
 // Quiz Page
 import { getQuizById } from '@/lib/education/courses';
 import { QuizPlayer } from '@/components/education/QuizPlayer';
-import { notFound } from 'next/navigation';
+import { createClient } from '@/lib/supabase/server';
+import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
@@ -10,6 +11,11 @@ interface QuizPageProps {
 }
 
 export default async function QuizPage({ params }: QuizPageProps) {
+  // Auth guard
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect('/login');
+
   const resolvedParams = await params;
   const quiz = await getQuizById(resolvedParams.quizId);
 

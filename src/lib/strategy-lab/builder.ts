@@ -1,5 +1,5 @@
 // Strategy Lab Builder - CRUD operations
-import { createClient } from '@/lib/supabase/client';
+import { createClient } from '@/lib/supabase/server';
 import { Strategy, StrategyRow, EntryRule, ExitRule, RiskRule } from '@/types/strategy-lab';
 import { z } from 'zod';
 
@@ -32,7 +32,7 @@ export const strategyValidation = z.object({
 export type StrategyFormData = z.infer<typeof strategyValidation>;
 
 export async function getStrategiesByUser(userId: string): Promise<Strategy[]> {
-  const supabase = createClient();
+  const supabase = await createClient();
   
   const { data, error } = await supabase
     .from('strategies')
@@ -49,7 +49,7 @@ export async function getStrategiesByUser(userId: string): Promise<Strategy[]> {
 }
 
 export async function getStrategyById(strategyId: string, userId: string): Promise<Strategy | null> {
-  const supabase = createClient();
+  const supabase = await createClient();
   
   const { data, error } = await supabase
     .from('strategies')
@@ -66,7 +66,7 @@ export async function getStrategyById(strategyId: string, userId: string): Promi
 }
 
 export async function createStrategy(userId: string, data: StrategyFormData): Promise<Strategy> {
-  const supabase = createClient();
+  const supabase = await createClient();
   
   // Validate data
   const validated = strategyValidation.parse(data);
@@ -96,7 +96,7 @@ export async function updateStrategy(
   userId: string, 
   data: Partial<StrategyFormData>
 ): Promise<Strategy> {
-  const supabase = createClient();
+  const supabase = await createClient();
   
   // Validate partial data
   const validated = strategyValidation.partial().parse(data);
@@ -124,7 +124,7 @@ export async function updateStrategy(
 }
 
 export async function deleteStrategy(strategyId: string, userId: string): Promise<void> {
-  const supabase = createClient();
+  const supabase = await createClient();
   
   const { error } = await supabase
     .from('strategies')

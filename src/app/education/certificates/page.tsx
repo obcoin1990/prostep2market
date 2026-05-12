@@ -1,11 +1,10 @@
 // Certificates Page - User's earned certificates
 import { getUserCertificates } from '@/lib/education/certificates';
+import { createClient } from '@/lib/supabase/server';
 import { CertificateCard } from '@/components/education/CertificateCard';
+import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { Award, ArrowRight } from 'lucide-react';
-
-// Mock user ID - in production, this would come from auth
-const MOCK_USER_ID = '00000000-0000-0000-0000-000000000001';
 
 export const metadata = {
   title: 'My Certificates - Prostep2market',
@@ -13,7 +12,11 @@ export const metadata = {
 };
 
 export default async function CertificatesPage() {
-  const certificates = await getUserCertificates(MOCK_USER_ID);
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect('/login');
+
+  const certificates = await getUserCertificates(user.id);
 
   return (
     <div className="min-h-screen bg-background">

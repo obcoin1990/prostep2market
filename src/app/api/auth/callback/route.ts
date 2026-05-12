@@ -26,7 +26,7 @@ export async function GET(request: Request) {
 
   // For password reset, redirect to update password page
   if (type === 'recovery') {
-    return NextResponse.redirect(new URL('/update-password' + next, request.url))
+    return NextResponse.redirect(new URL('/update-password', request.url))
   }
 
   return NextResponse.redirect(new URL(next, request.url))

@@ -1,10 +1,9 @@
 // Strategy Lab Home Page
 import { getStrategiesByUser } from '@/lib/strategy-lab/builder';
+import { createClient } from '@/lib/supabase/server';
+import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { Plus, Settings, Play, Trash2, Clock } from 'lucide-react';
-
-// Mock user ID - in production, this would come from auth
-const MOCK_USER_ID = '00000000-0000-0000-0000-000000000001';
+import { Plus, Settings, Play, Clock } from 'lucide-react';
 
 export const metadata = {
   title: 'Strategy Lab - Prostep2market',
@@ -12,7 +11,11 @@ export const metadata = {
 };
 
 export default async function StrategyLabPage() {
-  const strategies = await getStrategiesByUser(MOCK_USER_ID);
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect('/login');
+
+  const strategies = await getStrategiesByUser(user.id);
 
   return (
     <div className="min-h-screen bg-background">

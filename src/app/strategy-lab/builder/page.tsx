@@ -1,12 +1,10 @@
 // New Strategy Builder Page
 import { StrategyBuilder } from '@/components/strategy-lab/StrategyBuilder';
 import { createStrategy, StrategyFormData } from '@/lib/strategy-lab/builder';
+import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
-
-// Mock user ID - in production, this would come from auth
-const MOCK_USER_ID = '00000000-0000-0000-0000-000000000001';
 
 export const metadata = {
   title: 'New Strategy - Strategy Lab',
@@ -14,10 +12,19 @@ export const metadata = {
 };
 
 export default async function NewStrategyPage() {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect('/login');
+
+  const userId = user.id;
+
   async function handleSubmit(data: StrategyFormData) {
     'use server';
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) redirect('/login');
     try {
-      const strategy = await createStrategy(MOCK_USER_ID, data);
+      const strategy = await createStrategy(user.id, data);
       redirect(`/strategy-lab?created=${strategy.id}`);
     } catch (error) {
       console.error('Error creating strategy:', error);

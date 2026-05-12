@@ -29,9 +29,9 @@ export async function GET(request: Request) {
     if (!settings) {
       // Get trader profile to determine profile type
       const { data: profile } = await supabase
-        .from('user_profiles')
+        .from('trader_profiles')
         .select('profile_type')
-        .eq('user_id', user.id)
+        .eq('id', user.id)
         .single();
 
       const profileType = (profile?.profile_type as ProfileType) || 'default';

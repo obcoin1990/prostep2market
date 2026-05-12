@@ -246,12 +246,11 @@ export function useDashboardData(options: UseDashboardDataOptions = {}) {
     leaderboardQuery.isLoading ||
     guardianSettingsQuery.isLoading;
 
+  // Only treat it as a hard error if ALL critical data sources fail.
+  // Guardian settings and leaderboard failing for new users is expected.
   const isError =
-    edgeScoreQuery.isError ||
-    edgeScoreHistoryQuery.isError ||
-    analyticsQuery.isError ||
-    leaderboardQuery.isError ||
-    guardianSettingsQuery.isError;
+    edgeScoreQuery.isError &&
+    analyticsQuery.isError;
 
   return {
     // Individual query data

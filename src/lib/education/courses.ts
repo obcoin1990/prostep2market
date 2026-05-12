@@ -1,5 +1,5 @@
 // Courses and Lessons - Data access functions
-import { createClient } from '@/lib/supabase/client';
+import { createClient } from '@/lib/supabase/server';
 import { 
   Course, 
   Lesson, 
@@ -13,7 +13,7 @@ import {
 } from '@/types/education';
 
 export async function getCoursesByPath(path: LearningPath): Promise<Course[]> {
-  const supabase = createClient();
+  const supabase = await createClient();
   
   const { data, error } = await supabase
     .from('courses')
@@ -30,7 +30,7 @@ export async function getCoursesByPath(path: LearningPath): Promise<Course[]> {
 }
 
 export async function getCourseById(courseId: string): Promise<Course | null> {
-  const supabase = createClient();
+  const supabase = await createClient();
   
   const { data, error } = await supabase
     .from('courses')
@@ -59,7 +59,7 @@ export async function getCourseById(courseId: string): Promise<Course | null> {
 }
 
 export async function getLessonsByCourse(courseId: string): Promise<Lesson[]> {
-  const supabase = createClient();
+  const supabase = await createClient();
   
   const { data, error } = await supabase
     .from('lessons')
@@ -76,7 +76,7 @@ export async function getLessonsByCourse(courseId: string): Promise<Lesson[]> {
 }
 
 export async function getLessonById(lessonId: string): Promise<Lesson | null> {
-  const supabase = createClient();
+  const supabase = await createClient();
   
   const { data, error } = await supabase
     .from('lessons')
@@ -93,7 +93,7 @@ export async function getLessonById(lessonId: string): Promise<Lesson | null> {
 }
 
 export async function getQuizByCourse(courseId: string): Promise<Quiz | null> {
-  const supabase = createClient();
+  const supabase = await createClient();
   
   const { data: quizData, error: quizError } = await supabase
     .from('quizzes')
@@ -127,7 +127,7 @@ export async function getQuizByCourse(courseId: string): Promise<Quiz | null> {
 }
 
 export async function getQuizById(quizId: string): Promise<Quiz | null> {
-  const supabase = createClient();
+  const supabase = await createClient();
   
   const { data: quizData, error: quizError } = await supabase
     .from('quizzes')
@@ -161,7 +161,7 @@ export async function getQuizById(quizId: string): Promise<Quiz | null> {
 }
 
 export async function getAllCourses(): Promise<Course[]> {
-  const supabase = createClient();
+  const supabase = await createClient();
   
   const { data, error } = await supabase
     .from('courses')

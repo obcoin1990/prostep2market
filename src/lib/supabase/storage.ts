@@ -1,15 +1,15 @@
 import { createClient } from '@supabase/supabase-js'
 
-const url = process.env.NEXT_PUBLIC_SUPABASE_URL
-const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-if (!url || !anon) {
-  throw new Error(
-    'Missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY. Set them in Vercel project settings.'
-  )
+function getStorageClient() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  if (!url || !anon) {
+    throw new Error(
+      'Missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY. Set them in Vercel project settings.'
+    )
+  }
+  return createClient(url, anon)
 }
-
-const supabase = createClient(url, anon)
 
 const BUCKET_NAME = 'trade-screenshots'
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
@@ -63,7 +63,7 @@ export async function uploadScreenshot(
   const filePath = `${userId}/${tradeId || 'pending'}/${fileName}`
 
   // Upload to storage
-  const { data, error } = await supabase.storage
+  const { data, error } = await getStorageClient().storage
     .from(BUCKET_NAME)
     .upload(filePath, file, {
       cacheControl: '3600',
@@ -75,7 +75,7 @@ export async function uploadScreenshot(
   }
 
   // Get public URL
-  const { data: { publicUrl } } = supabase.storage
+  const { data: { publicUrl } } = getStorageClient().storage
     .from(BUCKET_NAME)
     .getPublicUrl(filePath)
 
@@ -89,7 +89,7 @@ export async function uploadScreenshot(
  * @returns The public URL or null
  */
 export async function getScreenshotUrl(userId: string, path: string): Promise<string | null> {
-  const { data: { publicUrl } } = supabase.storage
+  const { data: { publicUrl } } = getStorageClient().storage
     .from(BUCKET_NAME)
     .getPublicUrl(`${userId}/${path}`)
 
@@ -103,7 +103,7 @@ export async function getScreenshotUrl(userId: string, path: string): Promise<st
  * @returns DeleteResult with error if any
  */
 export async function deleteScreenshot(userId: string, path: string): Promise<DeleteResult> {
-  const { error } = await supabase.storage
+  const { error } = await getStorageClient().storage
     .from(BUCKET_NAME)
     .remove([`${userId}/${path}`])
 
@@ -123,7 +123,7 @@ export async function deleteScreenshot(userId: string, path: string): Promise<De
 export async function listScreenshots(userId: string, tradeId?: string): Promise<ListResult> {
   const path = tradeId ? `${userId}/${tradeId}` : userId
   
-  const { data, error } = await supabase.storage
+  const { data, error } = await getStorageClient().storage
     .from(BUCKET_NAME)
     .list(path, { limit: 100 })
 

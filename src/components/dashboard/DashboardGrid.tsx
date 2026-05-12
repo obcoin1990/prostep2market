@@ -181,18 +181,14 @@ export function DashboardGrid({
 }: DashboardGridProps) {
   const widgetOrder = getWidgetLayout(profile)
 
-  if (error) {
-    return (
-      <div className="bg-red-50 border border-red-200 rounded-lg p-6">
-        <p className="text-sm text-red-800 font-medium">
-          Failed to load dashboard widgets. Please refresh the page.
-        </p>
-      </div>
-    )
-  }
-
   return (
     <div className="space-y-4 sm:space-y-6">
+      {/* Soft error notice — widgets still render with empty states */}
+      {error && (
+        <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-amber-50 border border-amber-200 text-xs text-amber-700">
+          <span>Some data could not be loaded. Widgets will show when data is available.</span>
+        </div>
+      )}
       {/* Pause Overlay - shown when pause mode is active */}
       {isPaused && pauseInfo && (
         <div className="animate-fade-in">

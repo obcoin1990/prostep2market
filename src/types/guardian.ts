@@ -63,10 +63,11 @@ export interface DetectionInput {
   settings: RiskGuardianSettings;
 }
 
-export type ProfileType = 'Sniper' | 'Analyst' | 'Warrior' | 'default';
+// Matches the lowercase values stored in the DB (trader_profiles.profile_type)
+export type ProfileType = 'sniper' | 'analyst' | 'warrior' | 'disciplinarian' | 'opportunist' | 'default';
 
 export const PROFILE_DEFAULTS: Record<ProfileType, Omit<RiskGuardianSettings, 'userId'>> = {
-  Sniper: {
+  sniper: {
     maxSessionDuration: 180,
     maxTradesPerSession: 60,
     maxTradesPerWindow: 10,
@@ -75,7 +76,7 @@ export const PROFILE_DEFAULTS: Record<ProfileType, Omit<RiskGuardianSettings, 'u
     revengeTradingAlertEnabled: true,
     emotionalInstabilityThreshold: 7
   },
-  Analyst: {
+  analyst: {
     maxSessionDuration: 90,
     maxTradesPerSession: 30,
     maxTradesPerWindow: 5,
@@ -84,7 +85,7 @@ export const PROFILE_DEFAULTS: Record<ProfileType, Omit<RiskGuardianSettings, 'u
     revengeTradingAlertEnabled: true,
     emotionalInstabilityThreshold: 3
   },
-  Warrior: {
+  warrior: {
     maxSessionDuration: 120,
     maxTradesPerSession: 50,
     maxTradesPerWindow: 8,
@@ -92,6 +93,24 @@ export const PROFILE_DEFAULTS: Record<ProfileType, Omit<RiskGuardianSettings, 'u
     fatigueWarningEnabled: true,
     revengeTradingAlertEnabled: true,
     emotionalInstabilityThreshold: 5
+  },
+  disciplinarian: {
+    maxSessionDuration: 150,
+    maxTradesPerSession: 40,
+    maxTradesPerWindow: 6,
+    exposureMultiplier: 1.10,
+    fatigueWarningEnabled: true,
+    revengeTradingAlertEnabled: true,
+    emotionalInstabilityThreshold: 2
+  },
+  opportunist: {
+    maxSessionDuration: 120,
+    maxTradesPerSession: 60,
+    maxTradesPerWindow: 12,
+    exposureMultiplier: 1.40,
+    fatigueWarningEnabled: true,
+    revengeTradingAlertEnabled: true,
+    emotionalInstabilityThreshold: 6
   },
   default: {
     maxSessionDuration: 120,

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/client';
+import { createClient } from '@/lib/supabase/server';
 import { z } from 'zod';
 
 const reportSchema = z.object({
@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
 }
 
 async function fetchAnalysisData(userId: string, startDate: string, endDate: string) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data } = await supabase
     .from('daily_analytics')
     .select('*')

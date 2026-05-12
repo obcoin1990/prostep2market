@@ -103,7 +103,7 @@ export function usePauseMode(userId: string): UsePauseModeReturn {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          durationMinutes: durationMinutes ?? null,
+          durationMinutes: durationMinutes ?? 15,
           reason
         })
       });

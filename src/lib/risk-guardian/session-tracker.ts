@@ -1,8 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+import { createClient } from '@/lib/supabase/server';
 
 const THIRTY_MINUTES_MS = 30 * 60 * 1000;
 
@@ -22,6 +18,7 @@ export interface SessionInfo {
  */
 export async function getActiveSession(userId: string): Promise<SessionInfo | null> {
   try {
+    const supabase = await createClient();
     // Get recent trades for the user (last 50)
     const { data: trades, error } = await supabase
       .from('trades')
@@ -95,6 +92,7 @@ export async function getActiveSession(userId: string): Promise<SessionInfo | nu
  */
 export async function updateSession(userId: string, tradeId: string): Promise<void> {
   try {
+    const supabase = await createClient();
     const { data: existingSession } = await supabase
       .from('trading_sessions')
       .select('*')

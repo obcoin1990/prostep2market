@@ -1,11 +1,26 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { createClient } from '@/lib/supabase/server'
 
 /**
  * POST /api/setup/database
  * Initialize database tables (one-time setup)
+ * Requires authenticated admin user
  */
 export async function POST(request: NextRequest) {
+  // Auth guard - only authenticated admins may call this
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  const adminEmails: string[] = (process.env.ADMIN_EMAILS ?? '').split(',').map(e => e.trim()).filter(Boolean)
+  if (!adminEmails.includes(user.email ?? '')) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
+
   try {
     const adminSupabase = createAdminClient()
 
@@ -123,5 +138,3 @@ export async function POST(request: NextRequest) {
     )
   }
 }
-
-import { NextRequest } from 'next/server'

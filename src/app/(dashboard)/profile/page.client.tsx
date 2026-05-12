@@ -9,11 +9,11 @@ interface TraderProfilePageClientProps {
 }
 
 const PROFILE_ICONS: Record<string, string> = {
-  sniper: '🎯',
-  analyst: '📊',
-  warrior: '⚔️',
-  disciplinarian: '📋',
-  opportunist: '🔄',
+  sniper: '\uD83C\uDFAF',
+  analyst: '\uD83D\uDCCA',
+  warrior: '\u2694\uFE0F',
+  disciplinarian: '\uD83D\uDEE1\uFE0F',
+  opportunist: '\uD83D\uDCA1',
 };
 
 const PROFILE_COLORS: Record<string, string> = {
@@ -36,8 +36,15 @@ export function TraderProfilePageClient({ profile }: TraderProfilePageClientProp
   const profileName = PROFILE_TYPE_NAMES[profile.type];
   const profileDescription = PROFILE_TYPE_DESCRIPTIONS[profile.type];
   const icon = PROFILE_ICONS[profile.type];
-  const colorClass = PROFILE_COLORS[profile.type];
+  const colorClass = PROFILE_COLORS[profile.type] ?? 'from-gray-500 to-gray-600';
   const scoreEntries = Object.entries(profile.scores) as [SectionKey, number][];
+
+  // Safely access dashboardLayout � it may be null/undefined if the profile
+  // was created before these columns were populated.
+  const primaryWidget = profile.dashboardLayout?.primaryWidget ?? 'edgeScore';
+  const widgetOrder = profile.dashboardLayout?.widgetOrder ?? [];
+  const riskSensitivity = profile.alertThresholds?.riskSensitivity ?? 'medium';
+  const alertFrequency = profile.alertThresholds?.alertFrequency ?? 'normal';
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
@@ -108,12 +115,12 @@ export function TraderProfilePageClient({ profile }: TraderProfilePageClientProp
         <div className="space-y-4">
           <div>
             <p className="text-sm text-[#9E9E9E]">Primary Widget</p>
-            <p className="text-[#0B0B0B] font-medium">{profile.dashboardLayout.primaryWidget}</p>
+            <p className="text-[#0B0B0B] font-medium">{primaryWidget}</p>
           </div>
           <div>
             <p className="text-sm text-[#9E9E9E]">Widget Order</p>
             <div className="flex flex-wrap gap-2 mt-1">
-              {profile.dashboardLayout.widgetOrder.map((widget, index) => (
+              {widgetOrder.map((widget, index) => (
                 <span 
                   key={widget}
                   className="px-3 py-1 bg-[#F5F7FA] text-[#616161] rounded-full text-sm"
@@ -126,7 +133,7 @@ export function TraderProfilePageClient({ profile }: TraderProfilePageClientProp
           <div>
             <p className="text-sm text-[#9E9E9E]">Alert Sensitivity</p>
             <p className="text-[#0B0B0B] font-medium capitalize">
-              {profile.alertThresholds.riskSensitivity} sensitivity • {profile.alertThresholds.alertFrequency} alerts
+              {riskSensitivity} sensitivity � {alertFrequency} alerts
             </p>
           </div>
         </div>
@@ -138,13 +145,13 @@ export function TraderProfilePageClient({ profile }: TraderProfilePageClientProp
           href="/trader-dna"
           className="px-4 py-2 text-sm text-[#616161] hover:text-[#E53935] transition-colors"
         >
-          ← Retake Assessment
+          ? Retake Assessment
         </a>
         <a
           href="/dashboard"
           className="px-6 py-3 bg-[#E53935] text-white rounded-lg font-medium hover:bg-[#D32F2F] transition-colors"
         >
-          Go to Dashboard →
+          Go to Dashboard ?
         </a>
       </div>
     </div>

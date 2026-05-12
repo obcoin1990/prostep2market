@@ -1,20 +1,25 @@
 // Edit Strategy Page
 import { getStrategyById, updateStrategy, StrategyFormData } from '@/lib/strategy-lab/builder';
 import { StrategyBuilder } from '@/components/strategy-lab/StrategyBuilder';
+import { createClient } from '@/lib/supabase/server';
 import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
-
-// Mock user ID - in production, this would come from auth
-const MOCK_USER_ID = '00000000-0000-0000-0000-000000000001';
 
 interface EditStrategyPageProps {
   params: Promise<{ strategyId: string }>;
 }
 
 export default async function EditStrategyPage({ params }: EditStrategyPageProps) {
-  const resolvedParams = await params;
-  const strategy = await getStrategyById(resolvedParams.strategyId, MOCK_USER_ID);
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect('/login');
+
+  // Resolve params once at the top level so the server action can capture a
+  // plain string (not a Promise), avoiding the "params should not be accessed
+  // directly during rendering" error.
+  const { strategyId } = await params;
+  const strategy = await getStrategyById(strategyId, user.id);
 
   if (!strategy) {
     notFound();
@@ -29,9 +34,14 @@ export default async function EditStrategyPage({ params }: EditStrategyPageProps
 
   async function handleSubmit(data: StrategyFormData) {
     'use server';
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) redirect('/login');
     try {
-      await updateStrategy(resolvedParams.strategyId, MOCK_USER_ID, data);
-      redirect(`/strategy-lab?updated=${resolvedParams.strategyId}`);
+      // `strategyId` is the resolved string captured from the outer scope -
+      // safe to use directly, no Promise involved.
+      await updateStrategy(strategyId, user.id, data);
+      redirect(`/strategy-lab?updated=${strategyId}`);
     } catch (error) {
       console.error('Error updating strategy:', error);
       throw error;

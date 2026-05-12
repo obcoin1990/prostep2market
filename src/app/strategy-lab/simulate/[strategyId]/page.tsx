@@ -1,20 +1,22 @@
 // Strategy Simulation Page
 import { getStrategyById } from '@/lib/strategy-lab/builder';
-import { notFound } from 'next/navigation';
+import { createClient } from '@/lib/supabase/server';
+import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { ClientSimulation } from './ClientSimulation';
-
-// Mock user ID - in production, this would come from auth
-const MOCK_USER_ID = '00000000-0000-0000-0000-000000000001';
 
 interface SimulatePageProps {
   params: Promise<{ strategyId: string }>;
 }
 
 export default async function SimulatePage({ params }: SimulatePageProps) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect('/login');
+
   const resolvedParams = await params;
-  const strategy = await getStrategyById(resolvedParams.strategyId, MOCK_USER_ID);
+  const strategy = await getStrategyById(resolvedParams.strategyId, user.id);
 
   if (!strategy) {
     notFound();

@@ -38,10 +38,11 @@ export default async function DashboardPage() {
     recommendations: [],
   } : null
 
-  // Get the base URL for API calls
-  const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http'
-  const host = process.env.VERCEL_URL || 'localhost:3000'
-  const baseUrl = `${protocol}://${host}`
+  // Get the base URL for API calls.
+  // VERCEL_URL does NOT include a protocol; localhost needs an explicit port.
+  const baseUrl = process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : `http://localhost:${process.env.PORT ?? 3000}`
 
   // Get session for auth header
   const { data: { session } } = await supabase.auth.getSession()
@@ -74,7 +75,7 @@ export default async function DashboardPage() {
   return (
     <DashboardContent
       profile={profile}
-      user={{ email: user.email || '' }}
+      user={{ id: user.id, email: user.email || '' }}
       initialData={{
         edgeScore: edgeScoreData,
         history: historyData,
@@ -84,3 +85,4 @@ export default async function DashboardPage() {
     />
   )
 }
+

@@ -1,6 +1,7 @@
 // Quiz Submit API - Server-side scoring
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import { issueCertificate } from '@/lib/education/certificates';
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
@@ -56,10 +57,10 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // Fetch questions with correct answers
+  // Fetch questions with correct answers AND explanations in a single query
   const { data: questions, error: questionsError } = await supabase
     .from('quiz_questions')
-    .select('id, correct_index')
+    .select('id, correct_index, explanation')
     .eq('quiz_id', quizId);
 
   if (questionsError || !questions) {
@@ -81,17 +82,10 @@ export async function POST(request: NextRequest) {
       correctCount++;
     }
 
-    // Get explanation
-    const { data: fullQuestion } = await supabase
-      .from('quiz_questions')
-      .select('explanation')
-      .eq('id', question.id)
-      .single();
-
     questionResults[question.id] = {
       correct: isCorrect,
       correctIndex: question.correct_index,
-      explanation: fullQuestion?.explanation || undefined,
+      explanation: (question as any).explanation ?? undefined,
     };
   }
 
@@ -113,7 +107,7 @@ export async function POST(request: NextRequest) {
       onConflict: 'user_id,course_id'
     });
 
-  // If passed and first time, issue certificate
+  // If passed and first time, mark course complete and issue certificate
   if (passed && !existingProgress?.completed_at) {
     // Mark course as completed
     await supabase
@@ -124,7 +118,19 @@ export async function POST(request: NextRequest) {
       .eq('user_id', user.id)
       .eq('course_id', quiz.course_id);
 
-    // TODO: Issue certificate via certificates.ts
+    // Issue certificate — fetch user name and course name for PDF
+    try {
+      const [{ data: userProfile }, { data: course }] = await Promise.all([
+        supabase.from('user_profiles').select('full_name').eq('id', user.id).single(),
+        supabase.from('courses').select('title').eq('id', quiz.course_id).single(),
+      ]);
+      const userName = userProfile?.full_name || user.email || 'Trader';
+      const courseName = course?.title || 'Course';
+      await issueCertificate(user.id, quiz.course_id, userName, courseName);
+    } catch (certError) {
+      // Certificate issuance failure should not block the quiz response
+      console.error('Certificate issuance failed:', certError);
+    }
   }
 
   return NextResponse.json({

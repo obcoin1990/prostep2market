@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if user is admin (email whitelist)
-    const adminEmails = ['ob6013@gmail.com']
+    const adminEmails = (process.env.ADMIN_EMAILS ?? '').split(',').map(e => e.trim()).filter(Boolean)
     if (!adminEmails.includes(authUser.email || '')) {
       return NextResponse.json(
         { error: 'Forbidden: Only admins can create users' },
@@ -145,7 +145,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Check admin permission
-    const adminEmails = ['ob6013@gmail.com']
+    const adminEmails = (process.env.ADMIN_EMAILS ?? '').split(',').map(e => e.trim()).filter(Boolean)
     if (!adminEmails.includes(authUser.email || '')) {
       return NextResponse.json(
         { error: 'Forbidden: Only admins can view users' },
@@ -180,3 +180,4 @@ export async function GET(request: NextRequest) {
     )
   }
 }
+

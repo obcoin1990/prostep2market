@@ -1,0 +1,400 @@
+// ProStep2Market - Corporate Learning Platform
+// Database Schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────────────────────
+// USERS & ORGANIZATIONS
+// ─────────────────────────────────────────────
+
+model Organization {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  logoUrl     String?
+  plan        Plan     @default(STARTER)
+  seatLimit   Int      @default(25)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  users        User[]
+  courses      Course[]
+  teams        Team[]
+  invitations  Invitation[]
+  subscription Subscription?
+}
+
+model User {
+  id             String    @id @default(cuid())
+  email          String    @unique
+  name           String?
+  hashedPassword String?
+  avatarUrl      String?
+  role           Role      @default(LEARNER)
+  jobTitle       String?
+  department     String?
+  skillLevel     SkillLevel @default(BEGINNER)
+  onboarded      Boolean   @default(false)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  organizationId String?
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+
+  accounts       Account[]
+  sessions       Session[]
+  enrollments    Enrollment[]
+  quizAttempts   QuizAttempt[]
+  certificates   Certificate[]
+  learningPath   LearningPath?
+  skillAssessments SkillAssessment[]
+  teamMemberships  TeamMember[]
+  createdCourses   Course[]   @relation("CourseAuthor")
+  notifications    Notification[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+  @@unique([identifier, token])
+}
+
+model Team {
+  id             String       @id @default(cuid())
+  name           String
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  members        TeamMember[]
+  createdAt      DateTime     @default(now())
+}
+
+model TeamMember {
+  id     String @id @default(cuid())
+  userId String
+  teamId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  team   Team   @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  @@unique([userId, teamId])
+}
+
+model Invitation {
+  id             String       @id @default(cuid())
+  email          String
+  role           Role         @default(LEARNER)
+  token          String       @unique @default(cuid())
+  accepted       Boolean      @default(false)
+  expiresAt      DateTime
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  createdAt      DateTime     @default(now())
+}
+
+// ─────────────────────────────────────────────
+// COURSES & CONTENT
+// ─────────────────────────────────────────────
+
+model Course {
+  id             String       @id @default(cuid())
+  title          String
+  description    String       @db.Text
+  thumbnailUrl   String?
+  level          SkillLevel   @default(BEGINNER)
+  category       String
+  tags           String[]
+  durationMins   Int          @default(0)
+  published      Boolean      @default(false)
+  featured       Boolean      @default(false)
+  price          Float?       // null = included in subscription
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  authorId       String
+  author         User         @relation("CourseAuthor", fields: [authorId], references: [id])
+  organizationId String?
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+
+  modules        Module[]
+  enrollments    Enrollment[]
+  learningPaths  LearningPathCourse[]
+  prerequisites  CoursePrerequisite[] @relation("CoursePrereqs")
+  requiredBy     CoursePrerequisite[] @relation("PrereqOf")
+}
+
+model CoursePrerequisite {
+  courseId       String
+  prerequisiteId String
+  course         Course @relation("CoursePrereqs", fields: [courseId], references: [id])
+  prerequisite   Course @relation("PrereqOf",     fields: [prerequisiteId], references: [id])
+  @@id([courseId, prerequisiteId])
+}
+
+model Module {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  order       Int
+  courseId    String
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lessons     Lesson[]
+  createdAt   DateTime @default(now())
+}
+
+model Lesson {
+  id          String      @id @default(cuid())
+  title       String
+  type        LessonType  @default(VIDEO)
+  content     String?     @db.Text   // markdown for TEXT type
+  videoUrl    String?                // Mux playback URL
+  videoId     String?                // Mux asset ID
+  durationSec Int         @default(0)
+  order       Int
+  isFree      Boolean     @default(false)
+  moduleId    String
+  module      Module      @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  quiz        Quiz?
+  progress    LessonProgress[]
+  createdAt   DateTime    @default(now())
+}
+
+// ─────────────────────────────────────────────
+// QUIZZES & ASSESSMENTS
+// ─────────────────────────────────────────────
+
+model Quiz {
+  id           String       @id @default(cuid())
+  title        String
+  passMark     Int          @default(70)  // percentage
+  maxAttempts  Int          @default(3)
+  lessonId     String       @unique
+  lesson       Lesson       @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  questions    Question[]
+  attempts     QuizAttempt[]
+  createdAt    DateTime     @default(now())
+}
+
+model Question {
+  id        String   @id @default(cuid())
+  text      String   @db.Text
+  type      QuestionType @default(SINGLE)
+  order     Int
+  quizId    String
+  quiz      Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  options   Option[]
+}
+
+model Option {
+  id         String   @id @default(cuid())
+  text       String
+  isCorrect  Boolean  @default(false)
+  order      Int
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+}
+
+model QuizAttempt {
+  id          String   @id @default(cuid())
+  score       Float
+  passed      Boolean
+  answers     Json     // { questionId: optionId[] }
+  startedAt   DateTime @default(now())
+  completedAt DateTime?
+  userId      String
+  quizId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quiz        Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+}
+
+model SkillAssessment {
+  id          String   @id @default(cuid())
+  skill       String
+  score       Int      // 0-100
+  level       SkillLevel
+  assessedAt  DateTime @default(now())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ─────────────────────────────────────────────
+// ENROLLMENTS & PROGRESS
+// ─────────────────────────────────────────────
+
+model Enrollment {
+  id          String           @id @default(cuid())
+  status      EnrollmentStatus @default(ACTIVE)
+  progress    Float            @default(0)  // 0-100
+  enrolledAt  DateTime         @default(now())
+  completedAt DateTime?
+  dueDate     DateTime?
+  userId      String
+  courseId    String
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course      Course           @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lessonProgress LessonProgress[]
+  @@unique([userId, courseId])
+}
+
+model LessonProgress {
+  id           String     @id @default(cuid())
+  completed    Boolean    @default(false)
+  watchedSec   Int        @default(0)
+  completedAt  DateTime?
+  enrollmentId String
+  lessonId     String
+  enrollment   Enrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  lesson       Lesson     @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  @@unique([enrollmentId, lessonId])
+}
+
+// ─────────────────────────────────────────────
+// AI LEARNING PATHS
+// ─────────────────────────────────────────────
+
+model LearningPath {
+  id          String               @id @default(cuid())
+  title       String
+  description String?              @db.Text
+  goal        String               // e.g. "Become a Senior Backend Developer"
+  aiGenerated Boolean              @default(true)
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+  userId      String               @unique
+  user        User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courses     LearningPathCourse[]
+}
+
+model LearningPathCourse {
+  id             String       @id @default(cuid())
+  order          Int
+  reason         String?      // AI explanation why this course is included
+  learningPathId String
+  courseId       String
+  learningPath   LearningPath @relation(fields: [learningPathId], references: [id], onDelete: Cascade)
+  course         Course       @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  @@unique([learningPathId, courseId])
+}
+
+// ─────────────────────────────────────────────
+// CERTIFICATES
+// ─────────────────────────────────────────────
+
+model Certificate {
+  id          String   @id @default(cuid())
+  title       String
+  issueDate   DateTime @default(now())
+  expiresAt   DateTime?
+  verifyToken String   @unique @default(cuid())
+  blockchainTx String? // future: on-chain verification hash
+  userId      String
+  courseId    String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([userId, courseId])
+}
+
+// ─────────────────────────────────────────────
+// NOTIFICATIONS
+// ─────────────────────────────────────────────
+
+model Notification {
+  id        String   @id @default(cuid())
+  type      String   // COURSE_ASSIGNED, QUIZ_PASSED, CERT_EARNED, etc.
+  title     String
+  body      String
+  read      Boolean  @default(false)
+  link      String?
+  createdAt DateTime @default(now())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ─────────────────────────────────────────────
+// BILLING
+// ─────────────────────────────────────────────
+
+model Subscription {
+  id             String   @id @default(cuid())
+  stripeSubId    String   @unique
+  stripePriceId  String
+  status         String   // active, past_due, canceled
+  currentPeriodEnd DateTime
+  organizationId String   @unique
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+// ─────────────────────────────────────────────
+// ENUMS
+// ─────────────────────────────────────────────
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  MANAGER
+  LEARNER
+}
+
+enum Plan {
+  STARTER
+  GROWTH
+  ENTERPRISE
+}
+
+enum SkillLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  EXPERT
+}
+
+enum LessonType {
+  VIDEO
+  TEXT
+  INTERACTIVE
+}
+
+enum QuestionType {
+  SINGLE
+  MULTIPLE
+  TRUE_FALSE
+}
+
+enum EnrollmentStatus {
+  ACTIVE
+  COMPLETED
+  DROPPED
+  OVERDUE
+}

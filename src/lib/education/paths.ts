@@ -1,5 +1,5 @@
 // Learning Paths - Data access functions
-import { createClient } from '@/lib/supabase/client';
+import { createClient } from '@/lib/supabase/server';
 import { LearningPathConfig, LearningPath, Course } from '@/types/education';
 
 // Static path configurations (metadata - actual courses come from database)
@@ -31,7 +31,7 @@ const pathMetadata: Record<LearningPath, Omit<LearningPathConfig, 'courses'>> = 
 };
 
 export async function getLearningPaths(): Promise<LearningPathConfig[]> {
-  const supabase = createClient();
+  const supabase = await createClient();
   
   // Fetch all courses from database
   const { data: courses, error } = await supabase
