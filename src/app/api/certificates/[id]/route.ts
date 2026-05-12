@@ -1,10 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { renderToBuffer } from '@react-pdf/renderer'
-import { createElement } from 'react'
+import { NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { requireAuth, apiError, apiSuccess } from '@/lib/api'
-import { format } from 'date-fns'
-import { CertificatePDF } from '@/components/certificate/CertificatePDF'
+import { apiError, apiSuccess } from '@/lib/api'
 
 type Params = { params: { id: string } }
 
