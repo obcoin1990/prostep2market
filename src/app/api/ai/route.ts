@@ -3,7 +3,10 @@ import OpenAI from 'openai'
 import { prisma } from '@/lib/prisma'
 import { requireAuth, apiError, apiSuccess } from '@/lib/api'
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+// Lazy-init so the build doesn't fail when OPENAI_API_KEY isn't set
+function getOpenAI() {
+  return new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+}
 
 // POST /api/ai — generate or refresh AI learning path for user
 export async function POST(req: NextRequest) {
@@ -37,6 +40,7 @@ export async function POST(req: NextRequest) {
     .join('\n')
 
   // Call GPT-4o to generate learning path
+  const openai = getOpenAI()
   const completion = await openai.chat.completions.create({
     model: 'gpt-4o',
     temperature: 0.3,

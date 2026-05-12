@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma'
 import { requireAuth, apiError } from '@/lib/api'
 import { format } from 'date-fns'
 
-type Params = { params: { id: string } }
+type Params = { params: Promise<{ id: string }> }
 
 // Brand colors
 const BRAND   = rgb(0.388, 0.400, 0.945)  // #6366f1
@@ -15,11 +15,12 @@ const WHITE   = rgb(1, 1, 1)
 
 // GET /api/certificates/[id]/pdf — stream PDF download
 export async function GET(req: NextRequest, { params }: Params) {
+  const { id } = await params
   const { session, error } = await requireAuth()
   if (error) return error
 
   const cert = await prisma.certificate.findUnique({
-    where:   { id: params.id },
+    where:   { id },
     include: { user: { select: { name: true } } },
   })
   if (!cert) return apiError('Certificate not found', 404)
@@ -231,13 +232,14 @@ export async function GET(req: NextRequest, { params }: Params) {
   // ── Serialise ─────────────────────────────────────────────────────
   const pdfBytes = await doc.save()
   const filename = `certificate-${cert.verifyToken.slice(0, 8)}.pdf`
+  const buffer   = Buffer.from(pdfBytes)
 
-  return new NextResponse(pdfBytes, {
+  return new NextResponse(buffer, {
     status: 200,
     headers: {
       'Content-Type':        'application/pdf',
       'Content-Disposition': `attachment; filename="${filename}"`,
-      'Content-Length':      pdfBytes.byteLength.toString(),
+      'Content-Length':      buffer.byteLength.toString(),
     },
   })
 }

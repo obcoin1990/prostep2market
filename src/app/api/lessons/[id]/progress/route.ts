@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { prisma } from '@/lib/prisma'
 import { requireAuth, apiError, apiSuccess } from '@/lib/api'
 
-type Params = { params: { id: string } }
+type Params = { params: Promise<{ id: string }> }
 
 const ProgressSchema = z.object({
   watchedSec:   z.number().min(0),
@@ -13,6 +13,7 @@ const ProgressSchema = z.object({
 
 // PATCH /api/lessons/[id]/progress — update watch progress
 export async function PATCH(req: NextRequest, { params }: Params) {
+  const { id: lessonId } = await params
   const { session, error } = await requireAuth()
   if (error) return error
 
@@ -26,7 +27,7 @@ export async function PATCH(req: NextRequest, { params }: Params) {
   if (!enrollment) return apiError('Enrollment not found', 404)
 
   // Get lesson to compute completion threshold (90% of video)
-  const lesson = await prisma.lesson.findUnique({ where: { id: params.id } })
+  const lesson = await prisma.lesson.findUnique({ where: { id: lessonId } })
   if (!lesson)  return apiError('Lesson not found', 404)
 
   const autoComplete =
@@ -34,7 +35,7 @@ export async function PATCH(req: NextRequest, { params }: Params) {
     (lesson.durationSec > 0 && watchedSec >= lesson.durationSec * 0.9)
 
   const progress = await prisma.lessonProgress.upsert({
-    where:  { enrollmentId_lessonId: { enrollmentId, lessonId: params.id } },
+    where:  { enrollmentId_lessonId: { enrollmentId, lessonId } },
     update: {
       watchedSec,
       completed:   autoComplete,
@@ -42,7 +43,7 @@ export async function PATCH(req: NextRequest, { params }: Params) {
     },
     create: {
       enrollmentId,
-      lessonId:    params.id,
+      lessonId,
       watchedSec,
       completed:   autoComplete,
       completedAt: autoComplete ? new Date() : undefined,
@@ -52,7 +53,7 @@ export async function PATCH(req: NextRequest, { params }: Params) {
   // Recalculate course progress
   const courseId = (
     await prisma.module.findFirst({
-      where:  { lessons: { some: { id: params.id } } },
+      where:  { lessons: { some: { id: lessonId } } },
       select: { courseId: true },
     })
   )?.courseId
@@ -110,6 +111,7 @@ export async function PATCH(req: NextRequest, { params }: Params) {
 
 // GET /api/lessons/[id]/progress — get progress for a specific lesson
 export async function GET(req: NextRequest, { params }: Params) {
+  const { id: lessonId } = await params
   const { session, error } = await requireAuth()
   if (error) return error
 
@@ -118,7 +120,7 @@ export async function GET(req: NextRequest, { params }: Params) {
   if (!enrollmentId) return apiError('enrollmentId required')
 
   const progress = await prisma.lessonProgress.findUnique({
-    where: { enrollmentId_lessonId: { enrollmentId, lessonId: params.id } },
+    where: { enrollmentId_lessonId: { enrollmentId, lessonId } },
   })
 
   return apiSuccess(progress ?? { watchedSec: 0, completed: false })

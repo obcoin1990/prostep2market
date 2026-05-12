@@ -2,15 +2,16 @@ import { NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { requireAuth, apiError, apiSuccess } from '@/lib/api'
 
-type Params = { params: { id: string } }
+type Params = { params: Promise<{ id: string }> }
 
 // GET /api/quizzes/[id] — fetch quiz with questions (no correct answers exposed)
 export async function GET(_req: NextRequest, { params }: Params) {
+  const { id } = await params
   const { error } = await requireAuth()
   if (error) return error
 
   const quiz = await prisma.quiz.findUnique({
-    where:   { id: params.id },
+    where:   { id },
     include: {
       questions: {
         orderBy: { order: 'asc' },

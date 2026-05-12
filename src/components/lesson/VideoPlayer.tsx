@@ -32,7 +32,7 @@ export function VideoPlayer({
   const watchedRef       = useRef(initialWatched)
   const completedRef     = useRef(initialCompleted)
   const lastSyncedRef    = useRef(initialWatched)
-  const syncTimerRef     = useRef<ReturnType<typeof setInterval>>()
+  const syncTimerRef     = useRef<ReturnType<typeof setInterval> | undefined>(undefined)
 
   const [completed, setCompleted] = useState(initialCompleted)
   const [syncing,   setSyncing]   = useState(false)

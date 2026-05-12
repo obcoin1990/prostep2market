@@ -3,12 +3,13 @@ import { format } from 'date-fns'
 import { CheckCircle, XCircle } from 'lucide-react'
 
 interface Props {
-  params: { token: string }
+  params: Promise<{ token: string }>
 }
 
 export default async function VerifyPage({ params }: Props) {
+  const { token } = await params
   const cert = await prisma.certificate.findUnique({
-    where:   { verifyToken: params.token },
+    where:   { verifyToken: token },
     include: {
       user: { select: { name: true } },
     },
@@ -47,7 +48,7 @@ export default async function VerifyPage({ params }: Props) {
             </div>
 
             <p className="text-xs text-gray-400">
-              Verification ID: <span className="font-mono text-brand-500">{params.token}</span>
+              Verification ID: <span className="font-mono text-brand-500">{token}</span>
             </p>
           </>
         ) : (

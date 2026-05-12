@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { prisma } from '@/lib/prisma'
 import { requireAuth, apiError, apiSuccess } from '@/lib/api'
 
-type Params = { params: { id: string } }
+type Params = { params: Promise<{ id: string }> }
 
 const SubmitSchema = z.object({
   // { questionId: optionId[] }
@@ -12,6 +12,7 @@ const SubmitSchema = z.object({
 
 // POST /api/quizzes/[id]/attempt — submit quiz answers, get graded result
 export async function POST(req: NextRequest, { params }: Params) {
+  const { id: quizId } = await params
   const { session, error } = await requireAuth()
   if (error) return error
 
@@ -19,7 +20,7 @@ export async function POST(req: NextRequest, { params }: Params) {
   const { answers } = SubmitSchema.parse(body)
 
   const quiz = await prisma.quiz.findUnique({
-    where:   { id: params.id },
+    where:   { id: quizId },
     include: {
       questions: {
         include: { options: true },
@@ -137,7 +138,7 @@ export async function POST(req: NextRequest, { params }: Params) {
           where: { userId_courseId: { userId: session!.user.id, courseId } },
         })
         if (!existingCert) {
-          const cert = await prisma.certificate.create({
+          await prisma.certificate.create({
             data: { userId: session!.user.id, courseId, title: 'Certificate of Completion' },
           })
           const course = await prisma.course.findUnique({
@@ -172,16 +173,17 @@ export async function POST(req: NextRequest, { params }: Params) {
 
 // GET /api/quizzes/[id]/attempt — get user's attempt history for this quiz
 export async function GET(_req: NextRequest, { params }: Params) {
+  const { id: quizId } = await params
   const { session, error } = await requireAuth()
   if (error) return error
 
   const attempts = await prisma.quizAttempt.findMany({
-    where:   { quizId: params.id, userId: session!.user.id },
+    where:   { quizId, userId: session!.user.id },
     orderBy: { startedAt: 'desc' },
   })
 
   const quiz = await prisma.quiz.findUnique({
-    where:  { id: params.id },
+    where:  { id: quizId },
     select: { maxAttempts: true, passMark: true },
   })
 

@@ -6,14 +6,14 @@ import { LessonSidebar } from '@/components/lesson/LessonSidebar'
 import { LessonContent } from './LessonContent'
 
 interface Props {
-  params: { id: string; lessonId: string }
+  params: Promise<{ id: string; lessonId: string }>
 }
 
 export default async function LessonPage({ params }: Props) {
   const session = await getServerSession(authOptions)
   if (!session) redirect('/login')
 
-  const { id: courseId, lessonId } = params
+  const { id: courseId, lessonId } = await params
 
   // Verify enrollment
   const enrollment = await prisma.enrollment.findUnique({

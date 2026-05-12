@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Keep Prisma and bcryptjs out of the Edge runtime
+  serverExternalPackages: ['@prisma/client', 'bcryptjs'],
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'avatars.githubusercontent.com' },
@@ -11,10 +13,7 @@ const nextConfig = {
       { protocol: 'https', hostname: '*.supabase.in' },
     ],
   },
-  experimental: {
-    // Keep Prisma and bcryptjs out of the Edge runtime
-    serverComponentsExternalPackages: ['@prisma/client', 'bcryptjs'],
-  },
+  experimental: {},
   // Disable powered-by header in production
   poweredByHeader: false,
   // Compress responses
@@ -22,9 +21,6 @@ const nextConfig = {
   // Strict mode for React
   reactStrictMode: true,
   // Silence ESLint errors during Vercel builds (lint separately in CI)
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   // Don't fail build on type errors — catch in CI instead
   typescript: {
     ignoreBuildErrors: false,

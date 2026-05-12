@@ -2,12 +2,13 @@ import { NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { apiError, apiSuccess } from '@/lib/api'
 
-type Params = { params: { id: string } }
+type Params = { params: Promise<{ id: string }> }
 
 // GET /api/certificates/[id] — get single cert (public for verification)
 export async function GET(req: NextRequest, { params }: Params) {
+  const { id } = await params
   const cert = await prisma.certificate.findUnique({
-    where:   { id: params.id },
+    where:   { id },
     include: {
       user: { select: { name: true, email: true } },
     },
