@@ -1,13 +1,15 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { signOut, useSession } from 'next-auth/react'
 import {
   LayoutDashboard, BookOpen, BarChart2, Users,
-  Settings, LogOut, Sparkles, Award, Bell,
+  Settings, LogOut, Sparkles, Award, Bell, User,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useState } from 'react'
 
 const NAV_ITEMS = {
   LEARNER: [
@@ -31,12 +33,29 @@ const NAV_ITEMS = {
   ],
 }
 
+function getInitials(name?: string | null, email?: string | null): string {
+  if (name) {
+    const parts = name.trim().split(/\s+/)
+    if (parts.length >= 2) return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
+    return parts[0].slice(0, 2).toUpperCase()
+  }
+  if (email) return email[0].toUpperCase()
+  return '?'
+}
+
 export function Sidebar() {
   const { data: session } = useSession()
   const pathname = usePathname()
+  const [avatarError, setAvatarError] = useState(false)
 
   const role = (session?.user?.role ?? 'LEARNER') as keyof typeof NAV_ITEMS
   const items = NAV_ITEMS[role] ?? NAV_ITEMS.LEARNER
+
+  const userName = session?.user?.name
+  const userEmail = session?.user?.email
+  const userImage = session?.user?.image
+  const initials = getInitials(userName, userEmail)
+  const showPhoto = userImage && !avatarError
 
   return (
     <aside className="flex h-screen w-60 flex-col border-r border-gray-200 bg-white">
@@ -68,7 +87,7 @@ export function Sidebar() {
         })}
       </nav>
 
-      {/* User */}
+      {/* Bottom section */}
       <div className="border-t border-gray-100 p-3 space-y-1">
         <Link
           href="/dashboard/notifications"
@@ -77,6 +96,40 @@ export function Sidebar() {
           <Bell className="h-4 w-4" />
           Notifications
         </Link>
+
+        {/* User row */}
+        {session?.user && (
+          <div className="flex items-center gap-2 rounded-lg px-3 py-2">
+            {/* Avatar */}
+            <div className="w-7 h-7 rounded-full overflow-hidden flex-shrink-0 bg-red-500 flex items-center justify-center">
+              {showPhoto ? (
+                <Image
+                  src={userImage!}
+                  alt={userName ?? userEmail ?? 'User'}
+                  width={28}
+                  height={28}
+                  className="w-full h-full object-cover"
+                  onError={() => setAvatarError(true)}
+                />
+              ) : initials !== '?' ? (
+                <span className="text-[11px] font-bold text-white select-none">{initials}</span>
+              ) : (
+                <User className="w-4 h-4 text-white" />
+              )}
+            </div>
+
+            {/* Name / email */}
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-semibold text-gray-800 truncate">
+                {userName ?? userEmail ?? 'Account'}
+              </p>
+              {userName && userEmail && (
+                <p className="text-[10px] text-gray-400 truncate">{userEmail}</p>
+              )}
+            </div>
+          </div>
+        )}
+
         <button
           onClick={() => signOut({ callbackUrl: '/login' })}
           className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-gray-600 hover:bg-red-50 hover:text-red-600"
