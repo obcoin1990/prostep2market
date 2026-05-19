@@ -33,11 +33,14 @@ export function EmptyState({
 }: EmptyStateProps) {
   return (
     <div className={`flex flex-col items-center justify-center py-12 ${className}`}>
-      <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-        <Icon className="w-8 h-8 text-gray-400" />
+      <div
+        className="w-16 h-16 rounded-full flex items-center justify-center mb-4"
+        style={{ backgroundColor: '#2b3139' }}
+      >
+        <Icon className="w-8 h-8" style={{ color: '#707a8a' }} />
       </div>
-      <h3 className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>
-      <p className="text-sm text-gray-600 text-center max-w-sm mb-6">{description}</p>
+      <h3 className="text-lg font-semibold mb-2" style={{ color: '#eaecef' }}>{title}</h3>
+      <p className="text-sm text-center max-w-sm mb-6" style={{ color: '#707a8a' }}>{description}</p>
       <div className="flex gap-3">
         {action && (
           <Link href={action.href}>
@@ -77,13 +80,16 @@ export function NoTradesEmptyState() {
 export function NoAlertsEmptyState() {
   return (
     <div className="flex flex-col items-center justify-center py-8 text-center">
-      <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-3">
-        <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div
+        className="w-12 h-12 rounded-full flex items-center justify-center mb-3"
+        style={{ backgroundColor: 'rgba(14,203,129,0.12)' }}
+      >
+        <svg className="w-6 h-6" style={{ color: '#0ecb81' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       </div>
-      <p className="text-sm font-medium text-gray-900">All Clear</p>
-      <p className="text-xs text-gray-600 mt-1">No active risk alerts detected</p>
+      <p className="text-sm font-medium" style={{ color: '#eaecef' }}>All Clear</p>
+      <p className="text-xs mt-1" style={{ color: '#707a8a' }}>No active risk alerts detected</p>
     </div>
   )
 }
@@ -105,13 +111,16 @@ export function NoScoreEmptyState() {
 export function NoInsightsEmptyState() {
   return (
     <div className="flex flex-col items-center justify-center py-8 text-center">
-      <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-3">
-        <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div
+        className="w-12 h-12 rounded-full flex items-center justify-center mb-3"
+        style={{ backgroundColor: 'rgba(74,144,217,0.12)' }}
+      >
+        <svg className="w-6 h-6" style={{ color: '#4a90d9' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       </div>
-      <p className="text-sm font-medium text-gray-900">No Insights Yet</p>
-      <p className="text-xs text-gray-600 mt-1">Run an analysis after logging more trades</p>
+      <p className="text-sm font-medium" style={{ color: '#eaecef' }}>No Insights Yet</p>
+      <p className="text-xs mt-1" style={{ color: '#707a8a' }}>Run an analysis after logging more trades</p>
     </div>
   )
 }
@@ -119,13 +128,16 @@ export function NoInsightsEmptyState() {
 export function NoLeaderboardRankEmptyState() {
   return (
     <div className="flex flex-col items-center justify-center py-8 text-center">
-      <div className="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center mb-3">
-        <svg className="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div
+        className="w-12 h-12 rounded-full flex items-center justify-center mb-3"
+        style={{ backgroundColor: 'rgba(252,213,53,0.12)' }}
+      >
+        <svg className="w-6 h-6" style={{ color: '#fcd535' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
         </svg>
       </div>
-      <p className="text-sm font-medium text-gray-900">Leaderboard Rank</p>
-      <p className="text-xs text-gray-600 mt-1">Complete your DNA assessment to see your rank</p>
+      <p className="text-sm font-medium" style={{ color: '#eaecef' }}>Leaderboard Rank</p>
+      <p className="text-xs mt-1" style={{ color: '#707a8a' }}>Complete your DNA assessment to see your rank</p>
     </div>
   )
 }

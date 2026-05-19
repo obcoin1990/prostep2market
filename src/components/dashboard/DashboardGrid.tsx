@@ -185,7 +185,10 @@ export function DashboardGrid({
     <div className="space-y-4 sm:space-y-6">
       {/* Soft error notice — widgets still render with empty states */}
       {error && (
-        <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-amber-50 border border-amber-200 text-xs text-amber-700">
+        <div
+          className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs"
+          style={{ backgroundColor: 'rgba(252,213,53,0.1)', border: '1px solid rgba(252,213,53,0.3)', color: '#fcd535' }}
+        >
           <span>Some data could not be loaded. Widgets will show when data is available.</span>
         </div>
       )}
@@ -302,9 +305,9 @@ export function DashboardGrid({
                   <CardContent className="pt-6 flex items-center justify-center min-h-[200px]">
                     {leaderboard.userRank ? (
                       <div className="text-center">
-                        <p className="text-sm text-gray-600 mb-2">Your Leaderboard Position</p>
-                        <p className="text-4xl font-bold text-[#00B4D8] mb-2">#{leaderboard.userRank.rank}</p>
-                        <p className="text-sm text-gray-600">Score: {leaderboard.userRank.score.toFixed(1)}</p>
+                        <p className="text-sm mb-2" style={{ color: '#707a8a' }}>Your Leaderboard Position</p>
+                        <p className="text-4xl font-bold mb-2" style={{ color: '#fcd535', fontFamily: 'var(--font-mono)' }}>#{leaderboard.userRank.rank}</p>
+                        <p className="text-sm" style={{ color: '#707a8a' }}>Score: {leaderboard.userRank.score.toFixed(1)}</p>
                       </div>
                     ) : (
                       <NoLeaderboardRankEmptyState />
@@ -338,7 +341,7 @@ export function DashboardGrid({
         <Card>
           <CardContent className="pt-6">
             <div className="text-center py-12">
-              <p className="text-gray-500">No widgets to display</p>
+              <p style={{ color: '#707a8a' }}>No widgets to display</p>
             </div>
           </CardContent>
         </Card>

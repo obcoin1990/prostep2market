@@ -26,11 +26,11 @@ const RANK_ICONS = {
 } as const
 
 const RANK_STYLES: Record<Rank, string> = {
-  beginner: 'bg-gray-500 text-white',
-  developing: 'bg-blue-500 text-white',
-  consistent: 'bg-green-500 text-white',
-  advanced: 'bg-purple-500 text-white',
-  elite: 'bg-gradient-to-r from-yellow-400 to-amber-500 text-amber-900',
+  beginner: 'bg-[#2b3139] text-[#b7bdc6]',
+  developing: 'bg-[#1a3a5c] text-[#4a90d9]',
+  consistent: 'bg-[#0a2e1f] text-[#0ecb81]',
+  advanced: 'bg-[#2d1a5c] text-[#a78bfa]',
+  elite: 'bg-gradient-to-r from-[#fcd535] to-[#f0b90b] text-[#0b0e11]',
 }
 
 const SIZE_STYLES = {
@@ -89,7 +89,7 @@ export function RankProgress({ score }: RankProgressProps) {
         <span className="text-muted-foreground">Progress to {nextRank?.label || 'Max'}</span>
         {nextRank && <span className="font-medium">{pointsToNext} pts to {nextRank.label}</span>}
       </div>
-      <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+      <div className="h-2 rounded-full overflow-hidden" style={{ backgroundColor: '#2b3139' }}>
         <div
           className={cn('h-full rounded-full transition-all', RANK_STYLES[current.rank])}
           style={{ width: `${(score / 100) * 100}%` }}

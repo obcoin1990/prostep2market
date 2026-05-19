@@ -69,7 +69,7 @@ function ScoreBar({ label, score, color, icon, showLabel = true, compact = false
       {showLabel && (
         <div className="w-24 flex items-center gap-2">
           <span className="text-base">{icon}</span>
-          <span className={cn('text-gray-700', compact ? 'text-xs' : 'text-sm')}>{label}</span>
+          <span className={cn(compact ? 'text-xs' : 'text-sm')} style={{ color: '#b7bdc6' }}>{label}</span>
         </div>
       )}
       <div className="flex-1 flex items-center gap-2">
@@ -83,7 +83,7 @@ function ScoreBar({ label, score, color, icon, showLabel = true, compact = false
         <span className={cn(
           'font-medium tabular-nums',
           compact ? 'text-xs w-8 text-right' : 'text-sm w-10 text-right'
-        )}>
+        )} style={{ color: '#eaecef' }}>
           {score}
         </span>
       </div>
@@ -120,7 +120,7 @@ export function MiniBreakdown({ scores }: MiniBreakdownProps) {
         <div
           key={config.key}
           className="flex-1 h-1 rounded-full"
-          style={{ backgroundColor: scores[config.key] > 50 ? config.color : '#e5e7eb' }}
+          style={{ backgroundColor: scores[config.key] > 50 ? config.color : '#2b3139' }}
         />
       ))}
     </div>
