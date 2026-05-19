@@ -1,7 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Use .next-build to avoid Windows Defender/Search Indexer locking .next artefacts
-  distDir: '.next-build',
   // Keep Prisma and bcryptjs out of the Edge runtime
   serverExternalPackages: ['@prisma/client', 'bcryptjs'],
   // Explicitly set workspace root to suppress turbopack warning
