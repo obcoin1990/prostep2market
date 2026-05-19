@@ -82,7 +82,13 @@ export function DashboardLayoutClient({
       onTouchEnd={handleTouchEnd}
     >
       {/* Mobile Sidebar (visible on mobile when open) */}
-      <Sidebar isOpen={sidebarOpen} onClose={handleCloseSidebar} />
+      <Sidebar
+          isOpen={sidebarOpen}
+          onClose={handleCloseSidebar}
+          userEmail={userEmail}
+          userAvatarUrl={userAvatarUrl}
+          userFullName={userFullName}
+        />
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
