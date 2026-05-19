@@ -40,7 +40,7 @@ export function Header({
     setShowUserMenu(false)
     const supabase = createClient()
     await supabase.auth.signOut()
-    router.push('/login')
+    window.location.replace('/login')
   }
 
   const initials = getInitials(userFullName, userEmail)

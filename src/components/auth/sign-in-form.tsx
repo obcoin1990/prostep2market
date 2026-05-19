@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input, Label } from '@/components/ui/input'
 import Link from 'next/link'
@@ -12,7 +11,6 @@ export function SignInForm() {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const router = useRouter()
   const supabase = createClient()
 
   const handleSignIn = async (e: React.FormEvent) => {
@@ -28,8 +26,9 @@ export function SignInForm() {
     if (error) {
       setError(error.message)
     } else {
-      router.push('/dashboard')
-      router.refresh()
+      // Hard redirect so the server layout re-reads the new session cookie
+      window.location.replace('/dashboard')
+      return
     }
     setLoading(false)
   }

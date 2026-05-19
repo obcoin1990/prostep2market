@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import {
@@ -55,7 +55,6 @@ export function Sidebar({
   userFullName,
 }: SidebarProps) {
   const pathname = usePathname()
-  const router = useRouter()
   const [avatarError, setAvatarError] = useState(false)
   const [signingOut, setSigningOut] = useState(false)
 
@@ -63,7 +62,7 @@ export function Sidebar({
     setSigningOut(true)
     const supabase = createClient()
     await supabase.auth.signOut()
-    router.push('/login')
+    window.location.replace('/login')
   }
 
   const initials = getInitials(userFullName, userEmail)
@@ -241,18 +240,17 @@ export function Sidebar({
             onClick={handleSignOut}
             disabled={signingOut}
             title="Sign out"
-            className="p-1.5 rounded-[6px] flex-shrink-0 transition-colors"
-            style={{ color: '#707a8a' }}
+            className="p-1.5 rounded-[6px] flex-shrink-0 transition-colors flex items-center gap-1.5 text-xs font-medium"
+            style={{ color: '#f6465d' }}
             onMouseEnter={e => {
-              e.currentTarget.style.color = '#f6465d'
               e.currentTarget.style.backgroundColor = 'rgba(246,70,93,0.1)'
             }}
             onMouseLeave={e => {
-              e.currentTarget.style.color = '#707a8a'
               e.currentTarget.style.backgroundColor = 'transparent'
             }}
           >
             <LogOut className="w-4 h-4" />
+            <span>{signingOut ? '...' : 'Logout'}</span>
           </button>
         </div>
       </div>
