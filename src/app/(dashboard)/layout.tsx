@@ -38,7 +38,12 @@ export default async function DashboardLayout({
   } : null
 
   return (
-    <DashboardLayoutClient profile={profile}>
+    <DashboardLayoutClient
+      profile={profile}
+      userEmail={user.email ?? null}
+      userAvatarUrl={user.user_metadata?.avatar_url ?? null}
+      userFullName={user.user_metadata?.full_name ?? user.user_metadata?.name ?? null}
+    >
       {children}
     </DashboardLayoutClient>
   )

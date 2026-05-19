@@ -8,6 +8,9 @@ import { TraderProfile } from '@/types/trader-dna'
 interface DashboardLayoutClientProps {
   children: React.ReactNode
   profile: TraderProfile | null
+  userEmail: string | null
+  userAvatarUrl: string | null
+  userFullName: string | null
 }
 
 interface TouchPosition {
@@ -18,6 +21,9 @@ interface TouchPosition {
 export function DashboardLayoutClient({
   children,
   profile,
+  userEmail,
+  userAvatarUrl,
+  userFullName,
 }: DashboardLayoutClientProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const touchStartPos = useRef<TouchPosition | null>(null)
@@ -80,7 +86,13 @@ export function DashboardLayoutClient({
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        <Header onMenuClick={handleMenuClick} profile={profile} />
+        <Header
+          onMenuClick={handleMenuClick}
+          profile={profile}
+          userEmail={userEmail}
+          userAvatarUrl={userAvatarUrl}
+          userFullName={userFullName}
+        />
         <main className="flex-1 overflow-y-auto bg-[#F5F7FA] p-4 sm:p-6">
           {children}
         </main>
