@@ -33,51 +33,48 @@ export function PauseOverlay({ userId }: { userId: string }) {
   }
 
   return (
-    <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
-      <div className="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full mx-4 text-center">
-        {/* Animated pause icon */}
+    <div className="fixed inset-0 flex items-center justify-center z-50" style={{ backgroundColor: 'rgba(0,0,0,0.85)' }}>
+      <div className="rounded-[12px] p-8 max-w-md w-full mx-4 text-center" style={{ backgroundColor: '#1e2329', border: '1px solid #2b3139' }}>
         <div className="flex justify-center mb-6">
           <div className="relative">
-            <div className="w-24 h-24 rounded-full bg-[#2E7D32]/10 flex items-center justify-center animate-pulse">
-              <Pause className="w-12 h-12 text-[#2E7D32]" />
+            <div className="w-24 h-24 rounded-full flex items-center justify-center animate-pulse" style={{ backgroundColor: 'rgba(14,203,129,0.1)' }}>
+              <Pause className="w-12 h-12" style={{ color: '#0ecb81' }} />
             </div>
-            <div className="absolute inset-0 rounded-full bg-[#2E7D32]/20 animate-ping" style={{ animationDuration: '2s' }} />
+            <div className="absolute inset-0 rounded-full animate-ping" style={{ backgroundColor: 'rgba(14,203,129,0.15)', animationDuration: '2s' }} />
           </div>
         </div>
 
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Trading Paused</h2>
+        <h2 className="text-2xl font-bold mb-2" style={{ color: '#ffffff' }}>Trading Paused</h2>
 
-        {/* Message based on reason */}
-        <p className="text-gray-600 mb-4">
-          {pauseInfo.reason === 'system_suggested' 
+        <p className="mb-4" style={{ color: '#eaecef' }}>
+          {pauseInfo.reason === 'system_suggested'
             ? "We noticed signs of trading fatigue. Take a break?"
             : "You've activated pause mode."}
         </p>
 
-        {/* Countdown timer or manual message */}
         {remainingTime !== null ? (
           <div className="mb-6">
-            <p className="text-sm text-gray-500">Time remaining</p>
-            <p className="text-3xl font-mono font-bold text-[#2E7D32] mt-1">
+            <p className="text-sm" style={{ color: '#707a8a' }}>Time remaining</p>
+            <p className="text-3xl font-bold mt-1" style={{ color: '#0ecb81', fontFamily: 'var(--font-mono)' }}>
               {formatTime(remainingTime)}
             </p>
           </div>
         ) : (
-          <p className="text-sm text-gray-500 mb-6">
-            Pause is active until you resume.
-          </p>
+          <p className="text-sm mb-6" style={{ color: '#707a8a' }}>Pause is active until you resume.</p>
         )}
 
-        {/* Resume button */}
         <button
           onClick={handleResume}
-          className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-[#2E7D32] text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
+          className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-[6px] font-semibold transition-colors"
+          style={{ backgroundColor: '#0ecb81', color: '#ffffff' }}
+          onMouseEnter={e => (e.currentTarget.style.opacity = '0.9')}
+          onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
         >
           <PlayCircle className="w-5 h-5" />
           Resume Trading
         </button>
 
-        <p className="text-xs text-gray-400 mt-4">
+        <p className="text-xs mt-4" style={{ color: '#707a8a' }}>
           You can still access Journal, Education, and Profile pages.
         </p>
       </div>

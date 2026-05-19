@@ -81,7 +81,7 @@ export function DashboardContent({
   if (!isHydrated) {
     return (
       <div className="flex items-center justify-center h-full">
-        <Loader className="w-8 h-8 text-[#00B4D8] animate-spin" />
+        <Loader className="w-8 h-8 animate-spin" style={{ color: '#fcd535' }} />
       </div>
     )
   }
@@ -111,9 +111,9 @@ export function DashboardContent({
       {/* Header section with user greeting and controls */}
       <div className="space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div className="space-y-2">
-            <h1 className="text-3xl font-bold text-[#0A0F1C]">Dashboard</h1>
-            <p className="text-[rgba(10,15,28,0.6)]">
+          <div className="space-y-1">
+            <h1 className="text-3xl font-bold" style={{ color: '#ffffff', letterSpacing: '-0.3px' }}>Dashboard</h1>
+            <p style={{ color: '#707a8a', fontSize: '14px' }}>
               Welcome back{user?.email ? `, ${user.email.split('@')[0]}` : ''}!
             </p>
           </div>

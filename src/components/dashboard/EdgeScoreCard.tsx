@@ -135,7 +135,7 @@ export function EdgeScoreCard({ userId, className }: EdgeScoreCardProps) {
 
   const trend = getTrend()
   const TrendIcon = trend === 'up' ? TrendingUp : trend === 'down' ? TrendingDown : Minus
-  const trendColor = trend === 'up' ? 'text-green-600' : trend === 'down' ? 'text-red-600' : 'text-gray-500'
+  const trendColor = trend === 'up' ? '#0ecb81' : trend === 'down' ? '#f6465d' : '#707a8a'
 
   // Loading state
   if (loading) {
@@ -143,7 +143,7 @@ export function EdgeScoreCard({ userId, className }: EdgeScoreCardProps) {
       <Card className={className} data-tour="edge-score">
         <CardHeader className="pb-2">
           <div className="flex justify-between items-center">
-            <CardTitle className="text-sm font-medium text-gray-500">Edge Score</CardTitle>
+          <CardTitle className="text-sm font-medium" style={{ color: '#707a8a' }}>Edge Score</CardTitle>
             <Skeleton className="h-6 w-20" />
           </div>
         </CardHeader>
@@ -166,11 +166,11 @@ export function EdgeScoreCard({ userId, className }: EdgeScoreCardProps) {
     return (
       <Card className={className} data-tour="edge-score">
         <CardHeader className="pb-2">
-          <CardTitle className="text-sm font-medium text-gray-500">Edge Score</CardTitle>
+          <CardTitle className="text-sm font-medium" style={{ color: '#707a8a' }}>Edge Score</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="text-center py-6 space-y-4">
-            <div className="text-5xl font-bold text-gray-300">—</div>
+            <div className="text-5xl font-bold" style={{ color: '#2b3139' }}>—</div>
             <p className="text-sm text-muted-foreground">
               Start logging trades to see your Edge Score
             </p>
@@ -214,26 +214,25 @@ export function EdgeScoreCard({ userId, className }: EdgeScoreCardProps) {
     <Card className={className} data-tour="edge-score">
       <CardHeader className="pb-2">
         <div className="flex justify-between items-center">
-          <CardTitle className="text-sm font-medium text-gray-500">Edge Score</CardTitle>
-          <Button 
-            variant="ghost" 
-            size="sm" 
+          <CardTitle className="text-sm font-medium" style={{ color: '#707a8a' }}>Edge Score</CardTitle>
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={triggerRecalculation}
             disabled={isCalculating}
             className="h-8"
           >
-            <RefreshCw className={`w-4 h-4 ${isCalculating ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-4 h-4 ${isCalculating ? 'animate-spin' : ''}`} style={{ color: '#707a8a' }} />
           </Button>
         </div>
       </CardHeader>
       <CardContent>
-        {/* Main score display */}
         <div className="flex items-end justify-between mb-4">
           <div className="flex items-baseline gap-2">
-            <span className="text-4xl font-bold text-gray-900">{score.compositeScore}</span>
-            <span className="text-sm text-gray-500">/100</span>
+            <span className="text-4xl font-bold" style={{ color: '#ffffff', fontFamily: 'var(--font-mono)' }}>{score.compositeScore}</span>
+            <span className="text-sm" style={{ color: '#707a8a' }}>/100</span>
           </div>
-          <div className={`flex items-center gap-1 ${trendColor}`}>
+          <div className="flex items-center gap-1" style={{ color: trendColor }}>
             <TrendIcon className="w-4 h-4" />
             <span className="text-sm font-medium">
               {trend === 'flat' ? 'Stable' : trend === 'up' ? 'Trending up' : 'Trending down'}
@@ -241,32 +240,29 @@ export function EdgeScoreCard({ userId, className }: EdgeScoreCardProps) {
           </div>
         </div>
 
-        {/* Sparkline */}
         <div className="h-16 mb-4">
           <ScoreSparkline data={history} width={280} height={60} />
         </div>
 
-        {/* Rank and progress */}
         <div className="space-y-3 mb-4">
           <div className="flex items-center justify-between">
             <RankBadge rank={score.rank} size="md" />
-            <span className="text-xs text-gray-500">
+            <span className="text-xs" style={{ color: '#707a8a' }}>
               {score.date && new Date(score.date).toLocaleDateString()}
             </span>
           </div>
           <RankProgress score={score.compositeScore} />
         </div>
 
-        {/* Score breakdown (expandable) */}
-        <div className="border-t pt-3 mt-3">
+        <div className="pt-3 mt-3" style={{ borderTop: '1px solid #2b3139' }}>
           <button
             onClick={() => setShowBreakdown(!showBreakdown)}
-            className="w-full flex items-center justify-between text-sm font-medium text-gray-700 mb-2"
+            className="w-full flex items-center justify-between text-sm font-medium mb-2"
+            style={{ color: '#eaecef' }}
           >
             <span>Score Breakdown</span>
             {showBreakdown ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
           </button>
-          
           {showBreakdown && (
             <div className="pt-2">
               <ScoreBreakdown scores={breakdownScores} />
@@ -274,14 +270,11 @@ export function EdgeScoreCard({ userId, className }: EdgeScoreCardProps) {
           )}
         </div>
 
-        {/* Quick tips */}
-        <div className="mt-4 p-3 bg-gray-50 rounded-lg space-y-2">
-          <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
-            Quick Tips
-          </p>
+        <div className="mt-4 p-3 rounded-[8px] space-y-2" style={{ backgroundColor: '#2b3139' }}>
+          <p className="text-xs font-semibold uppercase tracking-wide" style={{ color: '#707a8a' }}>Quick Tips</p>
           {tips.slice(0, 2).map((tip, index) => (
-            <p key={index} className="text-xs text-gray-600 flex items-start gap-2">
-              <span className="text-green-600 mt-0.5">→</span>
+            <p key={index} className="text-xs flex items-start gap-2" style={{ color: '#eaecef' }}>
+              <span className="mt-0.5" style={{ color: '#0ecb81' }}>→</span>
               {tip.message}
             </p>
           ))}
