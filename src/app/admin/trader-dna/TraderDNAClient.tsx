@@ -251,7 +251,8 @@ interface Props {
   profiles: TraderProfile[]
 }
 
-type SortKey = 'email' | 'profile_type' | 'completed_at' | 'risk_personality_score'
+// completed_at does not exist in trader_profiles — use profile_type presence as proxy
+type SortKey = 'email' | 'profile_type' | 'created_at' | 'risk_personality_score'
 
 export function TraderDNAClient({ profiles: initialProfiles }: Props) {
   const [profiles, setProfiles] = useState<TraderProfile[]>(initialProfiles)
@@ -285,7 +286,7 @@ export function TraderDNAClient({ profiles: initialProfiles }: Props) {
       let bv: string | number = ''
       if (sortKey === 'email') { av = a.email ?? a.id; bv = b.email ?? b.id }
       else if (sortKey === 'profile_type') { av = a.profile_type ?? ''; bv = b.profile_type ?? '' }
-      else if (sortKey === 'completed_at') { av = a.completed_at ?? ''; bv = b.completed_at ?? '' }
+      else if (sortKey === 'created_at') { av = a.created_at ?? ''; bv = b.created_at ?? '' }
       else if (sortKey === 'risk_personality_score') { av = a.risk_personality_score ?? 0; bv = b.risk_personality_score ?? 0 }
 
       if (av < bv) return sortDir === 'asc' ? -1 : 1
@@ -324,7 +325,7 @@ export function TraderDNAClient({ profiles: initialProfiles }: Props) {
           <div>
             <h1 className="text-2xl font-bold text-[#0A0F1C]">Trader DNA Editor</h1>
             <p className="text-sm text-gray-500 mt-0.5">
-              {profiles.length} profiles · {profiles.filter((p) => p.completed_at).length} completed
+              {profiles.length} profiles · {profiles.filter((p) => p.profile_type).length} with DNA complete
             </p>
           </div>
           <div className="relative w-full sm:w-72">
@@ -364,8 +365,8 @@ export function TraderDNAClient({ profiles: initialProfiles }: Props) {
                   <th className="px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide text-left">
                     Learning Path
                   </th>
-                  <th className={thCls} onClick={() => handleSort('completed_at')}>
-                    Status <SortIcon k="completed_at" />
+                  <th className={thCls} onClick={() => handleSort('created_at')}>
+                    Joined <SortIcon k="created_at" />
                   </th>
                   <th className="px-4 py-3" />
                 </tr>
@@ -425,12 +426,12 @@ export function TraderDNAClient({ profiles: initialProfiles }: Props) {
                       )}
                     </td>
 
-                    {/* Status */}
+                    {/* Joined / Status */}
                     <td className="px-4 py-3">
-                      {profile.completed_at ? (
+                      {profile.profile_type ? (
                         <div className="flex items-center gap-1 text-[#2E7D32]">
                           <CheckCircle className="w-3.5 h-3.5" />
-                          <span className="text-xs font-medium">Completed</span>
+                          <span className="text-xs font-medium">DNA Complete</span>
                         </div>
                       ) : (
                         <div className="flex items-center gap-1 text-gray-400">

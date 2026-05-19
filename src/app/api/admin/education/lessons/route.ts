@@ -2,6 +2,23 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { getAdminContext } from '@/lib/admin/auth'
 import { NextRequest, NextResponse } from 'next/server'
 
+// ─── GET /api/admin/education/lessons?course_id=<uuid> ───────────────────────
+export async function GET(request: NextRequest) {
+  const result = await getAdminContext()
+  if (result instanceof NextResponse) return result
+
+  const courseId = new URL(request.url).searchParams.get('course_id')
+  const admin = createAdminClient()
+
+  let query = admin.from('lessons').select('*').order('order_index', { ascending: true })
+  if (courseId) query = query.eq('course_id', courseId)
+
+  const { data, error } = await query
+  if (error) return NextResponse.json({ error: error.message }, { status: 400 })
+
+  return NextResponse.json({ success: true, data: data ?? [] })
+}
+
 export async function POST(request: NextRequest) {
   const result = await getAdminContext()
   if (result instanceof NextResponse) return result

@@ -58,9 +58,12 @@ interface Props {
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
+// DB CHECK: path IN ('beginner', 'intermediate', 'advanced', 'psychology-first')
 const PATHS = ['beginner', 'intermediate', 'advanced', 'psychology-first']
-const COURSE_TYPES = ['video', 'quiz', 'case_study', 'mixed']
-const LESSON_TYPES = ['video', 'text', 'quiz', 'case_study', 'exercise']
+// DB CHECK: type IN ('video', 'interactive', 'case-study', 'workshop')
+const COURSE_TYPES = ['video', 'interactive', 'case-study', 'workshop']
+// DB CHECK: type IN ('reading', 'video', 'interactive')
+const LESSON_TYPES = ['reading', 'video', 'interactive']
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -342,9 +345,9 @@ export function EducationManagerClient({ initialCourses, analytics }: Props) {
     if (!courseId) { setLessons([]); return }
     setLoadingLessons(true)
     try {
-      const res = await fetch(`/api/admin/education/${courseId}`)
+      const res = await fetch(`/api/admin/education/lessons?course_id=${courseId}`)
       const json = await res.json()
-      if (json.success) setLessons(json.data.lessons ?? [])
+      if (json.success) setLessons(json.data ?? [])
       else toast.error(json.error ?? 'Failed to fetch lessons')
     } catch {
       toast.error('Network error fetching lessons')

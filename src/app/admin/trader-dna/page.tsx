@@ -14,7 +14,6 @@ export interface TraderProfile {
   learning_path: string | null
   admin_role: string | null
   created_at: string | null
-  completed_at: string | null
   email?: string
 }
 
@@ -27,7 +26,7 @@ export default async function TraderDNAPage() {
   const { data: profiles, error } = await adminClient
     .from('trader_profiles')
     .select(
-      'id, profile_type, risk_personality_score, emotional_stability_score, decision_making_score, trading_behavior_score, learning_style_score, learning_path, admin_role, created_at, completed_at'
+      'id, profile_type, risk_personality_score, emotional_stability_score, decision_making_score, trading_behavior_score, learning_style_score, learning_path, admin_role, created_at'
     )
     .order('created_at', { ascending: false })
 
