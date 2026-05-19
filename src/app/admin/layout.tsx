@@ -15,8 +15,8 @@ export default async function AdminLayout({
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) redirect('/login')
-    // Logged in but not admin → show 403
-    redirect('/admin/forbidden')
+    // Logged in but not admin → show 403 (outside admin layout to avoid redirect loop)
+    redirect('/forbidden')
   }
 
   return (
