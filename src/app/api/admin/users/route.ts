@@ -1,75 +1,108 @@
 import { createAdminClient } from '@/lib/supabase/admin'
-import { createClient } from '@/lib/supabase/server'
+import { getAdminContext } from '@/lib/admin/auth'
 import { NextRequest, NextResponse } from 'next/server'
 
-/**
- * POST /api/admin/users
- * Create a new user with trader profile
- * Requires admin authentication
- */
-export async function POST(request: NextRequest) {
+// ─── GET /api/admin/users ─────────────────────────────────────────────────────
+export async function GET(request: NextRequest) {
+  const result = await getAdminContext()
+  if (result instanceof NextResponse) return result
+
+  const { searchParams } = new URL(request.url)
+  const page = Math.max(1, parseInt(searchParams.get('page') ?? '1', 10))
+  const limit = Math.min(200, Math.max(1, parseInt(searchParams.get('limit') ?? '50', 10)))
+  const search = searchParams.get('search') ?? ''
+
+  const adminSupabase = createAdminClient()
+
+  // Fetch auth users (paginated via Supabase admin API)
+  const emailMap: Record<string, string> = {}
+  const bannedMap: Record<string, boolean> = {}
   try {
-    // First, check if the requesting user is authenticated and is an admin
-    const supabase = await createClient()
-    const {
-      data: { user: authUser },
-    } = await supabase.auth.getUser()
-
-    if (!authUser) {
-      return NextResponse.json(
-        { error: 'Unauthorized: Must be logged in' },
-        { status: 401 }
-      )
+    let p = 1
+    while (true) {
+      const { data: usersPage, error } = await adminSupabase.auth.admin.listUsers({ page: p, perPage: 1000 })
+      if (error || !usersPage?.users?.length) break
+      for (const u of usersPage.users) {
+        if (u.email) emailMap[u.id] = u.email
+        bannedMap[u.id] = !!u.banned_until && new Date(u.banned_until) > new Date()
+      }
+      if (usersPage.users.length < 1000) break
+      p++
     }
+  } catch (e) {
+    console.error('Failed to list auth users:', e)
+  }
 
-    // Check if user is admin (email whitelist)
-    const adminEmails = (process.env.ADMIN_EMAILS ?? '').split(',').map(e => e.trim()).filter(Boolean)
-    if (!adminEmails.includes(authUser.email || '')) {
-      return NextResponse.json(
-        { error: 'Forbidden: Only admins can create users' },
-        { status: 403 }
-      )
+  // Filter by search
+  let userIds: string[] | null = null
+  if (search) {
+    userIds = Object.entries(emailMap)
+      .filter(([, email]) => email.toLowerCase().includes(search.toLowerCase()))
+      .map(([id]) => id)
+    if (userIds.length === 0) {
+      return NextResponse.json({ success: true, users: [], total: 0 })
     }
+  }
 
-    // Now use the admin client to create users
-    const adminSupabase = createAdminClient()
-    const body = await request.json()
-    const { email, password, profile_type, full_name } = body
+  let query = adminSupabase
+    .from('trader_profiles')
+    .select(
+      'id, profile_type, risk_personality_score, emotional_stability_score, decision_making_score, trading_behavior_score, learning_style_score, learning_path, admin_role, created_at, completed_at',
+      { count: 'exact' }
+    )
+    .order('created_at', { ascending: false })
+    .range((page - 1) * limit, page * limit - 1)
 
-    // Validate required fields
-    if (!email || !password || !profile_type) {
-      return NextResponse.json(
-        { error: 'Missing required fields: email, password, profile_type' },
-        { status: 400 }
-      )
-    }
+  if (userIds !== null) {
+    query = query.in('id', userIds)
+  }
 
-    // Create auth user via Admin API
-    const { data: newUser, error: authError } = await adminSupabase.auth.admin.createUser({
-      email,
-      password,
-      email_confirm: true, // Auto-confirm email
-      user_metadata: {
-        full_name: full_name || email.split('@')[0],
-      },
-    })
+  const { data: profiles, error, count } = await query
 
-    if (authError) {
-      return NextResponse.json(
-        { error: `Auth error: ${authError.message}` },
-        { status: 400 }
-      )
-    }
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 
-    if (!newUser.user) {
-      return NextResponse.json(
-        { error: 'Failed to create user' },
-        { status: 400 }
-      )
-    }
+  const enriched = (profiles ?? []).map((p) => ({
+    ...p,
+    email: emailMap[p.id] ?? null,
+    banned: bannedMap[p.id] ?? false,
+  }))
 
-    // Create trader profile
-    const profileData = {
+  return NextResponse.json({ success: true, users: enriched, total: count ?? 0 })
+}
+
+// ─── POST /api/admin/users ────────────────────────────────────────────────────
+export async function POST(request: NextRequest) {
+  const result = await getAdminContext()
+  if (result instanceof NextResponse) return result
+
+  let body: { email: string; password: string; profile_type: string; full_name?: string }
+  try {
+    body = await request.json()
+  } catch {
+    return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
+  }
+
+  const { email, password, profile_type, full_name } = body
+  if (!email || !password || !profile_type) {
+    return NextResponse.json({ error: 'email, password, and profile_type are required' }, { status: 400 })
+  }
+
+  const adminSupabase = createAdminClient()
+
+  const { data: newUser, error: authError } = await adminSupabase.auth.admin.createUser({
+    email,
+    password,
+    email_confirm: true,
+    user_metadata: { full_name: full_name ?? email.split('@')[0] },
+  })
+
+  if (authError) return NextResponse.json({ error: authError.message }, { status: 400 })
+  if (!newUser.user) return NextResponse.json({ error: 'Failed to create user' }, { status: 400 })
+
+  const now = new Date().toISOString()
+  const { error: profileError } = await adminSupabase
+    .from('trader_profiles')
+    .insert([{
       id: newUser.user.id,
       profile_type,
       risk_personality_score: 75,
@@ -78,106 +111,19 @@ export async function POST(request: NextRequest) {
       trading_behavior_score: 80,
       learning_style_score: 77,
       learning_path: 'beginner',
-      dashboard_layout: {
-        widgets: ['edgeScore', 'alerts', 'quickActions', 'tradeStats', 'insights'],
-      },
-      alert_thresholds: {
-        risk: 2.0,
-        consistency: 1.5,
-        emotion: 3.0,
-      },
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    }
+      dashboard_layout: { widgets: ['edgeScore', 'alerts', 'quickActions', 'tradeStats', 'insights'] },
+      alert_thresholds: { risk: 2.0, consistency: 1.5, emotion: 3.0 },
+      created_at: now,
+      updated_at: now,
+    }])
 
-    const { data: profile, error: profileError } = await adminSupabase
-      .from('trader_profiles')
-      .insert([profileData])
-      .select()
-
-    if (profileError) {
-      // Delete the auth user if profile creation fails
-      await adminSupabase.auth.admin.deleteUser(newUser.user.id)
-      return NextResponse.json(
-        { error: `Profile error: ${profileError.message}` },
-        { status: 400 }
-      )
-    }
-
-    return NextResponse.json(
-      {
-        success: true,
-        user: {
-          id: newUser.user.id,
-          email: newUser.user.email,
-          profile_type,
-          created_at: newUser.user.created_at,
-        },
-      },
-      { status: 201 }
-    )
-  } catch (error) {
-    console.error('Error creating user:', error)
-    return NextResponse.json(
-      { error: `Internal server error: ${error instanceof Error ? error.message : 'Unknown error'}` },
-      { status: 500 }
-    )
+  if (profileError) {
+    await adminSupabase.auth.admin.deleteUser(newUser.user.id)
+    return NextResponse.json({ error: profileError.message }, { status: 400 })
   }
+
+  return NextResponse.json({
+    success: true,
+    user: { id: newUser.user.id, email: newUser.user.email, profile_type, created_at: newUser.user.created_at },
+  }, { status: 201 })
 }
-
-/**
- * GET /api/admin/users
- * List all users (admin only)
- */
-export async function GET(request: NextRequest) {
-  try {
-    // Check if user is authenticated
-    const supabase = await createClient()
-    const {
-      data: { user: authUser },
-    } = await supabase.auth.getUser()
-
-    if (!authUser) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
-    }
-
-    // Check admin permission
-    const adminEmails = (process.env.ADMIN_EMAILS ?? '').split(',').map(e => e.trim()).filter(Boolean)
-    if (!adminEmails.includes(authUser.email || '')) {
-      return NextResponse.json(
-        { error: 'Forbidden: Only admins can view users' },
-        { status: 403 }
-      )
-    }
-
-    // Use admin client to fetch profiles
-    const adminSupabase = createAdminClient()
-    const { data: profiles, error } = await adminSupabase
-      .from('trader_profiles')
-      .select('*')
-      .order('created_at', { ascending: false })
-
-    if (error) {
-      return NextResponse.json(
-        { error: error.message },
-        { status: 400 }
-      )
-    }
-
-    return NextResponse.json({
-      success: true,
-      users: profiles || [],
-      total: profiles?.length || 0,
-    })
-  } catch (error) {
-    console.error('Error fetching users:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
-  }
-}
-

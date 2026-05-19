@@ -1,5 +1,3 @@
-'use server'
-
 import { redirect } from 'next/navigation'
 import { getAdminUser } from '@/lib/admin/auth'
 import { createAdminClient } from '@/lib/supabase/admin'

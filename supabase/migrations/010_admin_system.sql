@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS enterprise_tenants (
   name             TEXT NOT NULL,
   slug             TEXT UNIQUE NOT NULL,
   domain           TEXT UNIQUE,
-  contact_email    TEXT NOT NULL,
+  contact_email    TEXT,
   plan             TEXT NOT NULL DEFAULT 'enterprise'
                    CHECK (plan IN ('enterprise', 'white_label')),
   primary_color    TEXT,
