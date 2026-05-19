@@ -1,7 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Use .next-build to avoid Windows Defender/Search Indexer locking .next artefacts
+  distDir: '.next-build',
   // Keep Prisma and bcryptjs out of the Edge runtime
   serverExternalPackages: ['@prisma/client', 'bcryptjs'],
+  // Explicitly set workspace root to suppress turbopack warning
+  // (caused by parent-directory package-lock.json)
+  turbopack: {
+    root: __dirname,
+  },
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'avatars.githubusercontent.com' },
@@ -25,15 +32,9 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: false,
   },
-  // Redirect bare /dashboard → role-based page (handled in page.tsx, but keep)
+  // No redirects needed — /dashboard is handled by (dashboard)/dashboard/page.tsx
   async redirects() {
-    return [
-      {
-        source:      '/dashboard',
-        destination: '/dashboard/learner',
-        permanent:   false,
-      },
-    ]
+    return []
   },
 }
 

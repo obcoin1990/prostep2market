@@ -22,7 +22,7 @@ export default async function EducationPage() {
               <BookOpen className="h-4 w-4 text-primary mr-2" />
               <span className="text-sm font-medium text-primary">Education Hub</span>
             </div>
-            <h1 className="text-4xl font-bold tracking-tight mb-4">
+            <h1 className="text-4xl font-bold tracking-tight mb-4 text-foreground">
               Master Trading with Structured Learning
             </h1>
             <p className="text-lg text-muted-foreground mb-8">
@@ -34,11 +34,11 @@ export default async function EducationPage() {
             <div className="flex items-center justify-center gap-8 text-sm">
               <div className="flex items-center gap-2">
                 <Award className="h-4 w-4 text-amber-500" />
-                <span>Certificates on completion</span>
+                <span className="text-foreground">Certificates on completion</span>
               </div>
               <div className="flex items-center gap-2">
                 <TrendingUp className="h-4 w-4 text-green-500" />
-                <span>Progress tracked</span>
+                <span className="text-foreground">Progress tracked</span>
               </div>
             </div>
           </div>
@@ -47,7 +47,7 @@ export default async function EducationPage() {
 
       {/* Learning Paths Grid */}
       <section className="container mx-auto px-4 py-12">
-        <h2 className="text-2xl font-semibold mb-6">Choose Your Learning Path</h2>
+        <h2 className="text-2xl font-semibold mb-6 text-foreground">Choose Your Learning Path</h2>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {learningPaths.map((path) => (
             <LearningPathCard 
@@ -61,13 +61,13 @@ export default async function EducationPage() {
 
       {/* Info Section */}
       <section className="container mx-auto px-4 py-8">
-        <div className="rounded-lg border bg-card p-6">
-          <h3 className="font-semibold mb-4">How It Works</h3>
+        <div className="rounded-lg border bg-card border-border p-6">
+          <h3 className="font-semibold mb-4 text-foreground">How It Works</h3>
           <div className="grid gap-4 md:grid-cols-3">
             <div className="space-y-2">
               <div className="flex items-center gap-2">
                 <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs">1</span>
-                <span className="font-medium">Choose a Path</span>
+                <span className="font-medium text-foreground">Choose a Path</span>
               </div>
               <p className="text-sm text-muted-foreground">
                 Select from beginner, intermediate, advanced, or psychology-first tracks.
@@ -76,7 +76,7 @@ export default async function EducationPage() {
             <div className="space-y-2">
               <div className="flex items-center gap-2">
                 <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs">2</span>
-                <span className="font-medium">Complete Courses</span>
+                <span className="font-medium text-foreground">Complete Courses</span>
               </div>
               <p className="text-sm text-muted-foreground">
                 Work through micro-lessons at your own pace. Track your progress as you go.
@@ -85,7 +85,7 @@ export default async function EducationPage() {
             <div className="space-y-2">
               <div className="flex items-center gap-2">
                 <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs">3</span>
-                <span className="font-medium">Earn Certificates</span>
+                <span className="font-medium text-foreground">Earn Certificates</span>
               </div>
               <p className="text-sm text-muted-foreground">
                 Pass quizzes to earn certificates and boost your Edge Score.
