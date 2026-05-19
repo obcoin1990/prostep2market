@@ -20,12 +20,13 @@ import {
 } from 'lucide-react'
 
 const navItems = [
-  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/journal', label: 'Trade Journal', icon: FileText, dataTour: 'sidebar-journal' },
-  { href: '/analysis', label: 'AI Analysis', icon: Brain },
-  { href: '/education', label: 'Education', icon: GraduationCap },
-  { href: '/strategy-lab', label: 'Strategy Lab', icon: FlaskConical },
-  { href: '/leaderboard', label: 'Leaderboard', icon: Trophy },
+  { href: '/dashboard',     label: 'Dashboard',    icon: LayoutDashboard },
+  { href: '/journal',       label: 'Trade Journal', icon: FileText,     dataTour: 'sidebar-journal' },
+  { href: '/analysis',      label: 'AI Analysis',   icon: Brain },
+  { href: '/education',     label: 'Education',     icon: GraduationCap },
+  { href: '/strategy-lab',  label: 'Strategy Lab',  icon: FlaskConical },
+  { href: '/risk-guardian', label: 'Risk Guardian', icon: Shield },
+  { href: '/leaderboard',   label: 'Leaderboard',   icon: Trophy },
 ]
 
 interface SidebarProps {
@@ -36,7 +37,7 @@ interface SidebarProps {
   userFullName?: string | null
 }
 
-function getInitials(name: string | null | undefined, email: string | null | undefined): string {
+function getInitials(name?: string | null, email?: string | null): string {
   if (name) {
     const parts = name.trim().split(/\s+/)
     if (parts.length >= 2) return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
@@ -46,7 +47,13 @@ function getInitials(name: string | null | undefined, email: string | null | und
   return '?'
 }
 
-export function Sidebar({ isOpen = false, onClose, userEmail, userAvatarUrl, userFullName }: SidebarProps) {
+export function Sidebar({
+  isOpen = false,
+  onClose,
+  userEmail,
+  userAvatarUrl,
+  userFullName,
+}: SidebarProps) {
   const pathname = usePathname()
   const router = useRouter()
   const [avatarError, setAvatarError] = useState(false)
@@ -63,63 +70,133 @@ export function Sidebar({ isOpen = false, onClose, userEmail, userAvatarUrl, use
   const showPhoto = userAvatarUrl && !avatarError
 
   const SidebarContent = () => (
-    <aside className="w-64 bg-[#0A0F1C] border-r border-[rgba(255,255,255,0.1)] flex flex-col h-full">
-      {/* Logo */}
-      <div className="flex items-center justify-between p-4 border-b border-[rgba(255,255,255,0.1)]">
-        <Link href="/dashboard" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-          <span className="text-xl font-bold text-[#00B4D8]">P2M</span>
+    <aside
+      className="w-64 flex flex-col h-full"
+      style={{ backgroundColor: '#0b0e11', borderRight: '1px solid #2b3139' }}
+    >
+      {/* ── Logo / brand ────────────────────────────── */}
+      <div
+        className="flex items-center justify-between px-5 h-16 flex-shrink-0"
+        style={{ borderBottom: '1px solid #2b3139' }}
+      >
+        <Link
+          href="/dashboard"
+          className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+          onClick={onClose}
+        >
+          {/* P2M wordmark in Binance Yellow */}
+          <span
+            className="text-xl font-bold tracking-tight"
+            style={{ color: '#fcd535', fontFamily: 'var(--font-sans)' }}
+          >
+            P2M
+          </span>
+          <span
+            className="text-sm font-medium hidden lg:block"
+            style={{ color: '#707a8a' }}
+          >
+            ProStep2Market
+          </span>
         </Link>
+
+        {/* Mobile close */}
         <button
           onClick={onClose}
-          className="md:hidden p-2 -mr-2 hover:bg-[rgba(255,255,255,0.1)] rounded transition-colors"
+          className="md:hidden p-2 -mr-1 rounded-[6px] transition-colors"
+          style={{ color: '#707a8a' }}
+          onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#1e2329')}
+          onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
           aria-label="Close menu"
         >
-          <X className="w-5 h-5 text-white" />
+          <X className="w-5 h-5" />
         </button>
       </div>
 
-      {/* Navigation */}
-      <nav className="flex-1 p-4 space-y-1 overflow-y-auto sidebar-nav">
+      {/* ── Navigation ──────────────────────────────── */}
+      <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-0.5">
         {navItems.map((item) => {
-          const isActive = pathname === item.href
+          const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
           return (
             <Link
               key={item.href}
               href={item.href}
               onClick={onClose}
               data-tour={item.dataTour}
-              className={`
-                flex items-center gap-3 px-3 py-2 rounded-[6px] text-sm font-medium
-                transition-colors active:bg-[rgba(255,255,255,0.2)]
-                ${isActive
-                  ? 'bg-[rgba(0,180,216,0.1)] text-[#00B4D8]'
-                  : 'text-[rgba(255,255,255,0.6)] hover:text-white hover:bg-[rgba(255,255,255,0.1)]'
+              className="flex items-center gap-3 px-3 py-2.5 rounded-[6px] text-sm font-medium transition-colors"
+              style={
+                isActive
+                  ? {
+                      backgroundColor: 'rgba(252,213,53,0.08)',
+                      color: '#fcd535',
+                    }
+                  : {
+                      color: '#707a8a',
+                    }
+              }
+              onMouseEnter={e => {
+                if (!isActive) {
+                  e.currentTarget.style.backgroundColor = '#1e2329'
+                  e.currentTarget.style.color = '#eaecef'
                 }
-              `}
+              }}
+              onMouseLeave={e => {
+                if (!isActive) {
+                  e.currentTarget.style.backgroundColor = 'transparent'
+                  e.currentTarget.style.color = '#707a8a'
+                }
+              }}
             >
-              <item.icon className={`w-5 h-5 flex-shrink-0 ${isActive ? 'text-[#00B4D8]' : 'text-[rgba(255,255,255,0.6)]'}`} />
+              <item.icon
+                className="w-5 h-5 flex-shrink-0"
+                style={{ color: isActive ? '#fcd535' : '#707a8a' }}
+              />
               <span className="truncate">{item.label}</span>
+              {/* Yellow left accent bar for active item */}
+              {isActive && (
+                <span
+                  className="ml-auto w-1 h-4 rounded-full flex-shrink-0"
+                  style={{ backgroundColor: '#fcd535' }}
+                />
+              )}
             </Link>
           )
         })}
       </nav>
 
-      {/* User section */}
-      <div className="p-3 border-t border-[rgba(255,255,255,0.1)] space-y-1">
-        {/* Settings link */}
+      {/* ── Bottom: settings + user ──────────────────── */}
+      <div
+        className="px-3 py-3 flex-shrink-0 space-y-0.5"
+        style={{ borderTop: '1px solid #2b3139' }}
+      >
+        {/* Settings */}
         <Link
           href="/profile"
           onClick={onClose}
-          className="flex items-center gap-3 px-3 py-2 rounded-[6px] text-sm font-medium text-[rgba(255,255,255,0.6)] hover:text-white hover:bg-[rgba(255,255,255,0.1)] transition-colors"
+          className="flex items-center gap-3 px-3 py-2.5 rounded-[6px] text-sm font-medium transition-colors"
+          style={{ color: '#707a8a' }}
+          onMouseEnter={e => {
+            e.currentTarget.style.backgroundColor = '#1e2329'
+            e.currentTarget.style.color = '#eaecef'
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.backgroundColor = 'transparent'
+            e.currentTarget.style.color = '#707a8a'
+          }}
         >
-          <Settings className="w-5 h-5 flex-shrink-0" />
+          <Settings className="w-5 h-5 flex-shrink-0" style={{ color: '#707a8a' }} />
           <span className="truncate">Settings</span>
         </Link>
 
-        {/* User avatar + name + logout */}
-        <div className="flex items-center gap-3 px-3 py-2 rounded-[6px]">
+        {/* User row */}
+        <div
+          className="flex items-center gap-3 px-3 py-2.5 rounded-[6px]"
+          style={{ borderTop: '1px solid #2b3139', marginTop: '4px', paddingTop: '12px' }}
+        >
           {/* Avatar */}
-          <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 bg-[#E53935] flex items-center justify-center ring-2 ring-[#E53935]/30">
+          <div
+            className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center"
+            style={{ backgroundColor: '#fcd535', color: '#181a20' }}
+          >
             {showPhoto ? (
               <Image
                 src={userAvatarUrl!}
@@ -130,28 +207,50 @@ export function Sidebar({ isOpen = false, onClose, userEmail, userAvatarUrl, use
                 onError={() => setAvatarError(true)}
               />
             ) : initials !== '?' ? (
-              <span className="text-xs font-bold text-white select-none">{initials}</span>
+              <span
+                className="text-xs font-bold select-none"
+                style={{ color: '#181a20' }}
+              >
+                {initials}
+              </span>
             ) : (
-              <User className="w-4 h-4 text-white" />
+              <User className="w-4 h-4" style={{ color: '#181a20' }} />
             )}
           </div>
 
           {/* Name / email */}
           <div className="flex-1 min-w-0">
-            <p className="text-xs font-semibold text-white truncate">
+            <p
+              className="text-xs font-semibold truncate"
+              style={{ color: '#eaecef' }}
+            >
               {userFullName ?? userEmail ?? 'Account'}
             </p>
             {userFullName && userEmail && (
-              <p className="text-[10px] text-[rgba(255,255,255,0.4)] truncate">{userEmail}</p>
+              <p
+                className="text-[10px] truncate"
+                style={{ color: '#707a8a' }}
+              >
+                {userEmail}
+              </p>
             )}
           </div>
 
-          {/* Logout button */}
+          {/* Sign out */}
           <button
             onClick={handleSignOut}
             disabled={signingOut}
             title="Sign out"
-            className="p-1.5 rounded-[6px] text-[rgba(255,255,255,0.4)] hover:text-[#E53935] hover:bg-[rgba(229,57,53,0.1)] transition-colors flex-shrink-0"
+            className="p-1.5 rounded-[6px] flex-shrink-0 transition-colors"
+            style={{ color: '#707a8a' }}
+            onMouseEnter={e => {
+              e.currentTarget.style.color = '#f6465d'
+              e.currentTarget.style.backgroundColor = 'rgba(246,70,93,0.1)'
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.color = '#707a8a'
+              e.currentTarget.style.backgroundColor = 'transparent'
+            }}
           >
             <LogOut className="w-4 h-4" />
           </button>
@@ -162,9 +261,11 @@ export function Sidebar({ isOpen = false, onClose, userEmail, userAvatarUrl, use
 
   return (
     <>
+      {/* Mobile overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          className="fixed inset-0 z-40 md:hidden"
+          style={{ backgroundColor: 'rgba(0,0,0,0.6)' }}
           onClick={onClose}
         />
       )}
@@ -174,13 +275,11 @@ export function Sidebar({ isOpen = false, onClose, userEmail, userAvatarUrl, use
         <SidebarContent />
       </div>
 
-      {/* Mobile */}
+      {/* Mobile drawer */}
       <div
-        className={`
-          fixed md:hidden inset-y-0 left-0 z-50
-          transform transition-transform duration-200 ease-in-out
-          ${isOpen ? 'translate-x-0' : '-translate-x-full'}
-        `}
+        className={`fixed md:hidden inset-y-0 left-0 z-50 transform transition-transform duration-200 ease-in-out ${
+          isOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
       >
         <SidebarContent />
       </div>

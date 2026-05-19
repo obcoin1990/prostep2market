@@ -1,124 +1,382 @@
 @import "tailwindcss";
 
-@theme {
-  --color-brand-50:  #eef2ff;
-  --color-brand-100: #e0e7ff;
-  --color-brand-200: #c7d2fe;
-  --color-brand-300: #a5b4fc;
-  --color-brand-400: #818cf8;
-  --color-brand-500: #6366f1;
-  --color-brand-600: #4f46e5;
-  --color-brand-700: #4338ca;
-  --color-brand-800: #3730a3;
-  --color-brand-900: #312e81;
+/* ─── Binance Design System — ProStep2Market ────────────────────────────────
+   Font substitutes (DESIGN.md note):
+     BinanceNova  → Inter
+     BinancePlex  → IBM Plex Mono (tabular numerical type)
+   ─────────────────────────────────────────────────────────────────────────── */
 
-  --font-sans: 'Inter', system-ui, sans-serif;
+@theme {
+  /* Brand & Accent */
+  --color-primary:           #fcd535;  /* Binance Yellow — all primary CTAs */
+  --color-primary-active:    #f0b90b;  /* Hover / press */
+  --color-primary-disabled:  #3a3a1f;  /* Disabled over dark canvas */
+  --color-on-primary:        #181a20;  /* Black text on yellow CTA */
+
+  /* Dark canvas (marketing / dashboard default) */
+  --color-canvas-dark:          #0b0e11;
+  --color-surface-card-dark:    #1e2329;
+  --color-surface-elevated-dark:#2b3139;
+
+  /* Light canvas (transactional: login, forms) */
+  --color-canvas-light:         #ffffff;
+  --color-surface-soft-light:   #fafafa;
+  --color-surface-strong-light: #f5f5f5;
+
+  /* Text */
+  --color-on-dark:         #ffffff;
+  --color-body-dark:       #eaecef;   /* Running text on dark canvas */
+  --color-ink:             #181a20;   /* Strong text on light */
+  --color-muted:           #707a8a;
+  --color-muted-strong:    #929aa5;
+
+  /* Hairlines & borders */
+  --color-hairline-dark:   #2b3139;
+  --color-hairline-light:  #eaecef;
+  --color-border-strong:   #cdd1d6;
+
+  /* Trading semantics */
+  --color-trading-up:      #0ecb81;  /* Price up / Buy / Long */
+  --color-trading-down:    #f6465d;  /* Price down / Sell / Short */
+
+  /* Accent (single-product, use sparingly) */
+  --color-accent-turquoise:#2dbdb6;
+
+  /* Info / Focus ring */
+  --color-info:            #3b82f6;
+
+  /* Font stacks */
+  --font-sans:  var(--font-inter, 'Inter'), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono:  var(--font-plex, 'IBM Plex Mono'), 'JetBrains Mono', monospace;
+
+  /* Border radius scale */
+  --radius-xs:   2px;
+  --radius-sm:   4px;
+  --radius-md:   6px;
+  --radius-lg:   8px;
+  --radius-xl:   12px;
+  --radius-pill: 9999px;
+
+  /* Spacing scale (4px base) */
+  --spacing-xxs: 4px;
+  --spacing-xs:  8px;
+  --spacing-sm:  12px;
+  --spacing-md:  16px;
+  --spacing-lg:  24px;
+  --spacing-xl:  32px;
+  --spacing-xxl: 48px;
+  --spacing-section: 80px;
 }
 
+/* ─── CSS custom properties (HSL bridge for legacy component references) ─── */
 @layer base {
   :root {
-    /* Light mode colors (default) */
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.6%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.6%;
-    --primary: 6 100% 50%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 271 100% 50%;
+    /* Map Binance tokens → HSL vars for backwards-compat */
+    --background:        0 0% 7%;          /* canvas-dark #0b0e11 */
+    --foreground:        220 22% 93%;      /* body-dark #eaecef */
+    --card:              220 14% 15%;      /* surface-card-dark #1e2329 */
+    --card-foreground:   0 0% 100%;
+    --primary:           47 97% 59%;       /* #fcd535 */
+    --primary-foreground:222 12% 11%;      /* on-primary #181a20 */
+    --secondary:         220 14% 20%;      /* surface-elevated-dark #2b3139 */
     --secondary-foreground: 0 0% 100%;
-    --muted: 0 0% 88.6%;
-    --muted-foreground: 0 0% 39.2%;
-    --accent: 6 100% 50%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 100% 50%;
+    --muted:             220 14% 20%;
+    --muted-foreground:  218 11% 49%;      /* muted #707a8a */
+    --accent:            47 97% 59%;       /* primary yellow */
+    --accent-foreground: 222 12% 11%;
+    --destructive:       353 91% 65%;      /* trading-down #f6465d */
     --destructive-foreground: 0 0% 100%;
-    --border: 0 0% 88.6%;
-    --input: 0 0% 88.6%;
-    --ring: 6 100% 50%;
-    --radius: 0.5rem;
-    
-    /* Light mode semantic colors */
-    --background-alt: 0 0% 95.3%;
-    --text-primary: 0 0% 3.6%;
-    --text-secondary: 0 0% 39.2%;
-    --text-muted: 0 0% 59%;
-    --border-color: 0 0% 85%;
-    --success: 142 76% 36%;
-    --warning: 38 92% 50%;
-    --error: 0 84% 60%;
-    --info: 206 86% 50%;
-  }
+    --border:            220 14% 20%;      /* hairline-dark #2b3139 */
+    --input:             220 14% 15%;
+    --ring:              47 97% 59%;       /* yellow focus ring */
+    --radius:            6px;              /* md */
 
-  html.dark {
-    /* Dark mode colors */
-    --background: 240 10% 6%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 10%;
-    --card-foreground: 0 0% 98%;
-    --primary: 180 100% 50%;
-    --primary-foreground: 240 10% 6%;
-    --secondary: 271 100% 50%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 10% 25%;
-    --muted-foreground: 0 0% 70%;
-    --accent: 180 100% 50%;
-    --accent-foreground: 240 10% 6%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 10% 20%;
-    --input: 240 10% 15%;
-    --ring: 180 100% 50%;
-    
-    /* Dark mode semantic colors */
-    --background-alt: 240 10% 12%;
-    --text-primary: 0 0% 98%;
-    --text-secondary: 0 0% 80%;
-    --text-muted: 0 0% 60%;
-    --border-color: 240 10% 22%;
-    --success: 142 76% 36%;
-    --warning: 38 92% 50%;
-    --error: 0 84% 60%;
-    --info: 206 86% 50%;
+    /* Semantic */
+    --background-alt:    220 14% 15%;
+    --text-primary:      0 0% 100%;
+    --text-secondary:    220 22% 93%;
+    --text-muted:        218 11% 49%;
+    --border-color:      220 14% 20%;
+    --success:           158 83% 42%;      /* trading-up #0ecb81 */
+    --warning:           47 97% 59%;       /* primary yellow used for warnings */
+    --error:             353 91% 65%;      /* trading-down */
+    --info:              214 89% 60%;      /* info #3b82f6 */
+  }
+}
+
+/* ─── Base styles ────────────────────────────────────────────────────────── */
+@layer base {
+  html {
+    @apply antialiased;
+    color-scheme: dark;
   }
 
   body {
-    @apply bg-[hsl(var(--background))] text-[hsl(var(--foreground))] antialiased transition-colors duration-300;
+    background-color: #0b0e11;
+    color: #eaecef;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.5;
   }
 
   * {
     @apply box-border;
   }
 
-  /* Smooth transitions for theme switching */
-  * {
-    @apply transition-colors duration-200;
+  /* Scrollbar — Binance style (thin, dark) */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0b0e11;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #2b3139;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #707a8a;
+  }
+
+  /* Focus ring — yellow on dark */
+  :focus-visible {
+    outline: 2px solid #fcd535;
+    outline-offset: 2px;
+  }
+
+  /* Headings inherit BinanceNova (Inter) */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-sans);
+    color: #ffffff;
+    line-height: 1.2;
+  }
+
+  /* Links */
+  a {
+    color: #fcd535;
+    text-decoration: none;
+  }
+  a:hover {
+    color: #f0b90b;
+  }
+
+  /* Price / number elements use IBM Plex Mono */
+  .font-mono, [data-price], [data-stat] {
+    font-family: var(--font-mono);
   }
 }
 
-/* Light theme explicit backgrounds */
+/* ─── Binance component utility classes ──────────────────────────────────── */
 @layer components {
-  .bg-background {
-    @apply bg-[hsl(var(--background))];
+
+  /* Canvas surfaces */
+  .bg-canvas-dark    { background-color: #0b0e11; }
+  .bg-canvas-light   { background-color: #ffffff; }
+  .bg-card-dark      { background-color: #1e2329; }
+  .bg-elevated-dark  { background-color: #2b3139; }
+
+  /* Text roles */
+  .text-on-dark      { color: #ffffff; }
+  .text-body-dark    { color: #eaecef; }
+  .text-muted-bnb    { color: #707a8a; }
+  .text-yellow       { color: #fcd535; }
+  .text-trading-up   { color: #0ecb81; }
+  .text-trading-down { color: #f6465d; }
+
+  /* Hairlines */
+  .border-hairline-dark  { border-color: #2b3139; }
+  .border-hairline-light { border-color: #eaecef; }
+
+  /* Primary button — yellow with black text (Binance signature) */
+  .btn-primary {
+    background-color: #fcd535;
+    color: #181a20;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1;
+    border-radius: 6px;
+    padding: 12px 24px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 150ms;
+    cursor: pointer;
+    border: none;
+  }
+  .btn-primary:hover  { background-color: #f0b90b; }
+  .btn-primary:active { background-color: #f0b90b; }
+  .btn-primary:disabled {
+    background-color: #3a3a1f;
+    color: #707a8a;
+    cursor: not-allowed;
   }
 
-  .bg-card {
-    @apply bg-[hsl(var(--card))];
+  /* Pill primary — top-of-page sign-up CTAs */
+  .btn-primary-pill {
+    background-color: #fcd535;
+    color: #181a20;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 9999px;
+    padding: 14px 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 150ms;
+    cursor: pointer;
+    border: none;
+  }
+  .btn-primary-pill:hover { background-color: #f0b90b; }
+
+  /* Secondary — dark surface button */
+  .btn-secondary-dark {
+    background-color: #1e2329;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 6px;
+    padding: 12px 24px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 150ms;
+    cursor: pointer;
+    border: 1px solid #2b3139;
+  }
+  .btn-secondary-dark:hover { background-color: #2b3139; }
+
+  /* Trading action buttons */
+  .btn-trading-up {
+    background-color: #0ecb81;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 4px;
+    padding: 8px 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: none;
+  }
+  .btn-trading-down {
+    background-color: #f6465d;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 4px;
+    padding: 8px 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: none;
   }
 
-  .bg-muted {
-    @apply bg-[hsl(var(--muted))];
+  /* Card — dark surface */
+  .card-dark {
+    background-color: #1e2329;
+    border-radius: 12px;
+    padding: 24px;
+    border: 1px solid #2b3139;
   }
 
-  .text-foreground {
-    @apply text-[hsl(var(--foreground))];
+  /* Number display — always BinancePlex (IBM Plex Mono) */
+  .number-display {
+    font-family: var(--font-mono);
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.3px;
+    color: #fcd535;
+  }
+  .number-md {
+    font-family: var(--font-mono);
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+  .number-sm {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
   }
 
-  .text-muted-foreground {
-    @apply text-[hsl(var(--muted-foreground))];
+  /* Stat callout — yellow number with no background */
+  .stat-callout {
+    font-family: var(--font-mono);
+    font-size: 40px;
+    font-weight: 700;
+    color: #fcd535;
+    line-height: 1.1;
   }
 
-  .border-border {
-    @apply border-[hsl(var(--border))];
+  /* Input — dark search style */
+  .input-dark {
+    background-color: #1e2329;
+    color: #ffffff;
+    border: 1px solid #2b3139;
+    border-radius: 8px;
+    padding: 10px 16px;
+    height: 40px;
+    font-size: 14px;
+    width: 100%;
+    outline: none;
+    transition: border-color 150ms;
   }
+  .input-dark::placeholder { color: #707a8a; }
+  .input-dark:focus { border-color: #fcd535; }
+
+  /* Input — light transactional style */
+  .input-light {
+    background-color: #ffffff;
+    color: #181a20;
+    border: 1px solid #eaecef;
+    border-radius: 6px;
+    padding: 10px 16px;
+    height: 40px;
+    font-size: 14px;
+    width: 100%;
+    outline: none;
+    transition: border-color 150ms, box-shadow 150ms;
+  }
+  .input-light::placeholder { color: #929aa5; }
+  .input-light:focus {
+    border-color: #fcd535;
+    box-shadow: 0 0 0 2px rgba(252, 213, 53, 0.25);
+  }
+
+  /* Trust badge */
+  .trust-badge {
+    background-color: #1e2329;
+    border-radius: 8px;
+    padding: 16px 20px;
+    color: #ffffff;
+  }
+
+  /* CTA band */
+  .cta-band {
+    background-color: #1e2329;
+    border-radius: 12px;
+    padding: 48px;
+  }
+
+  /* Footer — light closes dark page (Binance signature) */
+  .footer-light {
+    background-color: #fafafa;
+    color: #181a20;
+    padding: 64px 0;
+  }
+
+  /* legacy compat */
+  .bg-background  { background-color: #0b0e11; }
+  .bg-card        { background-color: #1e2329; }
+  .bg-muted       { background-color: #2b3139; }
+  .text-foreground { color: #eaecef; }
+  .text-muted-foreground { color: #707a8a; }
+  .border-border  { border-color: #2b3139; }
 }
-

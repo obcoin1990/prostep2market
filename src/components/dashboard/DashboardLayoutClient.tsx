@@ -99,7 +99,7 @@ export function DashboardLayoutClient({
           userAvatarUrl={userAvatarUrl}
           userFullName={userFullName}
         />
-        <main className="flex-1 overflow-y-auto bg-[#F5F7FA] p-4 sm:p-6">
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6" style={{ backgroundColor: '#0b0e11' }}>
           {children}
         </main>
       </div>
