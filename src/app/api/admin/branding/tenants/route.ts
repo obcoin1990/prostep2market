@@ -57,7 +57,7 @@ export async function POST(request: Request) {
       logo_url: logo_url ?? null,
       platform_name: platform_name ?? null,
       custom_css: custom_css ?? null,
-      max_users: max_users ?? null,
+      max_users: max_users ?? 100,  // NOT NULL DEFAULT 100 in schema
       notes: notes ?? null,
       active: active ?? true,
       created_at: new Date().toISOString(),

@@ -24,9 +24,9 @@ interface EditForm {
 
 // ── Constants ────────────────────────────────────────────────────────────────
 
+// DB constraint: profile_type IN ('sniper','analyst','warrior','disciplinarian','opportunist')
 const PROFILE_TYPES = [
-  'analytical', 'intuitive', 'emotional', 'systematic',
-  'contrarian', 'momentum', 'value', 'growth',
+  'sniper', 'analyst', 'warrior', 'disciplinarian', 'opportunist',
 ]
 
 const LEARNING_PATHS = [
@@ -34,7 +34,8 @@ const LEARNING_PATHS = [
   'technical_analysis', 'fundamental_analysis', 'risk_management', 'psychology',
 ]
 
-const ADMIN_ROLES = ['', 'super_admin', 'moderator', 'support']
+// DB constraint: admin_role IN ('user','super_admin') only
+const ADMIN_ROLES = ['', 'super_admin']
 
 const SCORE_FIELDS: { key: keyof EditForm; label: string; color: string }[] = [
   { key: 'risk_personality_score', label: 'Risk', color: '#E53935' },
@@ -65,8 +66,8 @@ function profileTypeBadgeVariant(
   type: string | null
 ): 'default' | 'success' | 'warning' | 'outline' {
   if (!type) return 'outline'
-  if (['analytical', 'systematic'].includes(type)) return 'success'
-  if (['emotional', 'intuitive'].includes(type)) return 'warning'
+  if (['analyst', 'disciplinarian'].includes(type)) return 'success'
+  if (['warrior', 'sniper'].includes(type)) return 'warning'
   return 'default'
 }
 

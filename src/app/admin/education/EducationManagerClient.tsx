@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, Fragment } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -575,8 +575,8 @@ export function EducationManagerClient({ initialCourses, analytics }: Props) {
                       </tr>
                     )}
                     {courses.map((course) => (
-                      <>
-                        <tr key={course.id} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
+                      <Fragment key={course.id}>
+                        <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
                           <td className="py-3 px-4 font-medium text-[#0A0F1C]">{course.title}</td>
                           <td className="py-3 px-4">
                             <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${pathBadgeVariant(course.path)}`}>
@@ -633,7 +633,7 @@ export function EducationManagerClient({ initialCourses, analytics }: Props) {
                             </td>
                           </tr>
                         )}
-                      </>
+                      </Fragment>
                     ))}
                   </tbody>
                 </table>
@@ -715,8 +715,8 @@ export function EducationManagerClient({ initialCourses, analytics }: Props) {
                             </tr>
                           )}
                           {lessons.map((lesson) => (
-                            <>
-                              <tr key={lesson.id} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
+                            <Fragment key={lesson.id}>
+                              <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
                                 <td className="py-3 px-4 font-medium text-[#0A0F1C]">{lesson.title}</td>
                                 <td className="py-3 px-4">
                                   <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${typeBadgeVariant(lesson.type)}`}>
@@ -760,7 +760,7 @@ export function EducationManagerClient({ initialCourses, analytics }: Props) {
                                   </td>
                                 </tr>
                               )}
-                            </>
+                            </Fragment>
                           ))}
                         </tbody>
                       </table>

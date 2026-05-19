@@ -51,6 +51,14 @@ export default async function NotificationsPage() {
     )
   }
 
+  if (lErr) {
+    return (
+      <div className="p-6 rounded-xl bg-red-50 border border-red-200 text-red-800 text-sm">
+        Failed to load notification logs: {lErr.message}
+      </div>
+    )
+  }
+
   return (
     <NotificationsManagerClient
       initialTemplates={(templates ?? []) as EmailTemplate[]}

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, Fragment } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -598,8 +598,8 @@ export function MarketIntelClient({ initialPosts, initialConfig }: Props) {
                       </tr>
                     )}
                     {posts.map((post) => (
-                      <>
-                        <tr key={post.id} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
+                      <Fragment key={post.id}>
+                        <tr className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
                           <td className="py-3 px-4 font-medium text-[#0A0F1C] max-w-[200px] truncate">{post.title}</td>
                           <td className="py-3 px-4">
                             <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${categoryClass(post.category)}`}>
@@ -676,7 +676,7 @@ export function MarketIntelClient({ initialPosts, initialConfig }: Props) {
                             </td>
                           </tr>
                         )}
-                      </>
+                      </Fragment>
                     ))}
                   </tbody>
                 </table>

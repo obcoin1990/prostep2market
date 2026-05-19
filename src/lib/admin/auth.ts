@@ -109,5 +109,4 @@ export async function setAdminSetting(key: string, value: unknown, userId: strin
   await adminClient
     .from('admin_settings')
     .upsert({ key, value, updated_at: new Date().toISOString(), updated_by: userId })
-    .eq('key', key)
 }

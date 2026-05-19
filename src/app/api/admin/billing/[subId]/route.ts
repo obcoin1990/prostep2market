@@ -33,7 +33,8 @@ export async function PATCH(req: NextRequest, { params }: Params) {
     return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
   }
 
-  const allowed = ['plan', 'status', 'trial_ends_at', 'current_period_end', 'cancel_at_period_end']
+  // Note: `trial_ends_at` does not exist in the subscriptions schema — removed
+  const allowed = ['plan', 'status', 'current_period_end', 'cancel_at_period_end']
   const updates: Record<string, unknown> = { updated_at: new Date().toISOString() }
   for (const key of allowed) {
     if (key in body) updates[key] = body[key]

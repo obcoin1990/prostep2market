@@ -16,8 +16,9 @@ export async function PATCH(req: NextRequest, { params }: Params) {
     return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
   }
 
-  const allowed = ['title', 'content', 'type', 'duration_minutes', 'order_index', 'published']
-  const updates: Record<string, unknown> = { updated_at: new Date().toISOString() }
+  // Note: lessons table has no `published` or `updated_at` columns (see migration 007)
+  const allowed = ['title', 'content', 'type', 'duration_minutes', 'order_index']
+  const updates: Record<string, unknown> = {}
   for (const key of allowed) {
     if (key in body) updates[key] = body[key]
   }
@@ -47,3 +48,6 @@ export async function DELETE(_req: NextRequest, { params }: Params) {
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
   return NextResponse.json({ success: true })
 }
+
+// The client uses PUT for updates; alias to PATCH handler
+export { PATCH as PUT }

@@ -23,18 +23,6 @@ export async function PUT(request: Request) {
   const { user } = result
 
   const body = await request.json()
-  const {
-    primary_color,
-    secondary_color,
-    accent_color,
-    bg_color,
-    dark_bg_color,
-    logo_url,
-    favicon_url,
-    platform_name,
-    tagline,
-    custom_css,
-  } = body
 
   const admin = createAdminClient()
 
@@ -45,19 +33,27 @@ export async function PUT(request: Request) {
     .limit(1)
     .maybeSingle()
 
-  const payload = {
-    primary_color: primary_color ?? null,
-    secondary_color: secondary_color ?? null,
-    accent_color: accent_color ?? null,
-    bg_color: bg_color ?? null,
-    dark_bg_color: dark_bg_color ?? null,
-    logo_url: logo_url ?? null,
-    favicon_url: favicon_url ?? null,
-    platform_name: platform_name ?? null,
-    tagline: tagline ?? null,
-    custom_css: custom_css ?? null,
+  const payload: Record<string, unknown> = {
     updated_at: new Date().toISOString(),
     updated_by: user.id,
+  }
+
+  // NOT NULL columns — fall back to DB defaults rather than nulling them out
+  const notNullDefaults: Record<string, string> = {
+    primary_color: '#E53935',
+    secondary_color: '#2E7D32',
+    accent_color: '#00B4D8',
+    bg_color: '#F5F7FA',
+    dark_bg_color: '#0A0F1C',
+    platform_name: 'ProStep2Market',
+  }
+  for (const [key, fallback] of Object.entries(notNullDefaults)) {
+    payload[key] = body[key] ?? fallback
+  }
+
+  // Nullable columns — only include when explicitly sent in the request
+  for (const key of ['logo_url', 'favicon_url', 'tagline', 'custom_css']) {
+    if (key in body) payload[key] = body[key] ?? null
   }
 
   let data, error

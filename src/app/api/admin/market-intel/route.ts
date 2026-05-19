@@ -57,7 +57,9 @@ export async function POST(request: NextRequest) {
         source,
         external_url,
         published: published ?? false,
-        published_at: published ? now : null,
+        // published_at is NOT NULL DEFAULT NOW() — only set explicitly when publishing.
+        // When draft (published=false), omit it and let the DB default (NOW()) apply.
+        ...(published ? { published_at: now } : {}),
         created_by: user.id,
         created_at: now,
         updated_at: now,
