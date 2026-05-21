@@ -8,6 +8,11 @@ import { createClient } from '@/lib/supabase/server'
  * Requires authenticated admin user
  */
 export async function POST(request: NextRequest) {
+  // Production guard — block unless explicitly enabled
+  if (process.env.ALLOW_DB_SETUP !== 'true') {
+    return NextResponse.json({ error: 'Database setup is disabled in this environment' }, { status: 403 })
+  }
+
   // Auth guard - only authenticated admins may call this
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -98,7 +103,7 @@ export async function POST(request: NextRequest) {
             headers: {
               'Authorization': `Bearer ${serviceRoleKey}`,
               'Content-Type': 'application/json',
-              'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+              'apikey': serviceRoleKey,
             },
             body: JSON.stringify({ sql }),
           }

@@ -65,7 +65,12 @@ export async function PATCH(req: NextRequest, { params }: Params) {
     )
   }
 
-  await Promise.all(updates)
+  const results = await Promise.all(updates)
+  const failed = results.filter((r: any) => r?.error)
+  if (failed.length > 0) {
+    const messages = failed.map((r: any) => r.error?.message ?? 'Unknown error').join('; ')
+    return NextResponse.json({ error: `Update failed: ${messages}` }, { status: 500 })
+  }
   return NextResponse.json({ success: true })
 }
 

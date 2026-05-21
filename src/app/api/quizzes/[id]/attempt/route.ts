@@ -77,6 +77,12 @@ export async function POST(req: NextRequest, { params }: Params) {
   const passed         = score >= quiz.passMark
 
   // Persist attempt
+  // TODO (WR-03): There is a race condition here — two concurrent submissions can both
+  // pass the `attemptCount >= quiz.maxAttempts` check and then both create an attempt,
+  // exceeding the maximum. Fixing this properly requires wrapping the attempt-count
+  // check and the QuizAttempt.create in a Prisma interactive transaction with a
+  // serializable isolation level, or adding a DB-level unique partial index to cap
+  // attempts. This is deferred pending a dedicated Prisma transaction refactor.
   const attempt = await prisma.quizAttempt.create({
     data: {
       userId:      session!.user.id,

@@ -29,6 +29,7 @@ export default async function TraderDNAPage() {
       'id, profile_type, risk_personality_score, emotional_stability_score, decision_making_score, trading_behavior_score, learning_style_score, learning_path, admin_role, created_at'
     )
     .order('created_at', { ascending: false })
+    .range(0, 49) // load first 50; client fetches more pages via /api/admin/trader-dna
 
   if (error) {
     console.error('Failed to fetch trader_profiles:', error)

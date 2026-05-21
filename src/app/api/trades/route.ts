@@ -15,7 +15,7 @@ export async function GET(request: Request) {
 
   const { searchParams } = new URL(request.url)
   const page = parseInt(searchParams.get('page') || '1')
-  const limit = parseInt(searchParams.get('limit') || '20')
+  const limit = Math.min(200, Math.max(1, parseInt(searchParams.get('limit') || '20')))
   const symbol = searchParams.get('symbol')
   const session = searchParams.get('session')
   const emotion = searchParams.get('emotion')

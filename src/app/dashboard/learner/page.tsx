@@ -1,16 +1,15 @@
-import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
-import { authOptions } from '@/lib/auth'
+import { getPageSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { CourseCard } from '@/components/course/CourseCard'
 import { StatCard } from '@/components/dashboard/StatCard'
 import { BookOpen, Award, Clock, TrendingUp } from 'lucide-react'
 
 export default async function LearnerDashboard() {
-  const session = await getServerSession(authOptions)
+  const session = await getPageSession()
   if (!session) redirect('/login')
 
-  const userId = session.user.id
+  const userId = session.id
 
   const [enrollments, certificates, learningPath] = await Promise.all([
     prisma.enrollment.findMany({
@@ -44,17 +43,17 @@ export default async function LearnerDashboard() {
     <main className="flex-1 overflow-y-auto p-6 space-y-6">
       <div>
         <h1 className="text-xl font-bold text-gray-900">
-          Welcome back, {session.user.name?.split(' ')[0]} 👋
+          Welcome back, {session.name?.split(' ')[0] ?? 'there'} 👋
         </h1>
         <p className="text-sm text-gray-500 mt-0.5">Continue where you left off</p>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <StatCard label="Enrolled Courses"  value={enrollments.length} icon={BookOpen}   color="brand" />
-        <StatCard label="Completed"          value={completed}          icon={TrendingUp}  color="green" />
-        <StatCard label="Certificates"       value={certificates}       icon={Award}       color="yellow" />
-        <StatCard label="Avg Progress"       value={avgProgress}        icon={Clock}       suffix="%" color="brand" />
+        <StatCard label="Enrolled Courses" value={enrollments.length} icon={BookOpen}   color="brand" />
+        <StatCard label="Completed"         value={completed}          icon={TrendingUp}  color="green" />
+        <StatCard label="Certificates"      value={certificates}       icon={Award}       color="yellow" />
+        <StatCard label="Avg Progress"      value={avgProgress}        icon={Clock}       suffix="%" color="brand" />
       </div>
 
       {/* Learning Path CTA */}

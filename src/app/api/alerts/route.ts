@@ -15,7 +15,7 @@ export async function GET(request: Request) {
 
   const { searchParams } = new URL(request.url);
   const acknowledged = searchParams.get('acknowledged');
-  const limit = parseInt(searchParams.get('limit') || '10');
+  const limit = Math.min(100, Math.max(1, parseInt(searchParams.get('limit') || '10')));
   const type = searchParams.get('type');
 
   let query = supabase

@@ -1,24 +1,11 @@
-import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
-import { authOptions } from '@/lib/auth'
-import { StatCard } from '@/components/dashboard/StatCard'
-import { CompletionTrendChart, TopCoursesChart, ActiveUsersPie } from '@/components/dashboard/Charts'
-import { Users, TrendingUp, BookOpen, AlertTriangle } from 'lucide-react'
-
-async function getAnalytics(orgId: string) {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_APP_URL}/api/analytics?days=30`,
-    { cache: 'no-store', headers: { Cookie: '' } }
-  )
-  if (!res.ok) return null
-  const json = await res.json()
-  return json.data
-}
+import { getPageSession } from '@/lib/auth'
+import ManagerStats from './ManagerStats'
 
 export default async function ManagerDashboard() {
-  const session = await getServerSession(authOptions)
+  const session = await getPageSession()
   if (!session) redirect('/login')
-  if (!['ADMIN', 'MANAGER', 'SUPER_ADMIN'].includes(session.user.role)) {
+  if (!['ADMIN', 'MANAGER', 'SUPER_ADMIN'].includes(session.role)) {
     redirect('/dashboard/learner')
   }
 
@@ -34,6 +21,3 @@ export default async function ManagerDashboard() {
     </main>
   )
 }
-
-// Client component for live stats
-import ManagerStats from './ManagerStats'

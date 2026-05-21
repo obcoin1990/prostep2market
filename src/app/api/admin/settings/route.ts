@@ -38,6 +38,11 @@ export async function GET(request: NextRequest) {
   return NextResponse.json({ success: true, settings: data ?? [] })
 }
 
+// Keys that may be written via this generic endpoint.
+// Any other key is rejected to prevent overwriting unrelated settings.
+const ALLOWED_SETTINGS_KEYS = ['ai_engine'] as const
+type AllowedKey = (typeof ALLOWED_SETTINGS_KEYS)[number]
+
 export async function PUT(request: NextRequest) {
   const result = await getAdminContext()
   if (result instanceof NextResponse) return result
@@ -55,6 +60,25 @@ export async function PUT(request: NextRequest) {
   }
   if (body.value === undefined) {
     return NextResponse.json({ error: 'value is required' }, { status: 400 })
+  }
+
+  // Key allowlist — prevents overwriting arbitrary admin_settings rows
+  if (!ALLOWED_SETTINGS_KEYS.includes(body.key as AllowedKey)) {
+    return NextResponse.json(
+      { error: `Invalid key. Allowed keys: ${ALLOWED_SETTINGS_KEYS.join(', ')}` },
+      { status: 400 }
+    )
+  }
+
+  // Per-key value validation
+  if (body.key === 'ai_engine' && typeof body.value === 'object' && body.value !== null) {
+    const v = body.value as Record<string, unknown>
+    if (typeof v.temperature === 'number' && (v.temperature < 0 || v.temperature > 2)) {
+      return NextResponse.json({ error: 'temperature must be between 0 and 2' }, { status: 400 })
+    }
+    if (typeof v.max_tokens === 'number' && (v.max_tokens < 100 || v.max_tokens > 16000)) {
+      return NextResponse.json({ error: 'max_tokens must be between 100 and 16000' }, { status: 400 })
+    }
   }
 
   const adminClient = createAdminClient()

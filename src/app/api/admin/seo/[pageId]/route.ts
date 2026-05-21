@@ -52,7 +52,16 @@ export async function PATCH(req: NextRequest, { params }: Params) {
     .select()
     .single()
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  if (error) {
+    // Unique constraint violation on page_path
+    if (error.code === '23505') {
+      return NextResponse.json(
+        { error: 'A page with that path already exists' },
+        { status: 409 }
+      )
+    }
+    return NextResponse.json({ error: error.message }, { status: 500 })
+  }
   return NextResponse.json({ success: true, data })
 }
 

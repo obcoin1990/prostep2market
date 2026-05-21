@@ -1,17 +1,16 @@
-import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
-import { authOptions } from '@/lib/auth'
+import { getPageSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { StatCard } from '@/components/dashboard/StatCard'
 import { Users, BookOpen, Award, DollarSign } from 'lucide-react'
 import Link from 'next/link'
 
 export default async function AdminDashboard() {
-  const session = await getServerSession(authOptions)
+  const session = await getPageSession()
   if (!session) redirect('/login')
-  if (!['ADMIN', 'SUPER_ADMIN'].includes(session.user.role)) redirect('/dashboard/learner')
+  if (!['ADMIN', 'SUPER_ADMIN'].includes(session.role)) redirect('/dashboard/learner')
 
-  const orgId = session.user.organizationId!
+  const orgId = session.organizationId!
 
   const [userCount, courseCount, certCount, enrollmentCount] = await Promise.all([
     prisma.user.count({ where: { organizationId: orgId } }),
@@ -44,10 +43,10 @@ export default async function AdminDashboard() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <StatCard label="Total Users"    value={userCount}      icon={Users}     color="brand" />
-        <StatCard label="Courses"        value={courseCount}    icon={BookOpen}  color="green" />
-        <StatCard label="Enrollments"    value={enrollmentCount}icon={DollarSign}color="yellow"/>
-        <StatCard label="Certificates"   value={certCount}      icon={Award}     color="brand" />
+        <StatCard label="Total Users"   value={userCount}       icon={Users}      color="brand" />
+        <StatCard label="Courses"       value={courseCount}     icon={BookOpen}   color="green" />
+        <StatCard label="Enrollments"   value={enrollmentCount} icon={DollarSign} color="yellow"/>
+        <StatCard label="Certificates"  value={certCount}       icon={Award}      color="brand" />
       </div>
 
       {/* Recent Users */}
@@ -76,10 +75,10 @@ export default async function AdminDashboard() {
       {/* Quick Links */}
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         {[
-          { label: 'Manage Users',    href: '/dashboard/admin/users' },
-          { label: 'Manage Courses',  href: '/dashboard/admin/courses' },
-          { label: 'Analytics',       href: '/dashboard/admin/analytics' },
-          { label: 'Settings',        href: '/dashboard/admin/settings' },
+          { label: 'Manage Users',   href: '/dashboard/admin/users' },
+          { label: 'Manage Courses', href: '/dashboard/admin/courses' },
+          { label: 'Analytics',      href: '/dashboard/admin/analytics' },
+          { label: 'Settings',       href: '/dashboard/admin/settings' },
         ].map(l => (
           <Link
             key={l.href}

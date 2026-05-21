@@ -51,19 +51,30 @@ export async function markLessonComplete(userId: string, courseId: string, lesso
   if (existing) {
     // Check if lesson already completed
     if (existing.lessons_completed && existing.lessons_completed.includes(lessonId)) {
-      // Already completed
-      const { data } = await supabase
+      // Already completed — re-fetch to return full row
+      const { data, error: refetchError } = await supabase
         .from('course_progress')
         .select('*')
         .eq('user_id', userId)
         .eq('course_id', courseId)
         .single();
+      // WR-09: throw on DB error rather than silently returning null
+      if (refetchError) throw refetchError;
       return data ? mapCourseProgressRow(data) : null;
     }
     lessonsCompleted = [...existing.lessons_completed, lessonId];
   } else {
     lessonsCompleted = [lessonId];
   }
+
+  // NOTE (CR-08): There is a residual TOCTOU race between the read above and the
+  // upsert below — a concurrent request could insert the same lessonId between
+  // these two operations. Fully eliminating the race requires a PostgreSQL
+  // array_append RPC executed atomically in the DB. The guard above reduces but
+  // does not eliminate the race; a unique DB constraint on (user_id, course_id,
+  // lesson_id) or an RPC-level upsert would be the definitive fix.
+  // TODO: replace with a Supabase RPC `append_lesson_complete(user_id, course_id, lesson_id)`
+  //       that uses PostgreSQL array_append atomically to eliminate this race.
 
   // Upsert progress
   const { data, error } = await supabase

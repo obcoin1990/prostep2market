@@ -2,14 +2,15 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { usePathname } from 'next/navigation'
-import { signOut, useSession } from 'next-auth/react'
+import { usePathname, useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { createClient } from '@/lib/supabase/client'
+import type { User } from '@supabase/supabase-js'
 import {
   LayoutDashboard, BookOpen, BarChart2, Users,
-  Settings, LogOut, Sparkles, Award, Bell, User,
+  Settings, LogOut, Sparkles, Award, Bell, User as UserIcon,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { useState } from 'react'
 
 const NAV_ITEMS = {
   LEARNER: [
@@ -19,10 +20,10 @@ const NAV_ITEMS = {
     { href: '/dashboard/learner/certs',label: 'Certificates',    icon: Award },
   ],
   MANAGER: [
-    { href: '/dashboard/manager',         label: 'Overview',    icon: LayoutDashboard },
-    { href: '/dashboard/manager/team',    label: 'My Team',     icon: Users },
-    { href: '/dashboard/manager/analytics', label: 'Analytics', icon: BarChart2 },
-    { href: '/courses',                   label: 'Courses',     icon: BookOpen },
+    { href: '/dashboard/manager',             label: 'Overview',    icon: LayoutDashboard },
+    { href: '/dashboard/manager/team',        label: 'My Team',     icon: Users },
+    { href: '/dashboard/manager/analytics',   label: 'Analytics',   icon: BarChart2 },
+    { href: '/courses',                       label: 'Courses',     icon: BookOpen },
   ],
   ADMIN: [
     { href: '/dashboard/admin',           label: 'Overview',    icon: LayoutDashboard },
@@ -31,7 +32,16 @@ const NAV_ITEMS = {
     { href: '/dashboard/admin/analytics', label: 'Analytics',   icon: BarChart2 },
     { href: '/dashboard/admin/settings',  label: 'Settings',    icon: Settings },
   ],
-}
+  SUPER_ADMIN: [
+    { href: '/dashboard/admin',           label: 'Overview',    icon: LayoutDashboard },
+    { href: '/dashboard/admin/users',     label: 'Users',       icon: Users },
+    { href: '/dashboard/admin/courses',   label: 'Courses',     icon: BookOpen },
+    { href: '/dashboard/admin/analytics', label: 'Analytics',   icon: BarChart2 },
+    { href: '/dashboard/admin/settings',  label: 'Settings',    icon: Settings },
+  ],
+} as const
+
+type RoleKey = keyof typeof NAV_ITEMS
 
 function getInitials(name?: string | null, email?: string | null): string {
   if (name) {
@@ -44,18 +54,55 @@ function getInitials(name?: string | null, email?: string | null): string {
 }
 
 export function Sidebar() {
-  const { data: session } = useSession()
   const pathname = usePathname()
+  const router   = useRouter()
+  const [user, setUser]   = useState<User | null>(null)
+  const [role, setRole]   = useState<RoleKey>('LEARNER')
   const [avatarError, setAvatarError] = useState(false)
 
-  const role = (session?.user?.role ?? 'LEARNER') as keyof typeof NAV_ITEMS
+  useEffect(() => {
+    const supabase = createClient()
+
+    // Load current user from Supabase session
+    supabase.auth.getUser().then(({ data }) => {
+      if (!data.user) return
+      setUser(data.user)
+      // Role is stored in user_metadata (set at registration via admin API)
+      const metaRole = data.user.user_metadata?.role as RoleKey | undefined
+      if (metaRole && metaRole in NAV_ITEMS) {
+        setRole(metaRole)
+      }
+    })
+
+    // Keep user state in sync with auth changes (e.g. sign-out in another tab)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!session?.user) {
+        setUser(null)
+        return
+      }
+      setUser(session.user)
+      const metaRole = session.user.user_metadata?.role as RoleKey | undefined
+      if (metaRole && metaRole in NAV_ITEMS) {
+        setRole(metaRole)
+      }
+    })
+
+    return () => subscription.unsubscribe()
+  }, [])
+
   const items = NAV_ITEMS[role] ?? NAV_ITEMS.LEARNER
 
-  const userName = session?.user?.name
-  const userEmail = session?.user?.email
-  const userImage = session?.user?.image
-  const initials = getInitials(userName, userEmail)
+  const userName  = user?.user_metadata?.name as string | undefined
+  const userEmail = user?.email
+  const userImage = user?.user_metadata?.avatar_url as string | undefined
+  const initials  = getInitials(userName, userEmail)
   const showPhoto = userImage && !avatarError
+
+  async function handleSignOut() {
+    const supabase = createClient()
+    await supabase.auth.signOut()
+    router.push('/login')
+  }
 
   return (
     <aside className="flex h-screen w-60 flex-col border-r border-gray-200 bg-white">
@@ -98,7 +145,7 @@ export function Sidebar() {
         </Link>
 
         {/* User row */}
-        {session?.user && (
+        {user && (
           <div className="flex items-center gap-2 rounded-lg px-3 py-2">
             {/* Avatar */}
             <div className="w-7 h-7 rounded-full overflow-hidden flex-shrink-0 bg-red-500 flex items-center justify-center">
@@ -114,7 +161,7 @@ export function Sidebar() {
               ) : initials !== '?' ? (
                 <span className="text-[11px] font-bold text-white select-none">{initials}</span>
               ) : (
-                <User className="w-4 h-4 text-white" />
+                <UserIcon className="w-4 h-4 text-white" />
               )}
             </div>
 
@@ -131,7 +178,7 @@ export function Sidebar() {
         )}
 
         <button
-          onClick={() => signOut({ callbackUrl: '/login' })}
+          onClick={handleSignOut}
           className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-gray-600 hover:bg-red-50 hover:text-red-600"
         >
           <LogOut className="h-4 w-4" />

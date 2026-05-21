@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback } from 'react'
 import { toast } from 'sonner'
-import { Shield, AlertTriangle, Clock, TrendingDown, Save, Info } from 'lucide-react'
+import { Shield, AlertTriangle, Clock, Save, Info, RotateCcw } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -97,6 +97,16 @@ function NumericField({
 }
 
 // ── Main Component ────────────────────────────────────────────────────────────
+
+const DEFAULT_SETTINGS: RiskGuardianDefaults = {
+  max_session_duration: 120,
+  max_trades_per_session: 20,
+  max_trades_per_window: 10,
+  exposure_multiplier: 1.5,
+  fatigue_warning_enabled: true,
+  revenge_trading_alert_enabled: true,
+  emotional_instability_threshold: 6,
+}
 
 interface Props {
   initialSettings: RiskGuardianDefaults
@@ -273,7 +283,19 @@ export function RiskGuardianClient({ initialSettings }: Props) {
         </Card>
 
         {/* Save */}
-        <div className="flex justify-end">
+        <div className="flex justify-between items-center">
+          <Button
+            variant="outline"
+            className="text-gray-600"
+            onClick={() => {
+              setSettings(DEFAULT_SETTINGS)
+              toast.info('Defaults restored — click Save to persist')
+            }}
+            disabled={saving}
+          >
+            <RotateCcw className="w-4 h-4 mr-2" />
+            Reset to Defaults
+          </Button>
           <Button
             className="bg-[#E53935] hover:bg-[#C62828] text-white px-8"
             onClick={handleSave}

@@ -41,7 +41,7 @@ export async function PUT(request: Request) {
   // NOT NULL columns — fall back to DB defaults rather than nulling them out
   const notNullDefaults: Record<string, string> = {
     primary_color: '#E53935',
-    secondary_color: '#2E7D32',
+    secondary_color: '#0A0F1C',
     accent_color: '#00B4D8',
     bg_color: '#F5F7FA',
     dark_bg_color: '#0A0F1C',

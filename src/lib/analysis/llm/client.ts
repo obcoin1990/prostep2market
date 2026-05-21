@@ -61,7 +61,11 @@ export class LLMClient {
     });
 
     const content = response.choices[0].message.content || '{}';
-    return JSON.parse(content) as T;
+    try {
+      return JSON.parse(content) as T;
+    } catch (e) {
+      throw new Error(`LLM returned invalid JSON: ${String(content).slice(0, 200)}`);
+    }
   }
 }
 

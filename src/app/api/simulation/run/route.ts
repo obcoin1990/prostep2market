@@ -47,6 +47,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // TODO (WR-13): Replace generateSampleCandles with real historical OHLC data for the
+    // requested `pair` between `startDate` and `endDate`. Until then, results are
+    // based on synthetic candle data and the pair/date-range parameters are ignored.
+
     // Generate sample candle data (30 days)
     const candles = generateSampleCandles(30, 1.1000, 3600000);
     
@@ -125,6 +129,8 @@ export async function POST(request: NextRequest) {
       metrics: simulationResult.metrics,
       rrOptimization,
       behavioralComparison,
+      // WR-13: Warn consumers that candle data is synthetic; pair/date-range params are not yet used.
+      warning: 'Simulation uses synthetic candle data. The requested pair and date range are not yet applied to candle generation.',
     });
   } catch (error) {
     console.error('Error running simulation:', error);

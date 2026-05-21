@@ -87,6 +87,11 @@ export async function PATCH(
 
   if (exitPrice !== undefined && entryPrice !== undefined && lotSize !== undefined) {
     const priceDiff = exitPrice - entryPrice
+    // TODO (WR-04): Short trade P&L direction is incorrect when takeProfit < stopLoss
+    // (i.e. a short position). Correctly determining direction requires an explicit
+    // `direction` ('long'|'short') field on the trade schema. Until the schema is
+    // updated, short trades will have their P&L sign inverted. Fixing this requires
+    // a schema migration to add the direction column.
     const direction = (takeProfit ?? 0) > (stopLoss ?? 0) ? 1 : -1
     const pnl = priceDiff * lotSize * 100000 * direction
     sanitized.pnl = pnl

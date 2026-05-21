@@ -21,6 +21,10 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'durationMinutes must be a positive number' }, { status: 400 });
     }
 
+    if (durationMinutes > 1440) {
+      return NextResponse.json({ error: 'Maximum pause duration is 24 hours' }, { status: 400 });
+    }
+
     // Deactivate any existing active pause first
     await supabase
       .from('pause_mode')

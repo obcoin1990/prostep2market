@@ -42,17 +42,19 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // Get user emails via auth admin
+    // Get user emails — parallel requests instead of sequential N+1
     const userIds = [...new Set((strategies ?? []).map((s) => s.user_id))]
     const emailMap: Record<string, string> = {}
-    for (const uid of userIds) {
-      try {
-        const { data: userData } = await admin.auth.admin.getUserById(uid)
-        if (userData?.user?.email) emailMap[uid] = userData.user.email
-      } catch {
-        emailMap[uid] = uid
-      }
-    }
+    await Promise.all(
+      userIds.map(async (uid) => {
+        try {
+          const { data: userData } = await admin.auth.admin.getUserById(uid)
+          if (userData?.user?.email) emailMap[uid] = userData.user.email
+        } catch {
+          emailMap[uid] = uid
+        }
+      })
+    )
 
     const enriched = (strategies ?? []).map((s) => ({
       ...s,

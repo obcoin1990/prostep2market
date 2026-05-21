@@ -1,6 +1,5 @@
-import { getServerSession } from 'next-auth'
 import { redirect, notFound } from 'next/navigation'
-import { authOptions } from '@/lib/auth'
+import { getPageSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { LessonSidebar } from '@/components/lesson/LessonSidebar'
 import { LessonContent } from './LessonContent'
@@ -10,14 +9,14 @@ interface Props {
 }
 
 export default async function LessonPage({ params }: Props) {
-  const session = await getServerSession(authOptions)
+  const session = await getPageSession()
   if (!session) redirect('/login')
 
   const { id: courseId, lessonId } = await params
 
   // Verify enrollment
   const enrollment = await prisma.enrollment.findUnique({
-    where: { userId_courseId: { userId: session.user.id, courseId } },
+    where: { userId_courseId: { userId: session.id, courseId } },
   })
   if (!enrollment) redirect(`/courses/${courseId}`)
 
@@ -65,7 +64,7 @@ export default async function LessonPage({ params }: Props) {
   // Quiz attempt history
   const quizHistory = lesson.quiz
     ? await prisma.quizAttempt.findMany({
-        where:   { quizId: lesson.quiz.id, userId: session.user.id },
+        where:   { quizId: lesson.quiz.id, userId: session.id },
         orderBy: { startedAt: 'desc' },
       })
     : []

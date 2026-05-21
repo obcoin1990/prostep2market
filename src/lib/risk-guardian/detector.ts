@@ -40,14 +40,15 @@ export function detectAlerts(input: DetectionInput): Alert[] {
   for (const result of ruleResults) {
     if (!result.alert) continue;
 
-    // Check cooldown for this alert type
-    const lastTriggered = alertCooldowns.get(result.type);
+    // Check cooldown for this alert type — keyed per user to prevent cross-user pollution
+    const cooldownKey = `${input.userId}:${result.type}`;
+    const lastTriggered = alertCooldowns.get(cooldownKey);
     if (lastTriggered && (now - lastTriggered) < COOLDOWN_MS) {
       continue; // Skip - too soon since last alert
     }
 
     alerts.push(result.alert);
-    alertCooldowns.set(result.type, now);
+    alertCooldowns.set(cooldownKey, now);
   }
 
   return alerts;
@@ -65,10 +66,12 @@ export async function runFullCheck(
     const supabase = await createClient();
 
     // Fetch recent trades (last 50, last 24 hours)
+    const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
     const { data: trades, error } = await supabase
       .from('trades')
       .select('*')
       .eq('user_id', userId)
+      .gte('entry_time', since)
       .order('entry_time', { ascending: false })
       .limit(50);
 

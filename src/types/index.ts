@@ -1,15 +1,3 @@
-import type { DefaultSession } from 'next-auth'
-
-declare module 'next-auth' {
-  interface Session {
-    user: DefaultSession['user'] & {
-      id:             string
-      role:           string
-      organizationId: string | null
-    }
-  }
-}
-
 // ─── Domain Types ───────────────────────────────────────────────
 
 export type Role = 'SUPER_ADMIN' | 'ADMIN' | 'MANAGER' | 'LEARNER'

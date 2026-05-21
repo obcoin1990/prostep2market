@@ -25,7 +25,9 @@ export async function GET(req: NextRequest, { params }: Params) {
   })
   if (!cert) return apiError('Certificate not found', 404)
 
-  if (cert.userId !== session!.user.id && session!.user.role === 'LEARNER') {
+  const isOwner = cert.userId === session!.user.id
+  const isAdmin = ['ADMIN', 'SUPER_ADMIN', 'MANAGER'].includes(session!.user.role)
+  if (!isOwner && !isAdmin) {
     return apiError('Forbidden', 403)
   }
 

@@ -15,15 +15,31 @@ export async function GET(request: Request) {
 
   const admin = createAdminClient()
 
+  // Build full email → id map by paginating through all auth users
+  async function buildEmailMap(): Promise<Record<string, string>> {
+    const map: Record<string, string> = {}
+    let p = 1
+    while (true) {
+      const { data: page, error } = await admin.auth.admin.listUsers({ page: p, perPage: 1000 })
+      if (error || !page?.users?.length) break
+      for (const u of page.users) {
+        if (u.email) map[u.id] = u.email
+      }
+      if (page.users.length < 1000) break
+      p++
+    }
+    return map
+  }
+
   // If search by email, find user IDs first
   let filteredUserIds: string[] | null = null
   if (search) {
     try {
-      const { data: authList } = await admin.auth.admin.listUsers({ perPage: 1000 })
-      const matched = (authList?.users ?? []).filter((u) =>
-        (u.email ?? '').toLowerCase().includes(search.toLowerCase())
+      const emailMap = await buildEmailMap()
+      const matched = Object.entries(emailMap).filter(([, email]) =>
+        email.toLowerCase().includes(search.toLowerCase())
       )
-      filteredUserIds = matched.map((u) => u.id)
+      filteredUserIds = matched.map(([id]) => id)
     } catch {
       filteredUserIds = []
     }
@@ -54,12 +70,20 @@ export async function GET(request: Request) {
   const emailMap: Record<string, string> = {}
   if (userIds.length > 0) {
     try {
-      const { data: authList } = await admin.auth.admin.listUsers({ perPage: 1000 })
-      for (const u of authList?.users ?? []) {
-        if (userIds.includes(u.id)) emailMap[u.id] = u.email ?? ''
+      let p = 1
+      while (true) {
+        const { data: authPage, error } = await admin.auth.admin.listUsers({ page: p, perPage: 1000 })
+        if (error || !authPage?.users?.length) break
+        for (const u of authPage.users) {
+          if (userIds.includes(u.id)) emailMap[u.id] = u.email ?? ''
+        }
+        // Stop early if we've found all the IDs we need
+        if (Object.keys(emailMap).length === userIds.length) break
+        if (authPage.users.length < 1000) break
+        p++
       }
     } catch {
-      // non-fatal
+      // non-fatal — emails will fall back to user_id
     }
   }
 

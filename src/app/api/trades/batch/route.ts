@@ -48,6 +48,14 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Expected array of trades' }, { status: 400 })
   }
 
+  const MAX_BATCH_SIZE = 500
+  if (body.length > MAX_BATCH_SIZE) {
+    return NextResponse.json(
+      { error: `Batch size exceeds maximum of ${MAX_BATCH_SIZE} trades` },
+      { status: 400 }
+    )
+  }
+
   const valid: any[] = []
   const validationErrors: any[] = []
 

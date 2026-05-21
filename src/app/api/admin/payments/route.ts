@@ -59,11 +59,12 @@ export async function PUT(request: Request) {
   if (test_mode !== undefined) updates.test_mode = test_mode
   if (active !== undefined) updates.active = active
   if (extra_config !== undefined) updates.extra_config = extra_config
-  // Only update secrets if they don't look like masked values
-  if (secret_key !== undefined && !String(secret_key).startsWith('****')) {
+  // Only update secrets if they are non-empty and not masked placeholder values (WR-12)
+  // The client sends back '****xxxx' for masked keys — reject those as-is.
+  if (secret_key !== undefined && String(secret_key).trim() !== '' && !String(secret_key).startsWith('****')) {
     updates.secret_key = secret_key
   }
-  if (webhook_secret !== undefined && !String(webhook_secret).startsWith('****')) {
+  if (webhook_secret !== undefined && String(webhook_secret).trim() !== '' && !String(webhook_secret).startsWith('****')) {
     updates.webhook_secret = webhook_secret
   }
 

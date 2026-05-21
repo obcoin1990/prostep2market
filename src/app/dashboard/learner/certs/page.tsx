@@ -1,16 +1,15 @@
-import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
-import { authOptions } from '@/lib/auth'
+import { getPageSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { CertificateList } from '@/components/certificate/CertificateList'
 import { Award } from 'lucide-react'
 
 export default async function CertificatesPage() {
-  const session = await getServerSession(authOptions)
+  const session = await getPageSession()
   if (!session) redirect('/login')
 
   const certs = await prisma.certificate.findMany({
-    where:   { userId: session.user.id },
+    where:   { userId: session.id },
     orderBy: { issueDate: 'desc' },
     include: { user: { select: { name: true } } },
   })
@@ -22,9 +21,9 @@ export default async function CertificatesPage() {
   })
   const courseMap = Object.fromEntries(courses.map(c => [c.id, c]))
 
-  const org = session.user.organizationId
+  const org = session.organizationId
     ? await prisma.organization.findUnique({
-        where:  { id: session.user.organizationId },
+        where:  { id: session.organizationId },
         select: { name: true },
       })
     : null

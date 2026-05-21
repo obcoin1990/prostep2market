@@ -131,7 +131,7 @@ export async function GET(request: Request) {
 
     return {
       rank: index + 1,
-      userId,
+      userId: userId === user.id ? userId : undefined,
       displayName: visibility === 'public' && profile?.display_name
         ? profile.display_name
         : `Trader #${userId.slice(0, 6).toUpperCase()}`,
