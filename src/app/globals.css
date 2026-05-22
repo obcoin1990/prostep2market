@@ -45,6 +45,9 @@
   /* Accent (single-product, use sparingly) */
   --color-accent-turquoise:#2dbdb6;
 
+  /* Navy — pale blue light surface */
+  --color-navy:            #e8f0fe;
+
   /* Info / Focus ring */
   --color-info:            #3b82f6;
 
@@ -468,6 +471,13 @@
   .bg-\[#fafafa\] .text-gray-400, .bg-\[#fafafa\] .text-gray-500,
   .bg-\[#fafafa\] .text-gray-600, .bg-\[#fafafa\] .text-gray-700 { color: #000000; }
 
+  /* navy panels (#e8f0fe — pale blue light surface) */
+  .bg-navy .text-gray-300, .bg-navy .text-gray-400, .bg-navy .text-gray-500,
+  .bg-navy .text-gray-600, .bg-navy .text-gray-700, .bg-navy .text-gray-800,
+  .bg-navy .text-gray-900 { color: #000000; }
+  .bg-navy .text-slate-300, .bg-navy .text-slate-400, .bg-navy .text-slate-500,
+  .bg-navy .text-slate-600, .bg-navy .text-slate-700 { color: #000000; }
+
   /* ── Container-level color inheritance ────────────────────────────────────
      Setting color directly on the container makes ALL children without an
      explicit text-* class inherit the correct color automatically.
@@ -496,4 +506,5 @@
   .bg-\[#F5F7FA\] { color: #000000; }
   .bg-\[#f5f7fa\] { color: #000000; }
   .footer-light   { color: #000000; }
+  .bg-navy        { color: #000000; }
 }
