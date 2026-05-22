@@ -7,12 +7,20 @@ import { useDashboardData } from '@/hooks/useDashboardData'
 import { useAlerts } from '@/hooks/useAlerts'
 import { usePauseMode } from '@/hooks/usePauseMode'
 import { useAlertSubscription } from '@/hooks/useAlertSubscription'
+import { useLearningProgress } from '@/hooks/useLearningProgress'
+import { useCertificates } from '@/hooks/useCertificates'
+import { useOpenTrades } from '@/hooks/useOpenTrades'
+import { useWatchlist } from '@/hooks/useWatchlist'
 import { getDashboardTips } from '@/components/dashboard/personalized-layout'
 import { DashboardGrid } from './DashboardGrid'
 import { OnboardingBanner } from './OnboardingBanner'
 import { DashboardTips } from './DashboardTips'
 import { DateRangeFilter, type DateRangeType } from './DateRangeFilter'
 import { OnboardingTour } from './OnboardingTour'
+import { LearningProgressWidget } from './LearningProgressWidget'
+import { CertificatesWidget } from './CertificatesWidget'
+import { OpenTradesWidget } from './OpenTradesWidget'
+import { WatchlistWidget } from './WatchlistWidget'
 
 interface InitialData {
   edgeScore: any
@@ -69,6 +77,13 @@ export function DashboardContent({
 
   // Subscribe to real-time alerts
   useAlertSubscription(user.id)
+
+  // ── New sections ───────────────────────────────────────────────────────────
+  const learningProgress = useLearningProgress()
+  const certificates     = useCertificates()
+  const openTrades       = useOpenTrades()
+  const watchlist        = useWatchlist()
+  // ──────────────────────────────────────────────────────────────────────────
 
   // Hydration safety
   useEffect(() => {
@@ -161,6 +176,32 @@ export function DashboardContent({
           isPaused={isPaused}
           pauseInfo={pauseInfo}
         />
+      </div>
+
+      {/* ── Second row: Learning, Certs, Trades, Strategies ── */}
+      <div>
+        <h2 className="text-sm font-semibold mb-3" style={{ color: '#707a8a', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+          Learning &amp; Trading Activity
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
+          <LearningProgressWidget
+            enrollments={learningProgress.enrollments}
+            isLoading={learningProgress.isLoading}
+          />
+          <CertificatesWidget
+            certificates={certificates.certificates}
+            isLoading={certificates.isLoading}
+          />
+          <OpenTradesWidget
+            trades={openTrades.trades}
+            openTrades={openTrades.openTrades}
+            isLoading={openTrades.isLoading}
+          />
+          <WatchlistWidget
+            strategies={watchlist.strategies}
+            isLoading={watchlist.isLoading}
+          />
+        </div>
       </div>
     </div>
   )

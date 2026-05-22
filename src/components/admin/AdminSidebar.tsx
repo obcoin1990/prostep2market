@@ -184,14 +184,6 @@ export function AdminSidebar({ userEmail, isOpen, onClose }: AdminSidebarProps) 
 
       {/* Footer */}
       <div className="border-t border-white/10 px-3 py-4 space-y-2">
-        <Link
-          href="/dashboard"
-          className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/50 hover:text-white hover:bg-white/5 transition-all"
-        >
-          <LayoutDashboard className="w-4 h-4 flex-shrink-0" />
-          Back to App
-        </Link>
-
         <div className="px-3 py-2 rounded-lg bg-white/5">
           <p className="text-[11px] text-white/60 font-medium truncate">{userEmail}</p>
           <p className="text-[10px] text-[#E53935] font-semibold">Super Admin</p>

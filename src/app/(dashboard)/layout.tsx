@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { DashboardLayoutClient } from '@/components/dashboard/DashboardLayoutClient'
+import { getAdminUser } from '@/lib/admin/auth'
 
 export default async function DashboardLayout({
   children,
@@ -12,6 +13,12 @@ export default async function DashboardLayout({
 
   if (!user) {
     redirect('/login')
+  }
+
+  // super_admin users belong at /admin, not /dashboard
+  const adminUser = await getAdminUser()
+  if (adminUser) {
+    redirect('/admin')
   }
 
   // Get trader profile for personalization
