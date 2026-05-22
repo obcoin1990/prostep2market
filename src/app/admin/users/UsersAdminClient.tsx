@@ -6,7 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { CreateUserForm } from '@/components/admin/CreateUserForm'
-import type { TraderProfileRow } from './page'
+import { UserDetailDrawer } from '@/components/admin/UserDetailDrawer'
+import type { TraderProfileRow, OrgOption } from './page'
 import {
   Users,
   Shield,
@@ -19,6 +20,7 @@ import {
   UserCog,
   AlertTriangle,
   PlusCircle,
+  Eye,
 } from 'lucide-react'
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -256,15 +258,22 @@ function DeleteDialog({ user, onClose, onDeleted }: DeleteDialogProps) {
 
 // ─── Main Client Component ────────────────────────────────────────────────────
 
-export function UsersAdminClient({ initialUsers }: { initialUsers: TraderProfileRow[] }) {
+export function UsersAdminClient({
+  initialUsers,
+  organizations,
+}: {
+  initialUsers: TraderProfileRow[]
+  organizations: OrgOption[]
+}) {
   const router = useRouter()
   const [, startTransition] = useTransition()
 
   const [users, setUsers] = useState<TraderProfileRow[]>(initialUsers)
   const [search, setSearch] = useState('')
   const [showCreateForm, setShowCreateForm] = useState(false)
-  const [editingUser, setEditingUser] = useState<TraderProfileRow | null>(null)
+  const [editingUser, setEditingUser]   = useState<TraderProfileRow | null>(null)
   const [deletingUser, setDeletingUser] = useState<TraderProfileRow | null>(null)
+  const [viewingUser,  setViewingUser]  = useState<TraderProfileRow | null>(null)
 
   // ── Derived stats ──
   const stats = useMemo(() => {
@@ -307,6 +316,26 @@ export function UsersAdminClient({ initialUsers }: { initialUsers: TraderProfile
 
   return (
     <>
+      {/* ── User Detail Drawer ── */}
+      {viewingUser && (
+        <UserDetailDrawer
+          userId={viewingUser.id}
+          userEmail={viewingUser.email ?? viewingUser.id.slice(0, 8) + '…'}
+          onClose={() => setViewingUser(null)}
+          organizations={organizations}
+          onRoleChanged={(id, newRole) => {
+            // Sync admin_role badge in table when role changes to/from SUPER_ADMIN
+            setUsers((prev) =>
+              prev.map((u) =>
+                u.id === id
+                  ? { ...u, admin_role: newRole === 'SUPER_ADMIN' ? 'super_admin' : null }
+                  : u
+              )
+            )
+          }}
+        />
+      )}
+
       {/* ── Edit Modal ── */}
       {editingUser && (
         <EditModal
@@ -537,9 +566,16 @@ export function UsersAdminClient({ initialUsers }: { initialUsers: TraderProfile
                           <td className="px-4 py-3">
                             <div className="flex items-center justify-end gap-1.5">
                               <button
+                                onClick={() => setViewingUser(user)}
+                                className="p-1.5 rounded-lg text-gray-400 hover:text-[#00B4D8] hover:bg-[#00B4D8]/10 transition-all"
+                                title="View full details"
+                              >
+                                <Eye className="w-3.5 h-3.5" />
+                              </button>
+                              <button
                                 onClick={() => setEditingUser(user)}
                                 className="p-1.5 rounded-lg text-gray-400 hover:text-[#0A0F1C] hover:bg-gray-100 transition-all"
-                                title="Edit user"
+                                title="Quick edit"
                               >
                                 <Pencil className="w-3.5 h-3.5" />
                               </button>

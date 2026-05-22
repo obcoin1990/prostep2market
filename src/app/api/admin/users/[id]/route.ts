@@ -74,7 +74,8 @@ export async function PATCH(req: NextRequest, { params }: Params) {
   return NextResponse.json({ success: true })
 }
 
-// ─── DELETE /api/admin/users/[id] ────────────────────────────────────────────
+// ─── PUT /api/admin/users/[id] — alias kept for backward-compat ──────────────
+export { PATCH as PUT }
 export async function DELETE(_req: NextRequest, { params }: Params) {
   const result = await getAdminContext()
   if (result instanceof NextResponse) return result

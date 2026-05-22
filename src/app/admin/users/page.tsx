@@ -2,6 +2,7 @@
 import { redirect } from 'next/navigation'
 import { getAdminUser } from '@/lib/admin/auth'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { prisma } from '@/lib/prisma'
 import { UsersAdminClient } from './UsersAdminClient'
 
 export interface TraderProfileRow {
@@ -15,17 +16,30 @@ export interface TraderProfileRow {
   email?: string
 }
 
+export interface OrgOption {
+  id: string
+  name: string
+}
+
 export default async function AdminUsersPage() {
   const adminUser = await getAdminUser()
   if (!adminUser) redirect('/admin/forbidden')
 
   const admin = createAdminClient()
 
-  // Fetch all trader profiles
-  const { data: profiles, error } = await admin
-    .from('trader_profiles')
-    .select('id, profile_type, admin_role, risk_personality_score, emotional_stability_score, created_at')
-    .order('created_at', { ascending: false })
+  // Fetch all trader profiles + organizations in parallel
+  const [profilesResult, organizations] = await Promise.all([
+    admin
+      .from('trader_profiles')
+      .select('id, profile_type, admin_role, risk_personality_score, emotional_stability_score, created_at')
+      .order('created_at', { ascending: false }),
+
+    prisma.organization
+      .findMany({ select: { id: true, name: true }, orderBy: { name: 'asc' } })
+      .catch(() => [] as OrgOption[]),
+  ])
+
+  const { data: profiles, error } = profilesResult
 
   if (error) {
     return (
@@ -47,5 +61,5 @@ export default async function AdminUsersPage() {
     // emails stay empty — non-fatal
   }
 
-  return <UsersAdminClient initialUsers={enriched} />
+  return <UsersAdminClient initialUsers={enriched} organizations={organizations} />
 }
