@@ -25,7 +25,15 @@ const LEARNING_PATH_CONTENT: Record<LearningPath, { icon: string; title: string;
 };
 
 export function LearningPathDisplay({ learningPath }: LearningPathDisplayProps) {
-  const content = LEARNING_PATH_CONTENT[learningPath];
+  const content = learningPath ? LEARNING_PATH_CONTENT[learningPath] : undefined;
+
+  if (!content) {
+    return (
+      <div className="bg-[#F5F7FA] rounded-lg p-4 border-l-4 border-gray-300">
+        <p className="text-sm text-[#616161]">No learning path assigned yet. Complete the Trader DNA assessment to get your personalized path.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-[#F5F7FA] rounded-lg p-4 border-l-4 border-[#E53935]">

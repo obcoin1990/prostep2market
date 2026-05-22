@@ -34,7 +34,21 @@ export async function POST(request: NextRequest) {
     if (!parseResult.success) {
       return NextResponse.json({ error: parseResult.error.issues }, { status: 422 });
     }
-    const profile: TraderProfile = rawBody as TraderProfile;
+    const d = parseResult.data;
+    const profile: TraderProfile = {
+      type: d.profileType,
+      scores: {
+        riskPersonality: d.riskPersonalityScore ?? 0,
+        emotionalStability: d.emotionalStabilityScore ?? 0,
+        decisionMaking: d.decisionMakingScore ?? 0,
+        tradingBehavior: d.tradingBehaviorScore ?? 0,
+        learningStyle: d.learningStyleScore ?? 0,
+      },
+      learningPath: (d.learningPath as TraderProfile['learningPath']) ?? 'practical',
+      dashboardLayout: (d.dashboardLayout as unknown as TraderProfile['dashboardLayout']) ?? null,
+      alertThresholds: (d.alertThresholds as unknown as TraderProfile['alertThresholds']) ?? null,
+      recommendations: [],
+    };
     const result = await saveTraderProfile(profile);
 
     if (!result.success) {

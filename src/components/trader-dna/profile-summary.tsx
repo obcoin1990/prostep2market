@@ -37,7 +37,7 @@ export function ProfileSummary({ profile }: ProfileSummaryProps) {
   const profileName = PROFILE_TYPE_NAMES[profile.type];
   const profileDescription = PROFILE_TYPE_DESCRIPTIONS[profile.type];
   const icon = PROFILE_ICONS[profile.type];
-  const colorClass = PROFILE_COLORS[profile.type];
+  const colorClass = PROFILE_COLORS[profile.type] ?? 'from-gray-500 to-gray-600';
 
   const scoreEntries = Object.entries(profile.scores) as [SectionKey, number][];
 
@@ -66,24 +66,27 @@ export function ProfileSummary({ profile }: ProfileSummaryProps) {
       <div className="bg-white rounded-xl border border-[#E0E0E0] p-6 shadow-sm">
         <h2 className="text-lg font-semibold text-[#0B0B0B] mb-4">Assessment Results</h2>
         <div className="space-y-4">
-          {scoreEntries.map(([section, score]) => (
+          {scoreEntries.map(([section, score]) => {
+            const safeScore = score ?? 0;
+            return (
             <div key={section} className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-[#616161]">
                   {SECTION_LABELS[section]}
                 </span>
-                <span className="text-sm font-bold text-[#0B0B0B]">{score}%</span>
+                <span className="text-sm font-bold text-[#0B0B0B]">{safeScore}%</span>
               </div>
               <div className="h-2 bg-[#E0E0E0] rounded-full overflow-hidden">
                 <div 
                   className={`h-full rounded-full transition-all duration-500 ${
-                    score >= 70 ? 'bg-[#2E7D32]' : score >= 50 ? 'bg-[#E53935]' : 'bg-[#FF6B6B]'
+                    safeScore >= 70 ? 'bg-[#2E7D32]' : safeScore >= 50 ? 'bg-[#E53935]' : 'bg-[#FF6B6B]'
                   }`}
-                  style={{ width: `${score}%` }}
+                  style={{ width: `${safeScore}%` }}
                 />
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
