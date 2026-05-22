@@ -17,11 +17,11 @@ const mockTrendData = [
 ]
 
 const rankInfo = {
-  Beginner: { color: 'bg-gray-500', next: 'Developing', points: 0 },
-  Developing: { color: 'bg-blue-500', next: 'Consistent', points: 40 },
-  Consistent: { color: 'bg-green-500', next: 'Advanced', points: 70 },
-  Advanced: { color: 'bg-purple-500', next: 'Elite', points: 85 },
-  Elite: { color: 'bg-yellow-500', next: null, points: 95 },
+  Beginner:   { color: 'bg-gray-200',  textColor: 'text-gray-900', next: 'Developing', points: 0 },
+  Developing: { color: 'bg-blue-500',  textColor: 'text-white',    next: 'Consistent', points: 40 },
+  Consistent: { color: 'bg-green-500', textColor: 'text-white',    next: 'Advanced',   points: 70 },
+  Advanced:   { color: 'bg-purple-500',textColor: 'text-white',    next: 'Elite',      points: 85 },
+  Elite:      { color: 'bg-yellow-400',textColor: 'text-gray-900', next: null,         points: 95 },
 }
 
 interface EdgeScoreCardProps {
@@ -88,7 +88,7 @@ export function EdgeScoreCard({
 
         {/* Rank */}
         <div className="flex items-center justify-between mb-4">
-          <Badge variant={rank === 'Elite' ? 'success' : 'default'} className={currentRank.color + ' text-white'}>
+          <Badge variant={rank === 'Elite' ? 'success' : 'default'} className={`${currentRank.color} ${currentRank.textColor}`}>
             {rank}
           </Badge>
           {nextRank && (

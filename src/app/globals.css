@@ -459,4 +459,33 @@
   /* surface-soft-light panels */
   .bg-\[#fafafa\] .text-gray-400, .bg-\[#fafafa\] .text-gray-500,
   .bg-\[#fafafa\] .text-gray-600, .bg-\[#fafafa\] .text-gray-700 { color: #000000; }
+
+  /* ── Container-level color inheritance ────────────────────────────────────
+     Setting color directly on the container makes ALL children without an
+     explicit text-* class inherit the correct color automatically.
+     This fixes "invisible text" caused by body { color: #ffffff } bleeding
+     into white/light card components (e.g. Trade Journal, admin panels).
+  ── */
+
+  /* bg-white → black text (and all uncolored descendants) */
+  .bg-white { color: #000000; }
+
+  /* Light grays (near-white) → black text */
+  .bg-gray-50  { color: #000000; }
+  .bg-gray-100 { color: #000000; }
+  .bg-gray-200 { color: #000000; }
+  .bg-gray-300 { color: #000000; }
+
+  /* Dark grays → white text */
+  .bg-gray-700 { color: #ffffff; }
+  .bg-gray-800 { color: #ffffff; }
+  .bg-gray-900 { color: #ffffff; }
+  .bg-gray-950 { color: #ffffff; }
+  .bg-black    { color: #ffffff; }
+
+  /* Named light surfaces used in this codebase */
+  .bg-\[#fafafa\] { color: #000000; }
+  .bg-\[#F5F7FA\] { color: #000000; }
+  .bg-\[#f5f7fa\] { color: #000000; }
+  .footer-light   { color: #000000; }
 }
