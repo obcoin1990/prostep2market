@@ -449,7 +449,15 @@
 
   /* gray-100 panels */
   .bg-gray-100 .text-gray-300, .bg-gray-100 .text-gray-400, .bg-gray-100 .text-gray-500,
-  .bg-gray-100 .text-gray-600, .bg-gray-100 .text-gray-700 { color: #000000; }
+  .bg-gray-100 .text-gray-600, .bg-gray-100 .text-gray-700,
+  .bg-gray-100 .text-gray-800, .bg-gray-100 .text-gray-900 { color: #000000; }
+
+  /* gray-200 / gray-300 panels (chip/badge backgrounds) */
+  .bg-gray-200 .text-gray-400, .bg-gray-200 .text-gray-500, .bg-gray-200 .text-gray-600,
+  .bg-gray-200 .text-gray-700, .bg-gray-200 .text-gray-800, .bg-gray-200 .text-gray-900 { color: #000000; }
+
+  .bg-gray-300 .text-gray-500, .bg-gray-300 .text-gray-600, .bg-gray-300 .text-gray-700,
+  .bg-gray-300 .text-gray-800, .bg-gray-300 .text-gray-900 { color: #000000; }
 
   /* light footer (bg-color: #fafafa via .footer-light) */
   .footer-light .text-gray-300, .footer-light .text-gray-400, .footer-light .text-gray-500,
