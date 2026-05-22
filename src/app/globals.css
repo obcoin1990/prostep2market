@@ -57,7 +57,9 @@
   --radius-xl:   12px;
   --radius-pill: 9999px;
 
-  /* Spacing scale (4px base) */
+  /* Spacing scale (4px base)
+     NOTE: --spacing-{name} also generates max-w-{name} in Tailwind v4.
+     We define --max-width-* below to restore the standard container widths. */
   --spacing-xxs: 4px;
   --spacing-xs:  8px;
   --spacing-sm:  12px;
@@ -66,6 +68,28 @@
   --spacing-xl:  32px;
   --spacing-xxl: 48px;
   --spacing-section: 80px;
+
+  /* Container max-widths — must be explicit because --spacing-{sm/md/lg/xl}
+     above would otherwise override max-w-sm/md/lg/xl with tiny pixel values. */
+  --max-width-xs:  20rem;    /*  320px */
+  --max-width-sm:  24rem;    /*  384px */
+  --max-width-md:  28rem;    /*  448px */
+  --max-width-lg:  32rem;    /*  512px */
+  --max-width-xl:  36rem;    /*  576px */
+  --max-width-2xl: 42rem;    /*  672px */
+  --max-width-3xl: 48rem;    /*  768px */
+  --max-width-4xl: 56rem;    /*  896px */
+  --max-width-5xl: 64rem;    /* 1024px */
+  --max-width-6xl: 72rem;    /* 1152px */
+  --max-width-7xl: 80rem;    /* 1280px */
+  --max-width-screen-sm:  640px;
+  --max-width-screen-md:  768px;
+  --max-width-screen-lg:  1024px;
+  --max-width-screen-xl:  1280px;
+  --max-width-screen-2xl: 1536px;
+  --max-width-prose:      65ch;
+  --max-width-full:       100%;
+  --max-width-none:       none;
 }
 
 /* ─── CSS custom properties (HSL bridge for legacy component references) ─── */
