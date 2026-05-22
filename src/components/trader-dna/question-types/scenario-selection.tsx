@@ -30,7 +30,7 @@ export function ScenarioSelection({ question, value, onChange }: ScenarioSelecti
             <div className="flex items-start gap-3">
               <div className={`
                 w-6 h-6 rounded-md border-2 flex items-center justify-center flex-shrink-0
-                ${isSelected ? 'border-[#E53935] bg-[#E53935]' : 'border-[#BDBDBD]'}
+                ${isSelected ? 'border-[#E53935] bg-[#E53935]' : 'border-gray-400'}
               `}>
                 {isSelected && (
                   <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
@@ -43,7 +43,7 @@ export function ScenarioSelection({ question, value, onChange }: ScenarioSelecti
                   {option.label}
                 </div>
                 {option.description && (
-                  <div className="text-sm text-[#616161] mt-1">{option.description}</div>
+                  <div className="text-sm text-gray-600 mt-1">{option.description}</div>
                 )}
               </div>
             </div>

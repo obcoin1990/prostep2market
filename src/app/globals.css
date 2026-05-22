@@ -25,15 +25,18 @@
 
   /* Text */
   --color-on-dark:         #ffffff;
-  --color-body-dark:       #eaecef;   /* Running text on dark canvas */
+  --color-body-dark:       #e2e8f0;   /* Running text on dark canvas (slate-200, ~14:1) */
   --color-ink:             #181a20;   /* Strong text on light */
-  --color-muted:           #707a8a;
-  --color-muted-strong:    #929aa5;
+  --color-muted:           #94a3b8;   /* Muted text — slate-400, 6.1:1 on canvas */
+  --color-muted-strong:    #cbd5e1;   /* Helper / label text — slate-300, 9.3:1 on canvas */
 
   /* Hairlines & borders */
-  --color-hairline-dark:   #2b3139;
+  --color-hairline-dark:   #334155;   /* Input/card borders — slate-700, more visible depth */
   --color-hairline-light:  #eaecef;
   --color-border-strong:   #cdd1d6;
+
+  /* Soft interactive red (hover states — less aggressive than trading-down) */
+  --color-redsoft:         #fc8181;   /* 5.1:1 on canvas, 4.6:1 on card */
 
   /* Trading semantics */
   --color-trading-up:      #0ecb81;  /* Price up / Buy / Long */
@@ -105,7 +108,7 @@
     --secondary:         220 14% 20%;      /* surface-elevated-dark #2b3139 */
     --secondary-foreground: 0 0% 100%;
     --muted:             220 14% 20%;
-    --muted-foreground:  218 11% 49%;      /* muted #707a8a */
+    --muted-foreground:  215 20% 65%;      /* muted #94a3b8 — slate-400, 6.1:1 on canvas */
     --accent:            47 97% 59%;       /* primary yellow */
     --accent-foreground: 222 12% 11%;
     --destructive:       353 91% 65%;      /* trading-down #f6465d */
@@ -119,7 +122,7 @@
     --background-alt:    220 14% 15%;
     --text-primary:      0 0% 100%;
     --text-secondary:    220 22% 93%;
-    --text-muted:        218 11% 49%;
+    --text-muted:        215 20% 65%;
     --border-color:      220 14% 20%;
     --success:           158 83% 42%;      /* trading-up #0ecb81 */
     --warning:           47 97% 59%;       /* primary yellow used for warnings */
@@ -137,7 +140,7 @@
 
   body {
     background-color: #0b0e11;
-    color: #eaecef;
+    color: #e2e8f0;
     font-family: var(--font-sans);
     font-size: 14px;
     line-height: 1.5;
@@ -202,14 +205,15 @@
 
   /* Text roles */
   .text-on-dark      { color: #ffffff; }
-  .text-body-dark    { color: #eaecef; }
-  .text-muted-bnb    { color: #707a8a; }
+  .text-body-dark    { color: #e2e8f0; }
+  .text-muted-bnb    { color: #94a3b8; }   /* slate-400 — 6.1:1 on canvas */
   .text-yellow       { color: #fcd535; }
   .text-trading-up   { color: #0ecb81; }
   .text-trading-down { color: #f6465d; }
+  .text-redsoft      { color: #fc8181; }   /* soft interactive red — 5.1:1 on canvas */
 
   /* Hairlines */
-  .border-hairline-dark  { border-color: #2b3139; }
+  .border-hairline-dark  { border-color: #334155; }   /* slate-700 */
   .border-hairline-light { border-color: #eaecef; }
 
   /* Primary button — yellow with black text (Binance signature) */
@@ -233,7 +237,7 @@
   .btn-primary:active { background-color: #f0b90b; }
   .btn-primary:disabled {
     background-color: #3a3a1f;
-    color: #707a8a;
+    color: #94a3b8;   /* was #707a8a (2.0:1) → now slate-400 (~3.2:1) */
     cursor: not-allowed;
   }
 
@@ -352,7 +356,7 @@
     outline: none;
     transition: border-color 150ms;
   }
-  .input-dark::placeholder { color: #707a8a; }
+  .input-dark::placeholder { color: #94a3b8; }   /* slate-400 — 6.1:1 on canvas */
   .input-dark:focus { border-color: #fcd535; }
 
   /* Input — light transactional style */
@@ -368,7 +372,7 @@
     outline: none;
     transition: border-color 150ms, box-shadow 150ms;
   }
-  .input-light::placeholder { color: #929aa5; }
+  .input-light::placeholder { color: #6b7280; }   /* gray-500 — 4.6:1 on white ✅ */
   .input-light:focus {
     border-color: #fcd535;
     box-shadow: 0 0 0 2px rgba(252, 213, 53, 0.25);
@@ -400,7 +404,7 @@
   .bg-background  { background-color: #0b0e11; }
   .bg-card        { background-color: #1e2329; }
   .bg-muted       { background-color: #2b3139; }
-  .text-foreground { color: #eaecef; }
-  .text-muted-foreground { color: #707a8a; }
-  .border-border  { border-color: #2b3139; }
+  .text-foreground { color: #e2e8f0; }
+  .text-muted-foreground { color: #94a3b8; }   /* slate-400 — 6.1:1 on canvas, 5.5:1 on card */
+  .border-border  { border-color: #334155; }   /* slate-700 */
 }

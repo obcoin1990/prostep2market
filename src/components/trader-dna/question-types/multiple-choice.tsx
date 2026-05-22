@@ -31,7 +31,7 @@ export function MultipleChoice({ question, value, onChange }: MultipleChoiceProp
             <div className="flex items-start gap-3">
               <div className={`
                 w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5
-                ${isSelected ? 'border-[#E53935] bg-[#E53935]' : 'border-[#BDBDBD]'}
+                ${isSelected ? 'border-[#E53935] bg-[#E53935]' : 'border-gray-400'}
               `}>
                 {isSelected && (
                   <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 12 12">
@@ -44,7 +44,7 @@ export function MultipleChoice({ question, value, onChange }: MultipleChoiceProp
                   {option.label}
                 </div>
                 {option.description && (
-                  <div className="text-sm text-[#616161] mt-1">{option.description}</div>
+                  <div className="text-sm text-gray-600 mt-1">{option.description}</div>
                 )}
               </div>
             </div>

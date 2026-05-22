@@ -14,7 +14,7 @@ export function ProgressBar({ current, total, sectionName }: ProgressBarProps) {
       {/* Header with section name and percentage */}
       <div className="flex items-center justify-between mb-3">
         <div>
-          <span className="text-xs font-medium text-[#9E9E9E] uppercase tracking-wide">
+          <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">
             Section {current} of {total}
           </span>
           <h2 className="text-lg font-semibold text-[#0B0B0B] mt-1">
@@ -23,7 +23,7 @@ export function ProgressBar({ current, total, sectionName }: ProgressBarProps) {
         </div>
         <div className="text-right">
           <span className="text-2xl font-bold text-[#E53935]">{Math.round(progressPercentage)}%</span>
-          <span className="text-xs text-[#9E9E9E] block">Complete</span>
+          <span className="text-xs text-gray-500 block">Complete</span>
         </div>
       </div>
 
@@ -52,7 +52,7 @@ export function ProgressBar({ current, total, sectionName }: ProgressBarProps) {
                     ? 'bg-[#E53935] text-white' 
                     : isCurrent 
                       ? 'bg-[#E53935]/20 text-[#E53935] border-2 border-[#E53935]' 
-                      : 'bg-[#E0E0E0] text-[#9E9E9E]'
+                      : 'bg-[#E0E0E0] text-gray-500'
                   }
                 `}
               >

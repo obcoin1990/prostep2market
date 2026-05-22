@@ -28,7 +28,7 @@ export function RatingScale({ question, value, onChange }: RatingScaleProps) {
                 flex-1 py-3 px-2 rounded-lg border-2 font-medium transition-all
                 ${isSelected 
                   ? 'border-[#E53935] bg-[#E53935] text-white' 
-                  : 'border-[#E0E0E0] bg-white text-[#616161] hover:border-[#E53935]/50'
+                  : 'border-[#E0E0E0] bg-white text-gray-600 hover:border-[#E53935]/50'
                 }
               `}
               aria-pressed={isSelected}
@@ -41,7 +41,7 @@ export function RatingScale({ question, value, onChange }: RatingScaleProps) {
       </div>
       
       {/* Labels */}
-      <div className="flex justify-between text-xs text-[#757575] px-1">
+      <div className="flex justify-between text-xs text-gray-600 px-1">
         <span>Very Low</span>
         <span>Very High</span>
       </div>

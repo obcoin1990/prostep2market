@@ -28,7 +28,7 @@ export function FrequencyScale({ question, value, onChange }: FrequencyScaleProp
                 py-3 px-2 rounded-lg border-2 font-medium text-sm transition-all
                 ${isSelected 
                   ? 'border-[#E53935] bg-[#E53935] text-white' 
-                  : 'border-[#E0E0E0] bg-white text-[#616161] hover:border-[#E53935]/50'
+                  : 'border-[#E0E0E0] bg-white text-gray-600 hover:border-[#E53935]/50'
                 }
               `}
               aria-pressed={isSelected}
@@ -49,7 +49,7 @@ export function FrequencyScale({ question, value, onChange }: FrequencyScaleProp
               style={{ width: `${(selectedValue / 5) * 100}%` }}
             />
           </div>
-          <span className="text-xs text-[#757575]">
+          <span className="text-xs text-gray-600">
             {selectedValue}/5
           </span>
         </div>

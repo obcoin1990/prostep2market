@@ -121,7 +121,7 @@ export function DateRangeFilter({
                       type="date"
                       value={customStart}
                       onChange={(e) => setCustomStart(e.target.value)}
-                      className="w-full px-2 py-1 bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] rounded text-sm text-white placeholder-[rgba(255,255,255,0.4)]"
+                      className="w-full px-2 py-1 bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] rounded text-sm text-white placeholder:text-[#94a3b8]"
                     />
                   </div>
                   <div>
@@ -132,7 +132,7 @@ export function DateRangeFilter({
                       type="date"
                       value={customEnd}
                       onChange={(e) => setCustomEnd(e.target.value)}
-                      className="w-full px-2 py-1 bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] rounded text-sm text-white placeholder-[rgba(255,255,255,0.4)]"
+                      className="w-full px-2 py-1 bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] rounded text-sm text-white placeholder:text-[#94a3b8]"
                     />
                   </div>
                 </div>

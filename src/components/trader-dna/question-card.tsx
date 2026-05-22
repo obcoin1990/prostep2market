@@ -38,7 +38,7 @@ export function QuestionCard({ question, value, onChange, questionNumber, totalQ
           <span className="text-xs font-medium text-[#E53935] uppercase tracking-wide">
             Question {questionNumber} of {totalQuestions}
           </span>
-          <span className="text-xs text-[#9E9E9E] capitalize">
+          <span className="text-xs text-gray-500 capitalize">
             {question.type.replace('_', ' ')}
           </span>
         </div>

@@ -102,7 +102,7 @@ export function AssessmentWizard() {
 
       {/* Section description */}
       <div className="bg-[#F5F7FA] rounded-lg p-4">
-        <p className="text-sm text-[#616161]">
+        <p className="text-sm text-gray-600">
           {sectionInfo.description}
         </p>
       </div>
@@ -130,8 +130,8 @@ export function AssessmentWizard() {
           className={`
             px-6 py-3 rounded-lg font-medium transition-all
             ${currentStep === 0 
-              ? 'text-[#BDBDBD] cursor-not-allowed' 
-              : 'text-[#616161] hover:bg-[#F5F7FA] border border-[#E0E0E0]'
+              ? 'text-gray-400 cursor-not-allowed' 
+              : 'text-gray-600 hover:bg-[#F5F7FA] border border-[#E0E0E0]'
             }
           `}
         >
@@ -145,7 +145,7 @@ export function AssessmentWizard() {
           className={`
             px-8 py-3 rounded-lg font-medium transition-all
             ${!isSectionComplete() || saving
-              ? 'bg-[#E0E0E0] text-[#9E9E9E] cursor-not-allowed'
+              ? 'bg-[#E0E0E0] text-gray-500 cursor-not-allowed'
               : 'bg-[#E53935] text-white hover:bg-[#D32F2F]'
             }
           `}
@@ -161,7 +161,7 @@ export function AssessmentWizard() {
 
       {/* Section completion hint */}
       {!isSectionComplete() && (
-        <p className="text-center text-sm text-[#9E9E9E]">
+        <p className="text-center text-sm text-gray-500">
           Answer all {sectionQuestions.length} questions to continue
         </p>
       )}

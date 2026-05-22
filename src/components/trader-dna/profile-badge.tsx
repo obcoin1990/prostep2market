@@ -28,7 +28,7 @@ export function ProfileBadge({ profile }: ProfileBadgeProps) {
         </div>
         <div className="hidden sm:block">
           <p className="text-xs font-medium text-[#E53935]">Complete Assessment</p>
-          <p className="text-xs text-[#616161]">Discover your trading DNA</p>
+          <p className="text-xs text-gray-600">Discover your trading DNA</p>
         </div>
       </a>
     );
@@ -50,7 +50,7 @@ export function ProfileBadge({ profile }: ProfileBadgeProps) {
         <p className="text-xs font-medium text-[#0B0B0B] group-hover:text-[#E53935] transition-colors">
           {profileName}
         </p>
-        <p className="text-xs text-[#9E9E9E]">View profile</p>
+        <p className="text-xs text-gray-500">View profile</p>
       </div>
     </a>
   );
