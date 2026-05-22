@@ -25,10 +25,10 @@
 
   /* Text */
   --color-on-dark:         #ffffff;
-  --color-body-dark:       #e2e8f0;   /* Running text on dark canvas (slate-200, ~14:1) */
-  --color-ink:             #181a20;   /* Strong text on light */
-  --color-muted:           #94a3b8;   /* Muted text — slate-400, 6.1:1 on canvas */
-  --color-muted-strong:    #cbd5e1;   /* Helper / label text — slate-300, 9.3:1 on canvas */
+  --color-body-dark:       #ffffff;   /* Pure white on dark canvas */
+  --color-ink:             #000000;   /* Pure black on light surfaces */
+  --color-muted:           #ffffff;   /* All muted text → white on dark */
+  --color-muted-strong:    #ffffff;   /* All helper text → white on dark */
 
   /* Hairlines & borders */
   --color-hairline-dark:   #334155;   /* Input/card borders — slate-700, more visible depth */
@@ -100,7 +100,7 @@
   :root {
     /* Map Binance tokens → HSL vars for backwards-compat */
     --background:        0 0% 7%;          /* canvas-dark #0b0e11 */
-    --foreground:        220 22% 93%;      /* body-dark #eaecef */
+    --foreground:        0 0% 100%;        /* pure white */
     --card:              220 14% 15%;      /* surface-card-dark #1e2329 */
     --card-foreground:   0 0% 100%;
     --primary:           47 97% 59%;       /* #fcd535 */
@@ -108,7 +108,7 @@
     --secondary:         220 14% 20%;      /* surface-elevated-dark #2b3139 */
     --secondary-foreground: 0 0% 100%;
     --muted:             220 14% 20%;
-    --muted-foreground:  215 20% 65%;      /* muted #94a3b8 — slate-400, 6.1:1 on canvas */
+    --muted-foreground:  0 0% 100%;        /* pure white */
     --accent:            47 97% 59%;       /* primary yellow */
     --accent-foreground: 222 12% 11%;
     --destructive:       353 91% 65%;      /* trading-down #f6465d */
@@ -121,8 +121,8 @@
     /* Semantic */
     --background-alt:    220 14% 15%;
     --text-primary:      0 0% 100%;
-    --text-secondary:    220 22% 93%;
-    --text-muted:        215 20% 65%;
+    --text-secondary:    0 0% 100%;
+    --text-muted:        0 0% 100%;
     --border-color:      220 14% 20%;
     --success:           158 83% 42%;      /* trading-up #0ecb81 */
     --warning:           47 97% 59%;       /* primary yellow used for warnings */
@@ -140,7 +140,7 @@
 
   body {
     background-color: #0b0e11;
-    color: #e2e8f0;
+    color: #ffffff;
     font-family: var(--font-sans);
     font-size: 14px;
     line-height: 1.5;
@@ -205,12 +205,12 @@
 
   /* Text roles */
   .text-on-dark      { color: #ffffff; }
-  .text-body-dark    { color: #e2e8f0; }
-  .text-muted-bnb    { color: #94a3b8; }   /* slate-400 — 6.1:1 on canvas */
+  .text-body-dark    { color: #ffffff; }
+  .text-muted-bnb    { color: #ffffff; }
   .text-yellow       { color: #fcd535; }
   .text-trading-up   { color: #0ecb81; }
   .text-trading-down { color: #f6465d; }
-  .text-redsoft      { color: #fc8181; }   /* soft interactive red — 5.1:1 on canvas */
+  .text-redsoft      { color: #fc8181; }
 
   /* Hairlines */
   .border-hairline-dark  { border-color: #334155; }   /* slate-700 */
@@ -237,7 +237,7 @@
   .btn-primary:active { background-color: #f0b90b; }
   .btn-primary:disabled {
     background-color: #3a3a1f;
-    color: #94a3b8;   /* was #707a8a (2.0:1) → now slate-400 (~3.2:1) */
+    color: #ffffff;
     cursor: not-allowed;
   }
 
@@ -356,7 +356,7 @@
     outline: none;
     transition: border-color 150ms;
   }
-  .input-dark::placeholder { color: #94a3b8; }   /* slate-400 — 6.1:1 on canvas */
+  .input-dark::placeholder { color: #ffffff; }
   .input-dark:focus { border-color: #fcd535; }
 
   /* Input — light transactional style */
@@ -372,7 +372,7 @@
     outline: none;
     transition: border-color 150ms, box-shadow 150ms;
   }
-  .input-light::placeholder { color: #6b7280; }   /* gray-500 — 4.6:1 on white ✅ */
+  .input-light::placeholder { color: #000000; }
   .input-light:focus {
     border-color: #fcd535;
     box-shadow: 0 0 0 2px rgba(252, 213, 53, 0.25);
@@ -404,7 +404,59 @@
   .bg-background  { background-color: #0b0e11; }
   .bg-card        { background-color: #1e2329; }
   .bg-muted       { background-color: #2b3139; }
-  .text-foreground { color: #e2e8f0; }
-  .text-muted-foreground { color: #94a3b8; }   /* slate-400 — 6.1:1 on canvas, 5.5:1 on card */
-  .border-border  { border-color: #334155; }   /* slate-700 */
+  .text-foreground { color: #ffffff; }
+  .text-muted-foreground { color: #ffffff; }
+  .border-border  { border-color: #334155; }
+}
+
+/* ─── Global text-contrast overrides ────────────────────────────────────────
+   Rule A: On the permanently-dark canvas, all Tailwind gray/slate utility
+           text classes → pure white (#ffffff). Later declarations in the
+           same @layer utilities beat Tailwind's generated values.
+   Rule B: When a gray text class is a descendant of a light-surface parent
+           (.bg-white, .bg-gray-50, .bg-gray-100, .footer-light), override
+           back to pure black (#000000). The two-class selector has higher
+           specificity than the single-class Rule A.
+   ─────────────────────────────────────────────────────────────────────────── */
+@layer utilities {
+
+  /* ── Rule A: dark canvas default ── */
+  .text-gray-50,  .text-gray-100, .text-gray-200, .text-gray-300,
+  .text-gray-400, .text-gray-500, .text-gray-600, .text-gray-700,
+  .text-gray-800, .text-gray-900, .text-gray-950 { color: #ffffff; }
+
+  .text-slate-50,  .text-slate-100, .text-slate-200, .text-slate-300,
+  .text-slate-400, .text-slate-500, .text-slate-600, .text-slate-700,
+  .text-slate-800, .text-slate-900, .text-slate-950 { color: #ffffff; }
+
+  .text-zinc-400,  .text-zinc-500,  .text-zinc-600,
+  .text-neutral-400, .text-neutral-500, .text-neutral-600 { color: #ffffff; }
+
+  /* ── Rule B: light surface override → pure black ── */
+
+  /* white panels (admin, trader-dna forms) */
+  .bg-white .text-gray-100, .bg-white .text-gray-200, .bg-white .text-gray-300,
+  .bg-white .text-gray-400, .bg-white .text-gray-500, .bg-white .text-gray-600,
+  .bg-white .text-gray-700, .bg-white .text-gray-800, .bg-white .text-gray-900 { color: #000000; }
+
+  .bg-white .text-slate-300, .bg-white .text-slate-400, .bg-white .text-slate-500,
+  .bg-white .text-slate-600, .bg-white .text-slate-700 { color: #000000; }
+
+  /* gray-50 panels */
+  .bg-gray-50 .text-gray-300, .bg-gray-50 .text-gray-400, .bg-gray-50 .text-gray-500,
+  .bg-gray-50 .text-gray-600, .bg-gray-50 .text-gray-700,
+  .bg-gray-50 .text-gray-800, .bg-gray-50 .text-gray-900 { color: #000000; }
+
+  /* gray-100 panels */
+  .bg-gray-100 .text-gray-300, .bg-gray-100 .text-gray-400, .bg-gray-100 .text-gray-500,
+  .bg-gray-100 .text-gray-600, .bg-gray-100 .text-gray-700 { color: #000000; }
+
+  /* light footer (bg-color: #fafafa via .footer-light) */
+  .footer-light .text-gray-300, .footer-light .text-gray-400, .footer-light .text-gray-500,
+  .footer-light .text-gray-600, .footer-light .text-gray-700,
+  .footer-light .text-gray-800, .footer-light .text-gray-900 { color: #000000; }
+
+  /* surface-soft-light panels */
+  .bg-\[#fafafa\] .text-gray-400, .bg-\[#fafafa\] .text-gray-500,
+  .bg-\[#fafafa\] .text-gray-600, .bg-\[#fafafa\] .text-gray-700 { color: #000000; }
 }
