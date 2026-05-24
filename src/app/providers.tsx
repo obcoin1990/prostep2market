@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Toaster } from 'sonner'
 import { ThemeProvider } from '@/context/ThemeContext'
+import { LanguageProvider } from '@/contexts/LanguageContext'
 
 // NextAuth SessionProvider removed — Supabase Auth is the single identity provider.
 // Session state is read via supabase.auth.getUser() (server) or
@@ -23,10 +24,12 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider>
-        {children}
-        <Toaster richColors position="top-right" />
-      </ThemeProvider>
+      <LanguageProvider>
+        <ThemeProvider>
+          {children}
+          <Toaster richColors position="top-right" />
+        </ThemeProvider>
+      </LanguageProvider>
     </QueryClientProvider>
   )
 }

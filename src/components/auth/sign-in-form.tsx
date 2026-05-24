@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input, Label } from '@/components/ui/input'
 import Link from 'next/link'
+import { useT } from '@/contexts/LanguageContext'
 
 export function SignInForm() {
   const [email, setEmail] = useState('')
@@ -12,21 +13,18 @@ export function SignInForm() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const supabase = createClient()
+  const t = useT()
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setError(null)
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
+    const { error } = await supabase.auth.signInWithPassword({ email, password })
 
     if (error) {
       setError(error.message)
     } else {
-      // Hard redirect so the server layout re-reads the new session cookie
       window.location.replace('/dashboard')
       return
     }
@@ -41,33 +39,19 @@ export function SignInForm() {
         </div>
       )}
       <div>
-        <Label htmlFor="email">Email</Label>
-        <Input
-          id="email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="you@example.com"
-          required
-        />
+        <Label htmlFor="email">{t('auth.email')}</Label>
+        <Input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder={t('auth.emailPlaceholder')} required />
       </div>
       <div>
-        <Label htmlFor="password">Password</Label>
-        <Input
-          id="password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Your password"
-          required
-        />
+        <Label htmlFor="password">{t('auth.password')}</Label>
+        <Input id="password" type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder={t('auth.passwordPlaceholder')} required />
       </div>
       <Button type="submit" disabled={loading} className="w-full">
-        {loading ? 'Signing in...' : 'Sign In'}
+        {loading ? t('auth.signingIn') : t('auth.signInBtn')}
       </Button>
       <div className="text-center">
         <Link href="/reset-password" className="text-sm text-[#E53935] hover:underline">
-          Forgot your password?
+          {t('auth.forgotPassword')}
         </Link>
       </div>
     </form>

@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input, Label } from '@/components/ui/input'
+import { useT } from '@/contexts/LanguageContext'
 
 export function SignUpForm() {
   const [email, setEmail] = useState('')
@@ -14,6 +15,7 @@ export function SignUpForm() {
   const [success, setSuccess] = useState(false)
   const router = useRouter()
   const supabase = createClient()
+  const t = useT()
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -23,9 +25,7 @@ export function SignUpForm() {
     const { error } = await supabase.auth.signUp({
       email,
       password,
-      options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
-      },
+      options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
     })
 
     if (error) {
@@ -39,9 +39,9 @@ export function SignUpForm() {
   if (success) {
     return (
       <div className="text-center p-6">
-        <h2 className="text-xl font-semibold mb-2">Check your email</h2>
+        <h2 className="text-xl font-semibold mb-2">{t('auth.checkEmail')}</h2>
         <p className="text-gray-600">
-          We sent a confirmation link to {email}. Click the link to verify your account.
+          {t('auth.sentConfirmation', { email })}
         </p>
       </div>
     )
@@ -55,30 +55,15 @@ export function SignUpForm() {
         </div>
       )}
       <div>
-        <Label htmlFor="email">Email</Label>
-        <Input
-          id="email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="you@example.com"
-          required
-        />
+        <Label htmlFor="email">{t('auth.email')}</Label>
+        <Input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder={t('auth.emailPlaceholder')} required />
       </div>
       <div>
-        <Label htmlFor="password">Password</Label>
-        <Input
-          id="password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Min 6 characters"
-          minLength={6}
-          required
-        />
+        <Label htmlFor="password">{t('auth.password')}</Label>
+        <Input id="password" type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder={t('auth.passwordMinPlaceholder')} minLength={6} required />
       </div>
       <Button type="submit" disabled={loading} className="w-full">
-        {loading ? 'Creating account...' : 'Sign Up'}
+        {loading ? t('auth.creatingAccount') : t('auth.signUpBtn')}
       </Button>
     </form>
   )
