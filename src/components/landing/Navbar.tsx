@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import {
   Menu,
   X,
@@ -14,7 +15,10 @@ import {
   ShieldAlert,
   Trophy,
   ChevronRight,
+  LogOut,
 } from 'lucide-react'
+import { createClient } from '@/lib/supabase/client'
+import type { User } from '@supabase/supabase-js'
 
 /* ── Mega-menu data ───────────────────────────────────────────── */
 const platformItems = [
@@ -83,8 +87,23 @@ export function Navbar() {
   const [openMenu, setOpenMenu] = useState<'platform' | 'intelligence' | null>(null)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [mobileExpanded, setMobileExpanded] = useState<'platform' | 'intelligence' | null>(null)
+  const [userMenuOpen, setUserMenuOpen] = useState(false)
+  const [user, setUser] = useState<User | null>(null)
   const navRef = useRef<HTMLElement>(null)
+  const userMenuRef = useRef<HTMLDivElement>(null)
+  const router = useRouter()
 
+  /* ── Auth state ── */
+  useEffect(() => {
+    const supabase = createClient()
+    supabase.auth.getUser().then(({ data }) => setUser(data.user))
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null)
+    })
+    return () => subscription.unsubscribe()
+  }, [])
+
+  /* ── Close nav dropdowns on outside click ── */
   useEffect(() => {
     function handleClick(e: MouseEvent) {
       if (navRef.current && !navRef.current.contains(e.target as Node)) setOpenMenu(null)
@@ -92,6 +111,34 @@ export function Navbar() {
     document.addEventListener('mousedown', handleClick)
     return () => document.removeEventListener('mousedown', handleClick)
   }, [])
+
+  /* ── Close user dropdown on outside click ── */
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) {
+        setUserMenuOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [])
+
+  async function handleSignOut() {
+    const supabase = createClient()
+    await supabase.auth.signOut()
+    setUser(null)
+    setUserMenuOpen(false)
+    setMobileOpen(false)
+    router.push('/')
+  }
+
+  /* Display name: full_name → name → email prefix */
+  const displayName = user
+    ? (user.user_metadata?.full_name as string | undefined)
+      ?? (user.user_metadata?.name as string | undefined)
+      ?? user.email?.split('@')[0]
+      ?? 'Account'
+    : null
 
   const navLinkStyle = {
     color: '#eaecef',
@@ -228,36 +275,111 @@ export function Navbar() {
 
         {/* ── Desktop CTAs ── */}
         <div className="hidden md:flex items-center gap-2">
-          {/* Log In — tertiary text button */}
-          <Link
-            href="/login"
-            className="px-4 py-2 rounded-[6px] text-sm font-medium transition-colors"
-            style={{ color: '#eaecef' }}
-            onMouseEnter={e => {
-              e.currentTarget.style.color = '#ffffff'
-              e.currentTarget.style.backgroundColor = '#1e2329'
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.color = '#eaecef'
-              e.currentTarget.style.backgroundColor = 'transparent'
-            }}
-          >
-            Log In
-          </Link>
+          {user ? (
+            /* ── Logged-in: username button + dropdown ── */
+            <div className="relative" ref={userMenuRef}>
+              <button
+                onClick={() => setUserMenuOpen(p => !p)}
+                className="flex items-center gap-1.5 px-4 py-2 rounded-[6px] text-sm font-medium transition-colors"
+                style={{ color: '#eaecef' }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.color = '#ffffff'
+                  e.currentTarget.style.backgroundColor = '#1e2329'
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.color = '#eaecef'
+                  e.currentTarget.style.backgroundColor = 'transparent'
+                }}
+              >
+                {/* Yellow initial avatar */}
+                <span
+                  className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold"
+                  style={{ backgroundColor: '#fcd535', color: '#181a20' }}
+                >
+                  {displayName?.charAt(0).toUpperCase()}
+                </span>
+                {displayName}
+                <ChevronDown
+                  className={`h-3.5 w-3.5 transition-transform duration-150 ${userMenuOpen ? 'rotate-180' : ''}`}
+                  style={{ color: '#707a8a' }}
+                />
+              </button>
 
-          {/* Sign Up — Binance Yellow primary pill */}
-          <Link
-            href="/signup"
-            className="px-5 py-2 rounded-full text-sm font-semibold transition-colors"
-            style={{
-              backgroundColor: '#fcd535',
-              color: '#181a20',
-            }}
-            onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#f0b90b')}
-            onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#fcd535')}
-          >
-            Sign Up
-          </Link>
+              {/* User dropdown */}
+              <div
+                className={`absolute right-0 top-full mt-2 w-44 rounded-[8px] shadow-2xl transition-all duration-150 ${
+                  userMenuOpen
+                    ? 'opacity-100 translate-y-0 pointer-events-auto'
+                    : 'opacity-0 -translate-y-1 pointer-events-none'
+                }`}
+                style={{ backgroundColor: '#1e2329', border: '1px solid #2b3139' }}
+              >
+                <div className="p-1.5 space-y-0.5">
+                  <Link
+                    href="/dashboard"
+                    onClick={() => setUserMenuOpen(false)}
+                    className="flex items-center gap-2.5 w-full px-3 py-2 rounded-[6px] text-sm transition-colors"
+                    style={{ color: '#eaecef' }}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.backgroundColor = '#2b3139'
+                      e.currentTarget.style.color = '#ffffff'
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.backgroundColor = 'transparent'
+                      e.currentTarget.style.color = '#eaecef'
+                    }}
+                  >
+                    <LayoutDashboard className="h-4 w-4 shrink-0" style={{ color: '#fcd535' }} />
+                    Dashboard
+                  </Link>
+                  <button
+                    onClick={handleSignOut}
+                    className="flex items-center gap-2.5 w-full px-3 py-2 rounded-[6px] text-sm transition-colors"
+                    style={{ color: '#eaecef' }}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.backgroundColor = '#2b3139'
+                      e.currentTarget.style.color = '#f6465d'
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.backgroundColor = 'transparent'
+                      e.currentTarget.style.color = '#eaecef'
+                    }}
+                  >
+                    <LogOut className="h-4 w-4 shrink-0" />
+                    Sign Out
+                  </button>
+                </div>
+              </div>
+            </div>
+          ) : (
+            /* ── Logged-out: Log In + Sign Up ── */
+            <>
+              <Link
+                href="/login"
+                className="px-4 py-2 rounded-[6px] text-sm font-medium transition-colors"
+                style={{ color: '#eaecef' }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.color = '#ffffff'
+                  e.currentTarget.style.backgroundColor = '#1e2329'
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.color = '#eaecef'
+                  e.currentTarget.style.backgroundColor = 'transparent'
+                }}
+              >
+                Log In
+              </Link>
+              <Link
+                href="/signup"
+                className="px-5 py-2 rounded-full text-sm font-semibold transition-colors"
+                style={{ backgroundColor: '#fcd535', color: '#181a20' }}
+                onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#f0b90b')}
+                onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#fcd535')}
+              >
+                Sign Up
+              </Link>
+            </>
+          )}
         </div>
 
         {/* ── Mobile hamburger ── */}
@@ -367,23 +489,64 @@ export function Navbar() {
             </Link>
 
             {/* Mobile CTAs */}
-            <div className="flex gap-2 pt-3 pb-1" style={{ borderTop: '1px solid #2b3139', marginTop: '8px' }}>
-              <Link
-                href="/login"
-                onClick={() => setMobileOpen(false)}
-                className="flex-1 text-center px-4 py-2 rounded-[6px] text-sm font-medium transition-colors"
-                style={{ color: '#eaecef', border: '1px solid #2b3139' }}
-              >
-                Log In
-              </Link>
-              <Link
-                href="/signup"
-                onClick={() => setMobileOpen(false)}
-                className="flex-1 text-center px-4 py-2 rounded-full text-sm font-semibold transition-colors"
-                style={{ backgroundColor: '#fcd535', color: '#181a20' }}
-              >
-                Sign Up
-              </Link>
+            <div className="pt-3 pb-1 space-y-1" style={{ borderTop: '1px solid #2b3139', marginTop: '8px' }}>
+              {user ? (
+                /* ── Logged-in: username label + Dashboard + Sign Out ── */
+                <>
+                  <div className="flex items-center gap-2 px-3 py-2">
+                    <span
+                      className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold"
+                      style={{ backgroundColor: '#fcd535', color: '#181a20' }}
+                    >
+                      {displayName?.charAt(0).toUpperCase()}
+                    </span>
+                    <span className="text-sm font-medium" style={{ color: '#ffffff' }}>
+                      {displayName}
+                    </span>
+                  </div>
+                  <Link
+                    href="/dashboard"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex items-center gap-2.5 w-full px-3 py-2.5 rounded-[6px] text-sm font-medium transition-colors"
+                    style={{ color: '#eaecef' }}
+                    onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#1e2329')}
+                    onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
+                  >
+                    <LayoutDashboard className="h-4 w-4" style={{ color: '#fcd535' }} />
+                    Dashboard
+                  </Link>
+                  <button
+                    onClick={handleSignOut}
+                    className="flex items-center gap-2.5 w-full px-3 py-2.5 rounded-[6px] text-sm font-medium transition-colors"
+                    style={{ color: '#f6465d' }}
+                    onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#1e2329')}
+                    onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
+                  >
+                    <LogOut className="h-4 w-4" />
+                    Sign Out
+                  </button>
+                </>
+              ) : (
+                /* ── Logged-out: Log In + Sign Up ── */
+                <div className="flex gap-2">
+                  <Link
+                    href="/login"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex-1 text-center px-4 py-2 rounded-[6px] text-sm font-medium transition-colors"
+                    style={{ color: '#eaecef', border: '1px solid #2b3139' }}
+                  >
+                    Log In
+                  </Link>
+                  <Link
+                    href="/signup"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex-1 text-center px-4 py-2 rounded-full text-sm font-semibold transition-colors"
+                    style={{ backgroundColor: '#fcd535', color: '#181a20' }}
+                  >
+                    Sign Up
+                  </Link>
+                </div>
+              )}
             </div>
           </nav>
         </div>
