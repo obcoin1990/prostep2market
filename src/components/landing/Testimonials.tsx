@@ -23,7 +23,7 @@ export function Testimonials() {
         </h2>
         <div className="mx-auto grid max-w-4xl gap-6 md:grid-cols-2">
           {testimonials.map((testimonial, index) => (
-            <Card key={index} variant="default">
+            <Card key={index} variant="light">
               <CardContent className="pt-6">
                 <Quote className="mb-4 h-8 w-8 text-[#E53935]/30" />
                 <blockquote className="mb-4 text-lg text-gray-700">

@@ -348,7 +348,7 @@ export function TraderDNAClient({ profiles: initialProfiles }: Props) {
         </div>
 
         {/* Table */}
-        <Card>
+        <Card variant="light">
           <CardContent className="p-0 overflow-x-auto">
             <table className="w-full min-w-[900px]">
               <thead className="border-b bg-gray-50/60">

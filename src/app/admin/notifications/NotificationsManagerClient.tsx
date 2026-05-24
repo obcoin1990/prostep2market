@@ -863,7 +863,7 @@ export function NotificationsManagerClient({ initialTemplates, initialLogs }: Pr
           </TabsContent>
 
           <TabsContent value="send" className="mt-4">
-            <Card>
+            <Card variant="light">
               <CardHeader>
                 <CardTitle className="text-base">Send Test / Manual Email</CardTitle>
               </CardHeader>

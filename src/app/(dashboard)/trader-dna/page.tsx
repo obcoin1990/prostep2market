@@ -7,8 +7,8 @@ export default function TraderDNAPage() {
     <div className="space-y-6">
       {/* Page header */}
       <div className="text-center">
-        <h1 className="text-3xl font-bold text-[#0B0B0B]">Trader DNA Assessment</h1>
-        <p className="mt-2 text-[#616161]">
+        <h1 className="text-3xl font-bold text-white">Trader DNA Assessment</h1>
+        <p className="mt-2 text-[#b7bdc8]">
           Discover your trading personality and get personalized recommendations
         </p>
       </div>

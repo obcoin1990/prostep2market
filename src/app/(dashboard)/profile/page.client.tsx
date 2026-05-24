@@ -55,13 +55,13 @@ export function TraderProfilePageClient({ profile }: TraderProfilePageClientProp
           className="p-2 hover:bg-[#F5F7FA] rounded-lg transition-colors"
           aria-label="Back to dashboard"
         >
-          <svg className="w-5 h-5 text-[#616161]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <svg className="w-5 h-5 text-[#b7bdc8]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
           </svg>
         </a>
         <div>
-          <h1 className="text-2xl font-bold text-[#0B0B0B]">My Trader Profile</h1>
-          <p className="text-sm text-[#616161]">Your personalized trading DNA assessment results</p>
+          <h1 className="text-2xl font-bold text-white">My Trader Profile</h1>
+          <p className="text-sm text-[#b7bdc8]">Your personalized trading DNA assessment results</p>
         </div>
       </div>
 

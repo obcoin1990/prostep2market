@@ -382,7 +382,7 @@ export function UsersAdminClient({
 
         {/* ── Stats Cards ── */}
         <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-3">
-          <Card className="border border-gray-200 shadow-sm">
+          <Card variant="light" className="border border-gray-200 shadow-sm">
             <CardContent className="pt-4 pb-4">
               <div className="flex items-center gap-2 mb-1">
                 <Users className="w-4 h-4 text-[#00B4D8]" />
@@ -391,7 +391,7 @@ export function UsersAdminClient({
               <p className="text-2xl font-bold text-[#0A0F1C]">{stats.total}</p>
             </CardContent>
           </Card>
-          <Card className="border border-gray-200 shadow-sm">
+          <Card variant="light" className="border border-gray-200 shadow-sm">
             <CardContent className="pt-4 pb-4">
               <div className="flex items-center gap-2 mb-1">
                 <Shield className="w-4 h-4 text-[#E53935]" />
@@ -401,7 +401,7 @@ export function UsersAdminClient({
             </CardContent>
           </Card>
           {PROFILE_TYPES.map((pt) => (
-            <Card key={pt} className="border border-gray-200 shadow-sm">
+            <Card key={pt} variant="light" className="border border-gray-200 shadow-sm">
               <CardContent className="pt-4 pb-4">
                 <div className="flex items-center gap-2 mb-1">
                   <span
@@ -442,7 +442,7 @@ export function UsersAdminClient({
         </div>
 
         {/* ── Users Table ── */}
-        <Card className="border border-gray-200 shadow-sm overflow-hidden">
+        <Card variant="light" className="border border-gray-200 shadow-sm overflow-hidden">
           <CardHeader className="pb-2 border-b border-gray-100">
             <CardTitle className="text-base font-semibold text-[#0A0F1C] flex items-center justify-between">
               <span>All Users</span>

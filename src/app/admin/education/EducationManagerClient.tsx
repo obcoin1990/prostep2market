@@ -74,7 +74,7 @@ function pathBadgeVariant(path: string) {
     advanced: 'bg-purple-100 text-purple-700',
     'psychology-first': 'bg-amber-100 text-amber-700',
   }
-  return map[path] ?? 'bg-gray-100 text-gray-700'
+  return map[path] ?? 'bg-gray-100 text-[#374151]'
 }
 
 function typeBadgeVariant(type: string) {
@@ -83,10 +83,10 @@ function typeBadgeVariant(type: string) {
     quiz: 'bg-orange-50 text-orange-700',
     case_study: 'bg-violet-50 text-violet-700',
     mixed: 'bg-teal-50 text-teal-700',
-    text: 'bg-gray-50 text-gray-700',
+    text: 'bg-gray-50 text-[#374151]',
     exercise: 'bg-pink-50 text-pink-700',
   }
-  return map[type] ?? 'bg-gray-100 text-gray-700'
+  return map[type] ?? 'bg-gray-100 text-[#374151]'
 }
 
 // ─── Course Form ──────────────────────────────────────────────────────────────
@@ -538,7 +538,7 @@ export function EducationManagerClient({ initialCourses, analytics }: Props) {
 
         {/* ── Courses Tab ── */}
         <TabsContent value="courses">
-          <Card className="border border-gray-200">
+          <Card variant="light" className="border border-gray-200">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle className="text-lg font-semibold">All Courses</CardTitle>
               <Button
@@ -647,7 +647,7 @@ export function EducationManagerClient({ initialCourses, analytics }: Props) {
 
         {/* ── Lessons Tab ── */}
         <TabsContent value="lessons">
-          <Card className="border border-gray-200">
+          <Card variant="light" className="border border-gray-200">
             <CardHeader className="flex flex-row items-center justify-between gap-4 flex-wrap">
               <CardTitle className="text-lg font-semibold">Lessons</CardTitle>
               <div className="flex items-center gap-3">
@@ -778,7 +778,7 @@ export function EducationManagerClient({ initialCourses, analytics }: Props) {
         {/* ── Analytics Tab ── */}
         <TabsContent value="analytics">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Card className="border border-gray-200">
+            <Card variant="light" className="border border-gray-200">
               <CardContent className="pt-6">
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-blue-50 rounded-lg">
@@ -791,7 +791,7 @@ export function EducationManagerClient({ initialCourses, analytics }: Props) {
                 </div>
               </CardContent>
             </Card>
-            <Card className="border border-gray-200">
+            <Card variant="light" className="border border-gray-200">
               <CardContent className="pt-6">
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-emerald-50 rounded-lg">
@@ -804,7 +804,7 @@ export function EducationManagerClient({ initialCourses, analytics }: Props) {
                 </div>
               </CardContent>
             </Card>
-            <Card className="border border-gray-200">
+            <Card variant="light" className="border border-gray-200">
               <CardContent className="pt-6">
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-amber-50 rounded-lg">
@@ -819,7 +819,7 @@ export function EducationManagerClient({ initialCourses, analytics }: Props) {
             </Card>
           </div>
 
-          <Card className="border border-gray-200 mt-4">
+          <Card variant="light" className="border border-gray-200 mt-4">
             <CardHeader>
               <CardTitle className="text-lg font-semibold">Course Overview</CardTitle>
             </CardHeader>

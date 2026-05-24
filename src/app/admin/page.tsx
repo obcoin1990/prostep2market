@@ -152,7 +152,7 @@ export default async function AdminDashboardPage() {
         {stats.map((stat) => {
           const Icon = stat.icon
           return (
-            <Card key={stat.label} className="border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+            <Card key={stat.label} variant="light" className="border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
               <CardContent className="pt-5 pb-5">
                 <div className="flex items-center justify-between">
                   <div>
@@ -177,7 +177,7 @@ export default async function AdminDashboardPage() {
       <div className="grid grid-cols-1 xl:grid-cols-5 gap-6">
 
         {/* Recent Signups (3 cols) */}
-        <Card className="xl:col-span-3 border border-gray-200 shadow-sm">
+        <Card variant="light" className="xl:col-span-3 border border-gray-200 shadow-sm">
           <CardHeader className="pb-2">
             <CardTitle className="text-base font-semibold text-[#0A0F1C]">Recent Signups</CardTitle>
             <p className="text-xs text-gray-400">Last 5 trader accounts created</p>
@@ -250,7 +250,7 @@ export default async function AdminDashboardPage() {
         </Card>
 
         {/* Quick Links (2 cols) */}
-        <Card className="xl:col-span-2 border border-gray-200 shadow-sm">
+        <Card variant="light" className="xl:col-span-2 border border-gray-200 shadow-sm">
           <CardHeader className="pb-2">
             <CardTitle className="text-base font-semibold text-[#0A0F1C]">Quick Links</CardTitle>
             <p className="text-xs text-gray-400">Jump to any admin module</p>

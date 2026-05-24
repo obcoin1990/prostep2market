@@ -471,6 +471,15 @@
   .bg-\[#fafafa\] .text-gray-400, .bg-\[#fafafa\] .text-gray-500,
   .bg-\[#fafafa\] .text-gray-600, .bg-\[#fafafa\] .text-gray-700 { color: #000000; }
 
+  /* #F5F7FA — admin layout + pricing + faq page background */
+  .bg-\[#F5F7FA\] .text-gray-300, .bg-\[#F5F7FA\] .text-gray-400, .bg-\[#F5F7FA\] .text-gray-500,
+  .bg-\[#F5F7FA\] .text-gray-600, .bg-\[#F5F7FA\] .text-gray-700,
+  .bg-\[#F5F7FA\] .text-gray-800, .bg-\[#F5F7FA\] .text-gray-900 { color: #000000; }
+
+  .bg-\[#f5f7fa\] .text-gray-300, .bg-\[#f5f7fa\] .text-gray-400, .bg-\[#f5f7fa\] .text-gray-500,
+  .bg-\[#f5f7fa\] .text-gray-600, .bg-\[#f5f7fa\] .text-gray-700,
+  .bg-\[#f5f7fa\] .text-gray-800, .bg-\[#f5f7fa\] .text-gray-900 { color: #000000; }
+
   /* navy panels (#e8f0fe — pale blue light surface) */
   .bg-navy .text-gray-300, .bg-navy .text-gray-400, .bg-navy .text-gray-500,
   .bg-navy .text-gray-600, .bg-navy .text-gray-700, .bg-navy .text-gray-800,
