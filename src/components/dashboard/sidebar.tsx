@@ -17,11 +17,13 @@ import {
   FlaskConical,
   LogOut,
   User,
+  Cable,
 } from 'lucide-react'
 
 const navItems = [
   { href: '/dashboard',     label: 'Dashboard',    icon: LayoutDashboard },
   { href: '/journal',       label: 'Trade Journal', icon: FileText,     dataTour: 'sidebar-journal' },
+  { href: '/mt-connect',    label: 'MT4/MT5 Live',  icon: Cable },
   { href: '/analysis',      label: 'AI Analysis',   icon: Brain },
   { href: '/education',     label: 'Education',     icon: GraduationCap },
   { href: '/strategy-lab',  label: 'Strategy Lab',  icon: FlaskConical },
