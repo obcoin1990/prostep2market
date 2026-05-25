@@ -2,26 +2,13 @@ import { redirect } from 'next/navigation'
 import { getAdminUser } from '@/lib/admin/auth'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { RiskGuardianClient } from './RiskGuardianClient'
+import { DEFAULT_RISK_SETTINGS } from './defaults'
 
-export interface RiskGuardianDefaults {
-  max_session_duration: number
-  max_trades_per_session: number
-  max_trades_per_window: number
-  exposure_multiplier: number
-  fatigue_warning_enabled: boolean
-  revenge_trading_alert_enabled: boolean
-  emotional_instability_threshold: number
-}
+// Re-export so existing imports from './page' still work
+export type { RiskGuardianDefaults } from './defaults'
+export { DEFAULT_RISK_SETTINGS } from './defaults'
 
-const DEFAULT_RISK_SETTINGS: RiskGuardianDefaults = {
-  max_session_duration: 120,
-  max_trades_per_session: 20,
-  max_trades_per_window: 10,
-  exposure_multiplier: 1.5,
-  fatigue_warning_enabled: true,
-  revenge_trading_alert_enabled: true,
-  emotional_instability_threshold: 6,
-}
+// ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default async function RiskGuardianPage() {
   const adminUser = await getAdminUser()
@@ -35,9 +22,9 @@ export default async function RiskGuardianPage() {
     .eq('key', 'risk_guardian_defaults')
     .single()
 
-  const settings: RiskGuardianDefaults = {
+  const settings = {
     ...DEFAULT_RISK_SETTINGS,
-    ...(data?.value as Partial<RiskGuardianDefaults> ?? {}),
+    ...(data?.value as Partial<typeof DEFAULT_RISK_SETTINGS> ?? {}),
   }
 
   return <RiskGuardianClient initialSettings={settings} />

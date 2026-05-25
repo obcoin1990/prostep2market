@@ -2,12 +2,15 @@
 
 import React, { useState, useCallback } from 'react'
 import { toast } from 'sonner'
-import { Shield, AlertTriangle, Clock, Save, Info, RotateCcw } from 'lucide-react'
+import {
+  Shield, AlertTriangle, Clock, Save, Info, RotateCcw,
+  Zap, TrendingUp, GitBranch,
+} from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Alert } from '@/components/ui/alert'
-import type { RiskGuardianDefaults } from './page'
+import type { RiskGuardianDefaults } from './defaults'
+import { DEFAULT_RISK_SETTINGS } from './defaults'
 
 // ── Toggle Switch ─────────────────────────────────────────────────────────────
 
@@ -57,6 +60,7 @@ function NumericField({
   max,
   step = 1,
   suffix,
+  disabled = false,
 }: {
   label: string
   description: string
@@ -66,6 +70,7 @@ function NumericField({
   max: number
   step?: number
   suffix?: string
+  disabled?: boolean
 }) {
   const handleChange = (raw: string) => {
     const n = parseFloat(raw)
@@ -77,7 +82,7 @@ function NumericField({
   return (
     <div className="flex items-start justify-between gap-6 py-3 border-b border-gray-100 last:border-0">
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-[#0A0F1C]">{label}</p>
+        <p className={`text-sm font-medium ${disabled ? 'text-gray-400' : 'text-[#0A0F1C]'}`}>{label}</p>
         <p className="text-xs text-gray-500 mt-0.5">{description}</p>
       </div>
       <div className="flex items-center gap-1.5 flex-shrink-0">
@@ -89,6 +94,7 @@ function NumericField({
           value={value}
           onChange={(e) => handleChange(e.target.value)}
           className="w-24 text-right"
+          disabled={disabled}
         />
         {suffix && <span className="text-xs text-gray-500 w-10">{suffix}</span>}
       </div>
@@ -96,17 +102,65 @@ function NumericField({
   )
 }
 
-// ── Main Component ────────────────────────────────────────────────────────────
+// ── Section Header (enabled toggle + collapsed body) ─────────────────────────
 
-const DEFAULT_SETTINGS: RiskGuardianDefaults = {
-  max_session_duration: 120,
-  max_trades_per_session: 20,
-  max_trades_per_window: 10,
-  exposure_multiplier: 1.5,
-  fatigue_warning_enabled: true,
-  revenge_trading_alert_enabled: true,
-  emotional_instability_threshold: 6,
+function DetectionSection({
+  icon: Icon,
+  title,
+  badge,
+  enabled,
+  onToggle,
+  children,
+}: {
+  icon: React.ElementType
+  title: string
+  badge: string
+  enabled: boolean
+  onToggle: (v: boolean) => void
+  children: React.ReactNode
+}) {
+  return (
+    <Card variant="light" className="border border-gray-200">
+      <CardHeader className="pb-2">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Icon className="w-4 h-4 text-[#E53935]" />
+            <CardTitle className="text-base font-semibold text-[#0A0F1C]">{title}</CardTitle>
+            <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-[#E53935]/10 text-[#E53935] uppercase tracking-wide">
+              {badge}
+            </span>
+          </div>
+          <button
+            role="switch"
+            aria-checked={enabled}
+            onClick={() => onToggle(!enabled)}
+            className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#E53935]/50 ${
+              enabled ? 'bg-[#E53935]' : 'bg-gray-200'
+            }`}
+          >
+            <span
+              className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transition-transform duration-200 ${
+                enabled ? 'translate-x-5' : 'translate-x-0'
+              }`}
+            />
+          </button>
+        </div>
+      </CardHeader>
+      {enabled && (
+        <CardContent className="divide-y divide-gray-100 pt-0">
+          {children}
+        </CardContent>
+      )}
+      {!enabled && (
+        <CardContent className="pt-0 pb-3">
+          <p className="text-xs text-gray-400 italic">Detection disabled — enable to configure thresholds.</p>
+        </CardContent>
+      )}
+    </Card>
+  )
 }
+
+// ── Main Component ────────────────────────────────────────────────────────────
 
 interface Props {
   initialSettings: RiskGuardianDefaults
@@ -144,6 +198,7 @@ export function RiskGuardianClient({ initialSettings }: Props) {
   return (
     <div className="min-h-screen bg-[#F5F7FA] p-4 md:p-6">
       <div className="max-w-3xl mx-auto space-y-6">
+
         {/* Header */}
         <div>
           <div className="flex items-center gap-2 mb-1">
@@ -160,14 +215,15 @@ export function RiskGuardianClient({ initialSettings }: Props) {
           <Info className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
           <p className="text-sm text-amber-800 leading-relaxed">
             <span className="font-semibold">These are DEFAULTS for new users.</span> Existing users
-            keep their personal settings and are not affected by changes here.
+            keep their personal settings and are not affected by changes here. Abuse-detection
+            thresholds apply to all users regardless of their profile type.
           </p>
         </div>
 
-        {/* Session & Trade Limits */}
-        <Card>
+        {/* ── Session & Trade Limits ── */}
+        <Card variant="light" className="border border-gray-200">
           <CardHeader className="pb-2">
-            <CardTitle className="flex items-center gap-2 text-base">
+            <CardTitle className="flex items-center gap-2 text-base text-[#0A0F1C]">
               <Clock className="w-4 h-4 text-[#E53935]" />
               Session &amp; Trade Limits
             </CardTitle>
@@ -178,45 +234,36 @@ export function RiskGuardianClient({ initialSettings }: Props) {
               description="Maximum trading session length before a fatigue alert is triggered."
               value={settings.max_session_duration}
               onChange={(v) => set('max_session_duration', v)}
-              min={30}
-              max={480}
-              suffix="min"
+              min={30} max={480} suffix="min"
             />
             <NumericField
               label="Max Trades Per Session"
               description="Hard cap on number of trades allowed in a single session."
               value={settings.max_trades_per_session}
               onChange={(v) => set('max_trades_per_session', v)}
-              min={5}
-              max={200}
-              suffix="trades"
+              min={5} max={200} suffix="trades"
             />
             <NumericField
               label="Max Trades Per Rolling Window"
               description="Maximum trades allowed within a rolling time window (e.g. 1 hour)."
               value={settings.max_trades_per_window}
               onChange={(v) => set('max_trades_per_window', v)}
-              min={1}
-              max={50}
-              suffix="trades"
+              min={1} max={50} suffix="trades"
             />
             <NumericField
               label="Exposure Multiplier"
               description="Position size multiplier ceiling relative to the user's base risk unit."
               value={settings.exposure_multiplier}
               onChange={(v) => set('exposure_multiplier', v)}
-              min={1.0}
-              max={3.0}
-              step={0.1}
-              suffix="×"
+              min={1.0} max={3.0} step={0.1} suffix="×"
             />
           </CardContent>
         </Card>
 
-        {/* Alert Toggles */}
-        <Card>
+        {/* ── Alert Toggles ── */}
+        <Card variant="light" className="border border-gray-200">
           <CardHeader className="pb-2">
-            <CardTitle className="flex items-center gap-2 text-base">
+            <CardTitle className="flex items-center gap-2 text-base text-[#0A0F1C]">
               <AlertTriangle className="w-4 h-4 text-[#E53935]" />
               Alert Toggles
             </CardTitle>
@@ -237,9 +284,7 @@ export function RiskGuardianClient({ initialSettings }: Props) {
             <div className="py-3">
               <div className="flex items-start justify-between gap-6">
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-[#0A0F1C]">
-                    Emotional Instability Threshold
-                  </p>
+                  <p className="text-sm font-medium text-[#0A0F1C]">Emotional Instability Threshold</p>
                   <p className="text-xs text-gray-500 mt-0.5">
                     Score (1–10) above which an emotional instability alert is triggered.
                   </p>
@@ -247,9 +292,7 @@ export function RiskGuardianClient({ initialSettings }: Props) {
                 <div className="flex items-center gap-3 flex-shrink-0">
                   <Input
                     type="number"
-                    min={1}
-                    max={10}
-                    step={1}
+                    min={1} max={10} step={1}
                     value={settings.emotional_instability_threshold}
                     onChange={(e) => {
                       const n = parseInt(e.target.value, 10)
@@ -262,14 +305,9 @@ export function RiskGuardianClient({ initialSettings }: Props) {
               </div>
               <div className="mt-3">
                 <input
-                  type="range"
-                  min={1}
-                  max={10}
-                  step={1}
+                  type="range" min={1} max={10} step={1}
                   value={settings.emotional_instability_threshold}
-                  onChange={(e) =>
-                    set('emotional_instability_threshold', parseInt(e.target.value, 10))
-                  }
+                  onChange={(e) => set('emotional_instability_threshold', parseInt(e.target.value, 10))}
                   className="w-full h-1.5 rounded-full appearance-none cursor-pointer"
                   style={{ accentColor: '#E53935' }}
                 />
@@ -282,13 +320,101 @@ export function RiskGuardianClient({ initialSettings }: Props) {
           </CardContent>
         </Card>
 
-        {/* Save */}
+        {/* ── Abuse Detection: Divider ── */}
+        <div className="flex items-center gap-3">
+          <div className="flex-1 h-px bg-gray-200" />
+          <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+            Abuse Detection
+          </span>
+          <div className="flex-1 h-px bg-gray-200" />
+        </div>
+
+        {/* ── Abusive Scalping ── */}
+        <DetectionSection
+          icon={Zap}
+          title="Abusive Scalping"
+          badge="GRDN-08"
+          enabled={settings.scalping_enabled}
+          onToggle={(v) => set('scalping_enabled', v)}
+        >
+          <NumericField
+            label="Minimum Trade Duration"
+            description="Trades closed in less than this time are counted as scalps."
+            value={settings.scalping_min_duration_seconds}
+            onChange={(v) => set('scalping_min_duration_seconds', v)}
+            min={5} max={300} suffix="sec"
+          />
+          <NumericField
+            label="Max Scalp Trades Per Day"
+            description="Alert fires when this many sub-threshold-duration trades occur in a single day."
+            value={settings.scalping_max_trades_per_day}
+            onChange={(v) => set('scalping_max_trades_per_day', v)}
+            min={1} max={100} suffix="trades"
+          />
+        </DetectionSection>
+
+        {/* ── Arbitrage-Like Behavior ── */}
+        <DetectionSection
+          icon={TrendingUp}
+          title="Arbitrage-Like Behavior"
+          badge="GRDN-09"
+          enabled={settings.arbitrage_enabled}
+          onToggle={(v) => set('arbitrage_enabled', v)}
+        >
+          <NumericField
+            label="Max Average Trade Duration"
+            description="Average duration (seconds) across recent trades for the pattern to trigger."
+            value={settings.arbitrage_max_avg_duration_seconds}
+            onChange={(v) => set('arbitrage_max_avg_duration_seconds', v)}
+            min={5} max={300} suffix="sec"
+          />
+          <NumericField
+            label="Minimum Win Rate"
+            description="Win rate threshold (%) — must be exceeded alongside other conditions."
+            value={settings.arbitrage_min_win_rate}
+            onChange={(v) => set('arbitrage_min_win_rate', v)}
+            min={50} max={100} suffix="%"
+          />
+          <NumericField
+            label="Maximum Risk-Reward Ratio"
+            description="Avg RR below this value combined with high win rate signals arbitrage."
+            value={settings.arbitrage_max_rr}
+            onChange={(v) => set('arbitrage_max_rr', v)}
+            min={0.1} max={2.0} step={0.05} suffix="RR"
+          />
+        </DetectionSection>
+
+        {/* ── Hedging Behavior ── */}
+        <DetectionSection
+          icon={GitBranch}
+          title="Hedging Behavior"
+          badge="GRDN-10"
+          enabled={settings.hedging_enabled}
+          onToggle={(v) => set('hedging_enabled', v)}
+        >
+          <NumericField
+            label="Opposing-Position Time Window"
+            description="Positions on the same symbol within this window are checked for hedging."
+            value={settings.hedging_time_window_seconds}
+            onChange={(v) => set('hedging_time_window_seconds', v)}
+            min={30} max={3600} suffix="sec"
+          />
+          <NumericField
+            label="Lot-Size Similarity Tolerance"
+            description="Maximum relative lot-size difference (e.g. 0.10 = within 10%) to flag as a hedge pair."
+            value={settings.hedging_lot_size_tolerance}
+            onChange={(v) => set('hedging_lot_size_tolerance', v)}
+            min={0.01} max={0.5} step={0.01} suffix="ratio"
+          />
+        </DetectionSection>
+
+        {/* ── Save / Reset ── */}
         <div className="flex justify-between items-center">
           <Button
             variant="outline"
             className="text-gray-600"
             onClick={() => {
-              setSettings(DEFAULT_SETTINGS)
+              setSettings(DEFAULT_RISK_SETTINGS)
               toast.info('Defaults restored — click Save to persist')
             }}
             disabled={saving}

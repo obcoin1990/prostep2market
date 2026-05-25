@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import type { TraderProfile } from './page'
+import { BehavioralFlagsCard } from '@/components/risk-guardian/BehavioralFlagsCard'
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -221,6 +222,11 @@ function EditModal({ profile, onClose, onSaved }: EditModalProps) {
               ))}
             </select>
           </div>
+        </div>
+
+        {/* Behavioral Flags */}
+        <div className="px-5 pb-2">
+          <BehavioralFlagsCard userId={profile.id} isAdmin showAll />
         </div>
 
         <div className="flex gap-3 p-5 border-t">

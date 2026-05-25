@@ -3,6 +3,7 @@
 import { TraderProfile, PROFILE_TYPE_NAMES, PROFILE_TYPE_DESCRIPTIONS, SectionKey } from '@/types/trader-dna';
 import { ProfileSummary } from '@/components/trader-dna/profile-summary';
 import { LearningPathDisplay } from '@/components/trader-dna/learning-path-display';
+import { BehavioralFlagsCard } from '@/components/risk-guardian/BehavioralFlagsCard';
 
 interface TraderProfilePageClientProps {
   profile: TraderProfile;
@@ -137,6 +138,11 @@ export function TraderProfilePageClient({ profile }: TraderProfilePageClientProp
             </p>
           </div>
         </div>
+      </div>
+
+      {/* Behavioral Risk Flags */}
+      <div className="mt-6">
+        <BehavioralFlagsCard />
       </div>
 
       {/* Actions */}

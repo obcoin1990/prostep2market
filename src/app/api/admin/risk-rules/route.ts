@@ -19,7 +19,6 @@ export async function GET(_request: NextRequest) {
 
   if (error) {
     if (error.code === 'PGRST116') {
-      // Row not found — return empty/default
       return NextResponse.json({ success: true, setting: null })
     }
     return NextResponse.json({ error: error.message }, { status: 500 })
@@ -40,13 +39,27 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
   }
 
-  // Validate expected fields
+  // ── Validate numeric fields ────────────────────────────────────────────────
   const numericFields: Record<string, { min: number; max: number }> = {
-    max_session_duration: { min: 30, max: 480 },
-    max_trades_per_session: { min: 5, max: 200 },
-    max_trades_per_window: { min: 1, max: 50 },
-    exposure_multiplier: { min: 1.0, max: 3.0 },
-    emotional_instability_threshold: { min: 1, max: 10 },
+    // Existing
+    max_session_duration:            { min: 30,   max: 480  },
+    max_trades_per_session:          { min: 5,    max: 200  },
+    max_trades_per_window:           { min: 1,    max: 50   },
+    exposure_multiplier:             { min: 1.0,  max: 3.0  },
+    emotional_instability_threshold: { min: 1,    max: 10   },
+
+    // Scalping
+    scalping_min_duration_seconds:   { min: 5,    max: 300  },
+    scalping_max_trades_per_day:     { min: 1,    max: 100  },
+
+    // Arbitrage
+    arbitrage_max_avg_duration_seconds: { min: 5, max: 300  },
+    arbitrage_min_win_rate:             { min: 50, max: 100 },
+    arbitrage_max_rr:                   { min: 0.1, max: 2.0 },
+
+    // Hedging
+    hedging_time_window_seconds:     { min: 30,  max: 3600  },
+    hedging_lot_size_tolerance:      { min: 0.01, max: 0.5  },
   }
 
   for (const [field, { min, max }] of Object.entries(numericFields)) {
@@ -62,7 +75,15 @@ export async function PUT(request: NextRequest) {
     }
   }
 
-  const boolFields = ['fatigue_warning_enabled', 'revenge_trading_alert_enabled']
+  // ── Validate boolean fields ────────────────────────────────────────────────
+  const boolFields = [
+    'fatigue_warning_enabled',
+    'revenge_trading_alert_enabled',
+    // Abuse-detection toggles
+    'scalping_enabled',
+    'arbitrage_enabled',
+    'hedging_enabled',
+  ]
   for (const field of boolFields) {
     if (field in body && typeof body[field] !== 'boolean') {
       return NextResponse.json({ error: `${field} must be a boolean` }, { status: 400 })
