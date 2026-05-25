@@ -1,40 +1,34 @@
 'use client'
 
-/**
- * /mt-connect  — MT4/MT5 live account connection page.
- *
- * Architecture:
- *  • Client-side component so we can run the 3-second auto-sync loop.
- *  • On mount: GET /api/mt/status to see if an account is already connected.
- *  • Auto-sync: setInterval every 3 s calls POST /api/mt/sync while connected.
- *  • On connect: form calls POST /api/mt/connect → state updates → sync starts.
- */
-
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { RefreshCw } from 'lucide-react'
-import { MTConnectForm } from '@/components/mt/MTConnectForm'
-import { MTConnectionStatus } from '@/components/mt/MTConnectionStatus'
-import { MTAccountStats } from '@/components/mt/MTAccountStats'
-import { MTLiveTrades } from '@/components/mt/MTLiveTrades'
+import { RefreshCw, Plug, BarChart2 } from 'lucide-react'
+import { MTConnectForm }        from '@/components/mt/MTConnectForm'
+import { MTConnectionStatus }   from '@/components/mt/MTConnectionStatus'
+import { MTAccountStats }       from '@/components/mt/MTAccountStats'
+import { MTLiveTrades }         from '@/components/mt/MTLiveTrades'
+import { MTAnalyticsDashboard } from '@/components/mt/MTAnalyticsDashboard'
 import type {
   MTAccountStats as MTAccountStatsType,
   MTConnection,
   MTOpenPosition,
 } from '@/types/mt-connection'
 
-const SYNC_INTERVAL_MS = 3000
+const SYNC_INTERVAL_MS = 5000   // 5-second sync (FX Blue compatible rate)
+
+type PageTab = 'connection' | 'analytics'
 
 export default function MTConnectPage() {
-  const [connections, setConnections]   = useState<(MTConnection & { open_positions_count?: number })[]>([])
-  const [stats, setStats]               = useState<Partial<MTAccountStatsType> | null>(null)
-  const [positions, setPositions]       = useState<MTOpenPosition[]>([])
-  const [syncing, setSyncing]           = useState(false)
-  const [pageLoading, setPageLoading]   = useState(true)
-  const syncTimerRef                    = useRef<ReturnType<typeof setInterval> | null>(null)
+  const [pageTab, setPageTab]       = useState<PageTab>('connection')
+  const [connections, setConnections] = useState<(MTConnection & { open_positions_count?: number })[]>([])
+  const [stats, setStats]           = useState<Partial<MTAccountStatsType> | null>(null)
+  const [positions, setPositions]   = useState<MTOpenPosition[]>([])
+  const [syncing, setSyncing]       = useState(false)
+  const [pageLoading, setPageLoading] = useState(true)
+  const syncTimerRef                = useRef<ReturnType<typeof setInterval> | null>(null)
 
-  // ── Load connection status on mount ────────────────────────────────────────
+  // ── Load status ──────────────────────────────────────────────────────────
   const loadStatus = useCallback(async () => {
-    const res = await fetch('/api/mt/status')
+    const res  = await fetch('/api/mt/status')
     const json = await res.json()
     setConnections(json.connections ?? [])
     setPageLoading(false)
@@ -42,64 +36,43 @@ export default function MTConnectPage() {
 
   useEffect(() => { loadStatus() }, [loadStatus])
 
-  // ── Active connection (the first connected/connecting one) ─────────────────
   const activeConn = connections.find((c) => ['connected', 'connecting'].includes(c.status))
 
-  // ── Sync function ──────────────────────────────────────────────────────────
+  // ── Sync ─────────────────────────────────────────────────────────────────
   const doSync = useCallback(async () => {
     if (!activeConn || syncing) return
     setSyncing(true)
     try {
-      // 1. Trigger sync
       const syncRes = await fetch('/api/mt/sync', { method: 'POST' })
-      if (!syncRes.ok) throw new Error('sync failed')
+      if (!syncRes.ok) return
 
-      // 2. Refresh connection list (updates last_sync_at)
       await loadStatus()
 
-      // 3. Fetch latest stats
-      const statsRes = await fetch('/api/mt/account-stats')
-      const statsJson = await statsRes.json()
+      const [statsJson, tradesJson] = await Promise.all([
+        fetch('/api/mt/account-stats').then((r) => r.json()),
+        fetch('/api/mt/trades?type=open&limit=100').then((r) => r.json()),
+      ])
       setStats(statsJson.stats ?? null)
-
-      // 4. Fetch open positions
-      const tradesRes = await fetch('/api/mt/trades?type=open&limit=100')
-      const tradesJson = await tradesRes.json()
       setPositions(tradesJson.trades ?? [])
-
-    } catch {
-      // Silently swallow individual sync errors — the connection card shows status
-    } finally {
+    } catch { /* silent */ } finally {
       setSyncing(false)
     }
   }, [activeConn, syncing, loadStatus])
 
-  // ── Auto-sync loop ─────────────────────────────────────────────────────────
+  // ── Auto-sync loop ────────────────────────────────────────────────────────
   useEffect(() => {
     if (syncTimerRef.current) clearInterval(syncTimerRef.current)
-
     if (activeConn) {
-      // Immediate first sync, then every SYNC_INTERVAL_MS
       doSync()
       syncTimerRef.current = setInterval(doSync, SYNC_INTERVAL_MS)
     }
-
-    return () => {
-      if (syncTimerRef.current) clearInterval(syncTimerRef.current)
-    }
-    // We intentionally omit doSync from deps to avoid restarting the timer on every render
+    return () => { if (syncTimerRef.current) clearInterval(syncTimerRef.current) }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeConn?.id])
 
-  // ── Handlers ───────────────────────────────────────────────────────────────
-  const handleConnected = (conn: MTConnection) => {
-    setConnections((prev) => [{ ...conn, open_positions_count: 0 }, ...prev])
-  }
-
+  const handleConnected    = (conn: MTConnection) => setConnections((prev) => [{ ...conn, open_positions_count: 0 }, ...prev])
   const handleDisconnected = (id: string) => {
-    setConnections((prev) =>
-      prev.map((c) => c.id === id ? { ...c, status: 'disconnected' as const } : c)
-    )
+    setConnections((prev) => prev.map((c) => c.id === id ? { ...c, status: 'disconnected' as const } : c))
     setStats(null)
     setPositions([])
   }
@@ -108,12 +81,12 @@ export default function MTConnectPage() {
     <div className="min-h-screen bg-[#F5F7FA] p-4 md:p-6">
       <div className="max-w-5xl mx-auto space-y-6">
 
-        {/* ── Page header ──────────────────────────────────────────────── */}
-        <div className="flex items-center justify-between">
+        {/* ── Header ─────────────────────────────────────────────────────── */}
+        <div className="flex items-center justify-between flex-wrap gap-3">
           <div>
             <h1 className="text-2xl font-bold text-[#0A0F1C]">MT4 / MT5 Live Connection</h1>
             <p className="text-sm text-gray-500 mt-0.5">
-              Read-only account sync via MetaApi · data refreshes every 3 seconds
+              Read-only · MetaApi bridge · FX Blue compatible · syncs every {SYNC_INTERVAL_MS / 1000}s
             </p>
           </div>
           {activeConn && (
@@ -128,7 +101,27 @@ export default function MTConnectPage() {
           )}
         </div>
 
-        {/* ── Initial loading skeleton ──────────────────────────────────── */}
+        {/* ── Page tabs ──────────────────────────────────────────────────── */}
+        <div className="flex gap-1 bg-gray-100 p-1 rounded-xl w-fit">
+          {([
+            { id: 'connection', label: 'Connection', icon: Plug },
+            { id: 'analytics',  label: 'Analytics',  icon: BarChart2 },
+          ] as Array<{ id: PageTab; label: string; icon: React.ElementType }>).map(({ id, label, icon: Icon }) => (
+            <button
+              key={id}
+              onClick={() => setPageTab(id)}
+              className={`flex items-center gap-1.5 py-1.5 px-4 rounded-lg text-sm font-medium transition-colors ${
+                pageTab === id
+                  ? 'bg-white text-[#0A0F1C] shadow-sm'
+                  : 'text-gray-500 hover:text-gray-800'
+              }`}
+            >
+              <Icon className="w-4 h-4" />
+              {label}
+            </button>
+          ))}
+        </div>
+
         {pageLoading && (
           <div className="space-y-4">
             {[...Array(3)].map((_, i) => (
@@ -137,18 +130,18 @@ export default function MTConnectPage() {
           </div>
         )}
 
-        {!pageLoading && (
+        {!pageLoading && pageTab === 'connection' && (
           <>
-            {/* ── Account overview (shown once connected) ─────────────── */}
+            {/* Account stats */}
             {activeConn && (
               <MTAccountStats stats={stats} loading={syncing && !stats} />
             )}
 
-            {/* ── Existing connections ─────────────────────────────────── */}
+            {/* Connections */}
             {connections.length > 0 && (
               <div className="space-y-3">
                 <h2 className="text-sm font-semibold text-gray-600 uppercase tracking-wide">
-                  Your Connections
+                  Connected Accounts
                 </h2>
                 {connections.map((c) => (
                   <MTConnectionStatus
@@ -162,7 +155,7 @@ export default function MTConnectPage() {
               </div>
             )}
 
-            {/* ── Live positions ───────────────────────────────────────── */}
+            {/* Live positions */}
             {activeConn && (
               <MTLiveTrades
                 positions={positions}
@@ -171,20 +164,28 @@ export default function MTConnectPage() {
               />
             )}
 
-            {/* ── Connect form (always shown — user may add another) ────── */}
+            {/* Connect form */}
             <MTConnectForm onConnected={handleConnected} />
 
-            {/* ── Info box ─────────────────────────────────────────────── */}
-            <div className="p-4 rounded-xl bg-[#fffbeb] border border-yellow-200 text-sm text-yellow-800">
-              <p className="font-semibold mb-1">Before you connect</p>
+            {/* Info */}
+            <div className="p-4 rounded-xl bg-[#fffbeb] border border-yellow-200 text-sm text-yellow-800 space-y-2">
+              <p className="font-semibold">Before you connect</p>
               <ul className="list-disc list-inside space-y-1 text-xs">
-                <li>Use the <strong>investor (read-only) password</strong> — not your master password.</li>
-                <li>Your broker server name must match exactly (check MT4/MT5 → File → Login).</li>
+                <li>Use the <strong>investor (read-only) password</strong> — never your master password.</li>
+                <li>Broker server name must match exactly (MT4/MT5 → File → Login to find it).</li>
                 <li>ProStep never stores your investor password after passing it to MetaApi.</li>
+                <li>FX Blue users: link your FX Blue username below for additional analytics.</li>
                 <li>Run the SQL migration in Supabase before using this feature in production.</li>
               </ul>
             </div>
           </>
+        )}
+
+        {!pageLoading && pageTab === 'analytics' && (
+          <MTAnalyticsDashboard
+            connectionId={activeConn?.id}
+            currency={stats?.currency ?? 'USD'}
+          />
         )}
       </div>
     </div>

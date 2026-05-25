@@ -70,13 +70,18 @@ export async function POST(request: NextRequest) {
     // ── Trigger Risk Guardian ────────────────────────────────────────────────
     // Fire-and-forget: don't let a guardian error fail the sync response
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? `https://${request.headers.get('host')}`
+    const cookie  = request.headers.get('cookie') ?? ''
+
     fetch(`${baseUrl}/api/alerts/check`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        // Forward the user's auth cookie so the check route can identify them
-        Cookie: request.headers.get('cookie') ?? '',
-      },
+      headers: { 'Content-Type': 'application/json', Cookie: cookie },
+    }).catch(() => { /* ignore */ })
+
+    // ── Auto-build Trader DNA ────────────────────────────────────────────────
+    fetch(`${baseUrl}/api/mt/build-trader-dna`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Cookie: cookie },
+      body: JSON.stringify({ connectionId: conn.id }),
     }).catch(() => { /* ignore */ })
 
     return NextResponse.json({ success: true, result })
