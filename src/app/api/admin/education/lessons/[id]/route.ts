@@ -49,5 +49,6 @@ export async function DELETE(_req: NextRequest, { params }: Params) {
   return NextResponse.json({ success: true })
 }
 
-// The client uses PUT for updates; alias to PATCH handler
-export { PATCH as PUT }
+// PUT alias — admin clients send PUT; canonical update method is PATCH.
+// Both share identical semantics (partial update).
+export const PUT = PATCH

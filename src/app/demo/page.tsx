@@ -66,7 +66,7 @@ function DashboardPanel() {
             </div>
             <p className="text-2xl font-bold" style={{ color: m.color }}>{m.value}</p>
             <div className="flex items-center justify-between mt-1">
-              <span className="text-xs text-white/40">{m.sub}</span>
+              <span className="text-xs text-white/60">{m.sub}</span>
               <span className="text-xs font-semibold" style={{ color: m.color }}>{m.delta}</span>
             </div>
           </div>
@@ -77,12 +77,12 @@ function DashboardPanel() {
       <div className="rounded-xl border border-white/8 bg-white/4 p-4">
         <div className="flex items-center justify-between mb-2">
           <span className="text-sm font-medium text-white">Weekly Edge Score Progress</span>
-          <span className="text-xs text-white/40">78 / 100</span>
+          <span className="text-xs text-white/60">78 / 100</span>
         </div>
         <div className="h-2 w-full rounded-full bg-white/8 overflow-hidden">
           <div className="h-full rounded-full bg-[#00B4D8]" style={{ width: '78%' }} />
         </div>
-        <div className="mt-2 flex justify-between text-xs text-white/30">
+        <div className="mt-2 flex justify-between text-xs text-white/50">
           <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span>
         </div>
       </div>
@@ -94,7 +94,7 @@ function DashboardPanel() {
           {recentTrades.map((t) => (
             <div key={t.pair} className="flex items-center gap-3 rounded-lg bg-white/3 px-3 py-2.5">
               <span className="text-xs font-semibold text-white w-16">{t.pair}</span>
-              <span className="text-xs text-white/40 w-10">{t.dir}</span>
+              <span className="text-xs text-white/60 w-10">{t.dir}</span>
               <span className={`text-xs font-semibold w-14 ${t.result.startsWith('+') ? 'text-[#2E7D32]' : 'text-[#E53935]'}`}>
                 {t.result}
               </span>
@@ -102,7 +102,7 @@ function DashboardPanel() {
                 <div className="h-full rounded-full bg-[#00B4D8]" style={{ width: `${t.quality}%` }} />
               </div>
               <span className="text-xs text-[#00B4D8] w-6">{t.quality}</span>
-              <span className="text-xs text-white/40 hidden sm:block">{t.emotion}</span>
+              <span className="text-xs text-white/60 hidden sm:block">{t.emotion}</span>
             </div>
           ))}
         </div>
@@ -152,7 +152,7 @@ function JournalPanel() {
             <div className="flex items-center gap-3">
               <span className="text-sm font-bold text-white">{e.pair}</span>
               <span className="rounded-full bg-white/8 px-2 py-0.5 text-xs text-white/50">{e.dir}</span>
-              <span className="text-xs text-white/30">{e.date}</span>
+              <span className="text-xs text-white/50">{e.date}</span>
             </div>
             <span className={`text-sm font-bold ${e.result.startsWith('+') ? 'text-[#2E7D32]' : 'text-[#E53935]'}`}>
               {e.result}
@@ -162,7 +162,7 @@ function JournalPanel() {
           {/* Emotion bars */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <p className="text-xs text-white/40 mb-1">Pre-trade emotion</p>
+              <p className="text-xs text-white/60 mb-1">Pre-trade emotion</p>
               <div className="flex items-center gap-2">
                 <div className="flex-1 h-1.5 rounded-full bg-white/8 overflow-hidden">
                   <div className="h-full rounded-full bg-[#8A2BE2]" style={{ width: `${e.preEmotion * 10}%` }} />
@@ -171,7 +171,7 @@ function JournalPanel() {
               </div>
             </div>
             <div>
-              <p className="text-xs text-white/40 mb-1">Post-trade emotion</p>
+              <p className="text-xs text-white/60 mb-1">Post-trade emotion</p>
               <div className="flex items-center gap-2">
                 <div className="flex-1 h-1.5 rounded-full bg-white/8 overflow-hidden">
                   <div className="h-full rounded-full bg-[#8A2BE2]" style={{ width: `${e.postEmotion * 10}%` }} />
@@ -183,7 +183,7 @@ function JournalPanel() {
 
           {/* Tags */}
           <div className="flex items-center gap-2 flex-wrap">
-            <Camera className="h-3.5 w-3.5 text-white/20" />
+            <Camera className="h-3.5 w-3.5 text-white/50" />
             {e.tags.map((t) => (
               <span key={t} className={`rounded-full px-2 py-0.5 text-xs ${
                 ['Patient','Disciplined','Confident'].includes(t)
@@ -201,7 +201,7 @@ function JournalPanel() {
 
           {/* Quality */}
           <div className="flex items-center gap-2">
-            <span className="text-xs text-white/40">Trade quality</span>
+            <span className="text-xs text-white/60">Trade quality</span>
             <div className="flex-1 h-1.5 rounded-full bg-white/8 overflow-hidden">
               <div className="h-full rounded-full bg-[#00B4D8]" style={{ width: `${e.quality}%` }} />
             </div>
@@ -271,7 +271,7 @@ function RiskGuardianPanel() {
             }}
           />
         </div>
-        <div className="mt-2 flex justify-between text-xs text-white/30">
+        <div className="mt-2 flex justify-between text-xs text-white/50">
           <span>Safe</span><span>Caution</span><span>Elevated</span><span>Danger</span>
         </div>
       </div>
@@ -293,7 +293,7 @@ function RiskGuardianPanel() {
                 </div>
               </div>
               <p className="text-xs text-white/60 leading-relaxed">{a.body}</p>
-              <p className="mt-1.5 text-xs text-white/30">{a.time}</p>
+              <p className="mt-1.5 text-xs text-white/50">{a.time}</p>
             </div>
           </div>
         </div>
@@ -330,7 +330,7 @@ function StrategyLabPanel() {
           <div className="flex items-center justify-between mb-3">
             <div>
               <p className="text-sm font-semibold text-white">{s.name}</p>
-              <p className="text-xs text-white/40">{s.version}</p>
+              <p className="text-xs text-white/60">{s.version}</p>
             </div>
             <span className={`rounded-full px-2.5 py-1 text-xs font-medium ${
               s.status === 'Active' ? 'bg-[#2E7D32]/20 text-[#4CAF50]' : 'bg-[#FFC107]/20 text-[#FFC107]'
@@ -338,20 +338,20 @@ function StrategyLabPanel() {
           </div>
           <div className="grid grid-cols-3 gap-3 mb-3">
             <div className="rounded-lg bg-white/4 p-2 text-center">
-              <p className="text-xs text-white/40">Target RR</p>
+              <p className="text-xs text-white/60">Target RR</p>
               <p className="text-sm font-bold text-white">{s.rr}</p>
             </div>
             <div className="rounded-lg bg-white/4 p-2 text-center">
-              <p className="text-xs text-white/40">Hit Rate</p>
+              <p className="text-xs text-white/60">Hit Rate</p>
               <p className="text-sm font-bold text-[#00B4D8]">{s.hitRate}</p>
             </div>
             <div className="rounded-lg bg-white/4 p-2 text-center">
-              <p className="text-xs text-white/40">Consistency</p>
+              <p className="text-xs text-white/60">Consistency</p>
               <p className="text-sm font-bold text-[#E53935]">{s.consistency}%</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-xs text-white/40">Rules followed</span>
+            <span className="text-xs text-white/60">Rules followed</span>
             <div className="flex-1 h-1.5 rounded-full bg-white/8 overflow-hidden">
               <div className="h-full rounded-full bg-[#E53935]" style={{ width: `${s.consistency}%` }} />
             </div>
@@ -408,7 +408,7 @@ function TraderDNAPanel() {
           <p className="text-xs text-white/50">Data-driven · Risk-aware · Patience-oriented</p>
         </div>
         <div className="ml-auto text-right">
-          <p className="text-xs text-white/40">Assessment</p>
+          <p className="text-xs text-white/60">Assessment</p>
           <p className="text-sm font-semibold text-[#00B4D8]">Complete</p>
         </div>
       </div>
@@ -480,12 +480,20 @@ export default function DemoPage() {
             Click through each feature below — this is real product UI, not a video.
             No login required.
           </p>
-          <Link href="/signup">
-            <Button size="lg" className="gap-2 bg-[#E53935] hover:bg-[#C62828] text-white px-8">
-              Start Free — Takes 2 Minutes
-              <ArrowRight className="h-5 w-5" />
-            </Button>
-          </Link>
+          <div className="flex items-center justify-center gap-3 flex-wrap">
+            <Link href="/demo/dashboard/user">
+              <Button size="lg" className="gap-2 bg-[#00B4D8] hover:bg-[#0098b8] text-white px-8">
+                <Sparkles className="h-5 w-5" />
+                Try Full Demo
+              </Button>
+            </Link>
+            <Link href="/signup">
+              <Button size="lg" variant="outline" className="gap-2 border-white/20 text-white/80 hover:text-white px-8">
+                Start Free — Takes 2 Minutes
+                <ArrowRight className="h-5 w-5" />
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -530,7 +538,7 @@ export default function DemoPage() {
                 <span className="h-3 w-3 rounded-sm" style={{ background: `${current.accent}60` }}>
                   <current.icon className="h-3 w-3" style={{ color: current.accent }} />
                 </span>
-                <span className="text-xs text-white/40">prostep2market.vercel.app / {active}</span>
+                <span className="text-xs text-white/60">prostep2market.vercel.app / {active}</span>
               </div>
               <span
                 className="ml-auto rounded-full px-2.5 py-0.5 text-xs font-medium"
@@ -574,7 +582,7 @@ export default function DemoPage() {
       {/* ── Feature highlights ────────────────────────────────────────────── */}
       <section className="border-t border-white/8 bg-[#0B0B0B] py-16">
         <div className="container mx-auto px-4">
-          <p className="mb-8 text-center text-sm font-medium text-white/40 uppercase tracking-widest">
+          <p className="mb-8 text-center text-sm font-medium text-white/60 uppercase tracking-widest">
             Everything in the demo is available on the Free plan
           </p>
           <div className="mx-auto grid max-w-4xl gap-4 sm:grid-cols-2 lg:grid-cols-3">

@@ -48,9 +48,9 @@ export function TradeStatsWidget({ pairStats, timeStats }: TradeStatsWidgetProps
       <h3 className="text-base font-semibold mb-4" style={{ color: '#ffffff' }}>Trade Statistics</h3>
 
       <div className="mb-6">
-        <h4 className="text-xs font-medium mb-3 uppercase tracking-wide" style={{ color: '#707a8a' }}>Top Performing Pairs</h4>
+        <h4 className="text-xs font-medium mb-3 uppercase tracking-wide" style={{ color: '#9ea3ad' }}>Top Performing Pairs</h4>
         {sortedPairs.length === 0 ? (
-          <div className="text-center py-6 text-sm" style={{ color: '#707a8a' }}>No trade data available</div>
+          <div className="text-center py-6 text-sm" style={{ color: '#9ea3ad' }}>No trade data available</div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -62,7 +62,7 @@ export function TradeStatsWidget({ pairStats, timeStats }: TradeStatsWidgetProps
                       <th
                         key={label}
                         className={`text-xs font-medium uppercase tracking-wider py-2 ${i === 0 ? 'text-left' : 'text-right cursor-pointer'}`}
-                        style={{ color: '#707a8a' }}
+                        style={{ color: '#9ea3ad' }}
                         onClick={() => key && toggleSort(key as SortKey)}
                       >
                         <span className={`flex items-center ${i === 0 ? '' : 'justify-end'}`}>
@@ -100,7 +100,7 @@ export function TradeStatsWidget({ pairStats, timeStats }: TradeStatsWidgetProps
         <div className="rounded-[8px] p-4" style={{ backgroundColor: 'rgba(14,203,129,0.08)', border: '1px solid rgba(14,203,129,0.2)' }}>
           <h4 className="text-xs font-medium mb-2" style={{ color: '#0ecb81' }}>Best Times</h4>
           {bestTimes.length === 0 ? (
-            <p className="text-xs" style={{ color: '#707a8a' }}>No data</p>
+            <p className="text-xs" style={{ color: '#9ea3ad' }}>No data</p>
           ) : (
             <div className="space-y-2">
               {bestTimes.slice(0, 2).map((t) => (
@@ -115,7 +115,7 @@ export function TradeStatsWidget({ pairStats, timeStats }: TradeStatsWidgetProps
         <div className="rounded-[8px] p-4" style={{ backgroundColor: 'rgba(246,70,93,0.08)', border: '1px solid rgba(246,70,93,0.2)' }}>
           <h4 className="text-xs font-medium mb-2" style={{ color: '#f6465d' }}>Worst Times</h4>
           {worstTimes.length === 0 ? (
-            <p className="text-xs" style={{ color: '#707a8a' }}>No data</p>
+            <p className="text-xs" style={{ color: '#9ea3ad' }}>No data</p>
           ) : (
             <div className="space-y-2">
               {worstTimes.slice(0, 2).map((t) => (

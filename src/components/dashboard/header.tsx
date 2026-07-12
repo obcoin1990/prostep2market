@@ -56,10 +56,10 @@ export function Header({
     >
       {/* ── Left: hamburger + page title ── */}
       <div className="flex items-center gap-3">
-        <button
+<button type="button" 
           onClick={onMenuClick}
           className="md:hidden p-2 rounded-[6px] transition-colors"
-          style={{ color: '#707a8a' }}
+          style={{ color: '#9ea3ad' }}
           onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#1e2329')}
           onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
           aria-label="Toggle menu"
@@ -89,9 +89,9 @@ export function Header({
         )}
 
         {/* Notifications (placeholder) */}
-        <button
+<button type="button" 
           className="relative p-2 rounded-[6px] transition-colors"
-          style={{ color: '#707a8a' }}
+          style={{ color: '#9ea3ad' }}
           onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#1e2329')}
           onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
           aria-label="Notifications"
@@ -101,7 +101,7 @@ export function Header({
 
         {/* ── User avatar + dropdown ── */}
         <div className="relative">
-          <button
+  <button type="button" 
             onClick={() => setShowUserMenu(!showUserMenu)}
             className="flex items-center gap-2.5 pl-2 pr-3 py-1.5 rounded-[8px] transition-colors"
             onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#1e2329')}
@@ -144,7 +144,7 @@ export function Header({
 
             <ChevronDown
               className="w-3.5 h-3.5 hidden md:block flex-shrink-0"
-              style={{ color: '#707a8a' }}
+              style={{ color: '#9ea3ad' }}
             />
           </button>
 
@@ -179,7 +179,7 @@ export function Header({
                     {userEmail && (
                       <p
                         className="text-xs truncate mt-0.5"
-                        style={{ color: '#707a8a' }}
+                        style={{ color: '#9ea3ad' }}
                       >
                         {userEmail}
                       </p>
@@ -187,18 +187,18 @@ export function Header({
                   </div>
                 )}
 
-                <button
+        <button type="button" 
                   onClick={() => { router.push('/profile'); setShowUserMenu(false) }}
                   className="w-full px-4 py-2.5 text-left text-sm flex items-center gap-2.5 transition-colors"
                   style={{ color: '#eaecef' }}
                   onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#2b3139')}
                   onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
                 >
-                  <Settings className="w-4 h-4" style={{ color: '#707a8a' }} />
+                  <Settings className="w-4 h-4" style={{ color: '#9ea3ad' }} />
                   Profile Settings
                 </button>
 
-                <button
+        <button type="button" 
                   onClick={handleSignOut}
                   className="w-full px-4 py-2.5 text-left text-sm flex items-center gap-2.5 transition-colors"
                   style={{ color: '#f6465d' }}

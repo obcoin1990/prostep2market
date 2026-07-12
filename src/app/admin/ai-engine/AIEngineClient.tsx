@@ -166,7 +166,7 @@ export function AIEngineClient({ initialSettings }: Props) {
                 <select
                   value={settings.model}
                   onChange={(e) => setSettings((s) => ({ ...s, model: e.target.value }))}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#E53935]/30 focus:border-[#E53935]"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#E53935]/60 focus:border-[#E53935]"
                 >
                   {MODELS.map((m) => (
                     <option key={m} value={m}>{m}</option>

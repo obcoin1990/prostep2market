@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
 
 // Keys that may be written via this generic endpoint.
 // Any other key is rejected to prevent overwriting unrelated settings.
-const ALLOWED_SETTINGS_KEYS = ['ai_engine'] as const
+const ALLOWED_SETTINGS_KEYS = ['ai_engine', 'feature_flags', 'security_settings', 'permission_matrix', 'system_health'] as const
 type AllowedKey = (typeof ALLOWED_SETTINGS_KEYS)[number]
 
 export async function PUT(request: NextRequest) {

@@ -12,12 +12,12 @@ export default function SignUpPage() {
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 mb-6 hover:opacity-80 transition-opacity">
             <span className="text-2xl font-bold tracking-tight" style={{ color: '#fcd535', fontFamily: 'var(--font-sans)' }}>P2M</span>
-            <span className="text-sm font-medium" style={{ color: '#707a8a' }}>ProStep2Market</span>
+            <span className="text-sm font-medium" style={{ color: '#9ea3ad' }}>ProStep2Market</span>
           </Link>
           <h1 className="text-2xl font-bold text-[#0B0B0B]">{t('auth.createAccount')}</h1>
           <p className="text-gray-600 mt-2">{t('auth.startJourney')}</p>
         </div>
-        <div className="bg-white rounded-[12px] p-6 shadow-[0_6px_18px_rgba(11,11,11,0.06)]">
+        <div className="bg-white rounded-[12px] p-6 shadow-lg">
           <SignUpForm />
         </div>
         <p className="text-center mt-4 text-sm text-gray-600">

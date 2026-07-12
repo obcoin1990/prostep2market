@@ -17,7 +17,7 @@ export function HowItWorks() {
   return (
     <section className="bg-gray-50 py-16 md:py-24">
       <div className="container mx-auto px-4">
-        <h2 className="mb-12 text-center text-3xl font-bold text-[#0B0B0B] md:text-4xl">
+        <h2 className="mb-8 text-center text-3xl font-bold text-[#0B0B0B] md:mb-12 md:text-4xl">
           {t('landing.howItWorksHeading')}
         </h2>
         <div className="mx-auto max-w-4xl">

@@ -17,15 +17,16 @@ import {
   ChevronRight,
   LogOut,
   Globe,
+  Building2,
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { useLanguage } from '@/contexts/LanguageContext'
 import type { User } from '@supabase/supabase-js'
 
 export function Navbar() {
-  const [openMenu, setOpenMenu] = useState<'platform' | 'intelligence' | null>(null)
+  const [openMenu, setOpenMenu] = useState<'platform' | 'intelligence' | 'company' | null>(null)
   const [mobileOpen, setMobileOpen] = useState(false)
-  const [mobileExpanded, setMobileExpanded] = useState<'platform' | 'intelligence' | null>(null)
+  const [mobileExpanded, setMobileExpanded] = useState<'platform' | 'intelligence' | 'company' | null>(null)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const [langMenuOpen, setLangMenuOpen] = useState(false)
   const [user, setUser] = useState<User | null>(null)
@@ -96,12 +97,21 @@ export function Navbar() {
     { href: '/dashboard',    icon: LayoutDashboard, label: t('nav.dashboard'),    desc: t('nav.dashboardDesc') },
     { href: '/journal',      icon: BookMarked,       label: t('nav.tradeJournal'), desc: t('nav.tradeJournalDesc') },
     { href: '/strategy-lab', icon: FlaskConical,     label: t('nav.strategyLab'), desc: t('nav.strategyLabDesc') },
-    { href: '/trader-dna',   icon: Dna,              label: t('nav.traderDna'),   desc: t('nav.traderDnaDesc') },
+    { href: '/dashboard/trader-dna', icon: Dna, label: t('nav.traderDna'), desc: t('nav.traderDnaDesc') },
   ]
   const intelligenceItems = [
     { href: '/analysis',             icon: Sparkles,   label: t('nav.aiAnalysis'),   desc: t('nav.aiAnalysisDesc') },
     { href: '/risk-guardian',        icon: ShieldAlert, label: t('nav.riskGuardian'), desc: t('nav.riskGuardianDesc') },
     { href: '/dashboard#edge-score', icon: Trophy,      label: t('nav.edgeScore'),    desc: t('nav.edgeScoreDesc') },
+  ]
+  const companyItems = [
+    { href: '/company/about',      icon: Building2, label: 'About Us',        desc: 'Our story and values' },
+    { href: '/company/leadership', icon: Building2, label: 'Leadership',       desc: 'Meet our team' },
+    { href: '/company/mission',    icon: Building2, label: 'Mission & Vision', desc: 'Our driving purpose' },
+    { href: '/company/careers',    icon: Building2, label: 'Careers',          desc: 'Join our team' },
+    { href: '/company/press',      icon: Building2, label: 'Press & News',     desc: 'Latest updates' },
+    { href: '/company/media-kit',  icon: Building2, label: 'Media Kit',        desc: 'Brand assets' },
+    { href: '/company/investors',  icon: Building2, label: 'Investors',        desc: 'Financial info' },
   ]
 
   /* ── Micro dropdown ── */
@@ -128,9 +138,9 @@ export function Navbar() {
               </span>
               <span className="flex-1 min-w-0">
                 <span className="block text-sm font-medium truncate" style={{ color: '#ffffff' }}>{item.label}</span>
-                <span className="block text-xs truncate" style={{ color: '#707a8a' }}>{item.desc}</span>
+                <span className="block text-xs truncate" style={{ color: '#9ea3ad' }}>{item.desc}</span>
               </span>
-              <ChevronRight className="h-3.5 w-3.5 flex-shrink-0" style={{ color: '#707a8a' }} />
+              <ChevronRight className="h-3.5 w-3.5 flex-shrink-0" style={{ color: '#9ea3ad' }} />
             </Link>
           ))}
         </div>
@@ -141,7 +151,7 @@ export function Navbar() {
   return (
     <header
       ref={navRef}
-      className="sticky top-0 z-50"
+      className="sticky top-0 z-[300]"
       style={{ backgroundColor: '#0b0e11', borderBottom: '1px solid #2b3139', height: '64px' }}
     >
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6 h-full flex items-center justify-between">
@@ -149,7 +159,7 @@ export function Navbar() {
         {/* ── Logo ── */}
         <Link href="/" className="flex items-center gap-2 shrink-0 hover:opacity-80 transition-opacity">
           <span className="text-xl font-bold tracking-tight" style={{ color: '#fcd535', fontFamily: 'var(--font-sans)' }}>P2M</span>
-          <span className="text-sm font-medium hidden sm:block" style={{ color: '#707a8a' }}>ProStep2Market</span>
+          <span className="text-sm font-medium hidden sm:block" style={{ color: '#9ea3ad' }}>ProStep2Market</span>
         </Link>
 
         {/* ── Desktop nav ── */}
@@ -164,7 +174,7 @@ export function Navbar() {
               >
                 {t('nav.platform')}
               </Link>
-              <button className="pr-2.5 py-2 transition-colors" style={{ color: '#707a8a' }}
+              <button type="button" className="pr-2.5 py-2 transition-colors" style={{ color: '#9ea3ad' }}
                 onClick={() => setOpenMenu(p => p === 'platform' ? null : 'platform')}
                 aria-label="Open Platform menu"
               >
@@ -183,7 +193,7 @@ export function Navbar() {
               >
                 {t('nav.intelligence')}
               </Link>
-              <button className="pr-2.5 py-2 transition-colors" style={{ color: '#707a8a' }}
+              <button type="button" className="pr-2.5 py-2 transition-colors" style={{ color: '#9ea3ad' }}
                 onClick={() => setOpenMenu(p => p === 'intelligence' ? null : 'intelligence')}
                 aria-label="Open Intelligence menu"
               >
@@ -206,6 +216,25 @@ export function Navbar() {
           >
             {t('nav.pricing')}
           </Link>
+
+          {/* Company */}
+          <div className="relative" onMouseEnter={() => setOpenMenu('company')} onMouseLeave={() => setOpenMenu(null)}>
+            <div className="flex items-center rounded-[6px] transition-colors" style={openMenu === 'company' ? { backgroundColor: '#1e2329' } : {}}>
+              <Link href="/company/about" className="px-3 py-2 text-sm font-medium transition-colors" style={navLinkStyle}
+                onMouseEnter={e => (e.currentTarget.style.color = '#ffffff')}
+                onMouseLeave={e => (e.currentTarget.style.color = '#eaecef')}
+              >
+                Company
+              </Link>
+              <button type="button" className="pr-2.5 py-2 transition-colors" style={{ color: '#9ea3ad' }}
+                onClick={() => setOpenMenu(p => p === 'company' ? null : 'company')}
+                aria-label="Open Company menu"
+              >
+                <ChevronDown className={`h-3.5 w-3.5 transition-transform duration-150 ${openMenu === 'company' ? 'rotate-180' : ''}`} />
+              </button>
+            </div>
+            <MicroDropdown items={companyItems} visible={openMenu === 'company'} />
+          </div>
         </nav>
 
         {/* ── Desktop right side ── */}
@@ -223,7 +252,7 @@ export function Navbar() {
             >
               <Globe className="h-4 w-4" />
               <span className="text-xs font-semibold uppercase">{locale}</span>
-              <ChevronDown className={`h-3 w-3 transition-transform duration-150 ${langMenuOpen ? 'rotate-180' : ''}`} style={{ color: '#707a8a' }} />
+              <ChevronDown className={`h-3 w-3 transition-transform duration-150 ${langMenuOpen ? 'rotate-180' : ''}`} style={{ color: '#9ea3ad' }} />
             </button>
 
             <div
@@ -266,7 +295,7 @@ export function Navbar() {
                   {displayName?.charAt(0).toUpperCase()}
                 </span>
                 {displayName}
-                <ChevronDown className={`h-3.5 w-3.5 transition-transform duration-150 ${userMenuOpen ? 'rotate-180' : ''}`} style={{ color: '#707a8a' }} />
+                <ChevronDown className={`h-3.5 w-3.5 transition-transform duration-150 ${userMenuOpen ? 'rotate-180' : ''}`} style={{ color: '#9ea3ad' }} />
               </button>
 
               <div
@@ -350,16 +379,16 @@ export function Navbar() {
               onClick={() => setMobileExpanded(p => p === 'platform' ? null : 'platform')}
             >
               {t('nav.platform')}
-              <ChevronDown className={`h-4 w-4 transition-transform duration-150 ${mobileExpanded === 'platform' ? 'rotate-180' : ''}`} style={{ color: '#707a8a' }} />
+              <ChevronDown className={`h-4 w-4 transition-transform duration-150 ${mobileExpanded === 'platform' ? 'rotate-180' : ''}`} style={{ color: '#9ea3ad' }} />
             </button>
             {mobileExpanded === 'platform' && (
               <div className="ml-3 space-y-0.5 pl-3" style={{ borderLeft: '1px solid #2b3139' }}>
                 {platformItems.map(item => (
                   <Link key={item.href} href={item.href}
                     className="flex items-center gap-2.5 px-3 py-2 rounded-[6px] text-sm transition-colors"
-                    style={{ color: '#707a8a' }}
+                    style={{ color: '#9ea3ad' }}
                     onMouseEnter={e => (e.currentTarget.style.color = '#ffffff')}
-                    onMouseLeave={e => (e.currentTarget.style.color = '#707a8a')}
+                    onMouseLeave={e => (e.currentTarget.style.color = '#9ea3ad')}
                     onClick={() => setMobileOpen(false)}
                   >
                     <item.icon className="h-4 w-4" style={{ color: '#fcd535' }} />
@@ -376,16 +405,16 @@ export function Navbar() {
               onClick={() => setMobileExpanded(p => p === 'intelligence' ? null : 'intelligence')}
             >
               {t('nav.intelligence')}
-              <ChevronDown className={`h-4 w-4 transition-transform duration-150 ${mobileExpanded === 'intelligence' ? 'rotate-180' : ''}`} style={{ color: '#707a8a' }} />
+              <ChevronDown className={`h-4 w-4 transition-transform duration-150 ${mobileExpanded === 'intelligence' ? 'rotate-180' : ''}`} style={{ color: '#9ea3ad' }} />
             </button>
             {mobileExpanded === 'intelligence' && (
               <div className="ml-3 space-y-0.5 pl-3" style={{ borderLeft: '1px solid #2b3139' }}>
                 {intelligenceItems.map(item => (
                   <Link key={item.href} href={item.href}
                     className="flex items-center gap-2.5 px-3 py-2 rounded-[6px] text-sm transition-colors"
-                    style={{ color: '#707a8a' }}
+                    style={{ color: '#9ea3ad' }}
                     onMouseEnter={e => (e.currentTarget.style.color = '#ffffff')}
-                    onMouseLeave={e => (e.currentTarget.style.color = '#707a8a')}
+                    onMouseLeave={e => (e.currentTarget.style.color = '#9ea3ad')}
                     onClick={() => setMobileOpen(false)}
                   >
                     <item.icon className="h-4 w-4" style={{ color: '#fcd535' }} />
@@ -402,9 +431,35 @@ export function Navbar() {
               {t('nav.pricing')}
             </Link>
 
+            {/* Company accordion */}
+            <button
+              className="flex items-center justify-between w-full px-3 py-2.5 rounded-[6px] text-sm font-medium transition-colors"
+              style={{ color: '#eaecef' }}
+              onClick={() => setMobileExpanded(p => p === 'company' ? null : 'company')}
+            >
+              Company
+              <ChevronDown className={`h-4 w-4 transition-transform duration-150 ${mobileExpanded === 'company' ? 'rotate-180' : ''}`} style={{ color: '#9ea3ad' }} />
+            </button>
+            {mobileExpanded === 'company' && (
+              <div className="ml-3 space-y-0.5 pl-3" style={{ borderLeft: '1px solid #2b3139' }}>
+                {companyItems.map(item => (
+                  <Link key={item.href} href={item.href}
+                    className="flex items-center gap-2.5 px-3 py-2 rounded-[6px] text-sm transition-colors"
+                    style={{ color: '#9ea3ad' }}
+                    onMouseEnter={e => (e.currentTarget.style.color = '#ffffff')}
+                    onMouseLeave={e => (e.currentTarget.style.color = '#9ea3ad')}
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    <item.icon className="h-4 w-4" style={{ color: '#fcd535' }} />
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+            )}
+
             {/* Mobile language selector */}
             <div className="pt-2" style={{ borderTop: '1px solid #2b3139' }}>
-              <p className="px-3 py-1 text-xs font-semibold uppercase" style={{ color: '#707a8a' }}>{t('nav.language')}</p>
+              <p className="px-3 py-1 text-xs font-semibold uppercase" style={{ color: '#9ea3ad' }}>{t('nav.language')}</p>
               <div className="grid grid-cols-3 gap-1 px-1 py-1">
                 {localeList.map(l => (
                   <button
@@ -443,7 +498,7 @@ export function Navbar() {
                     <LayoutDashboard className="h-4 w-4" style={{ color: '#fcd535' }} />
                     {t('nav.dashboard')}
                   </Link>
-                  <button onClick={handleSignOut}
+                  <button type="button" onClick={handleSignOut}
                     className="flex items-center gap-2.5 w-full px-3 py-2.5 rounded-[6px] text-sm font-medium transition-colors"
                     style={{ color: '#f6465d' }}
                     onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#1e2329')}

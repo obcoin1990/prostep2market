@@ -1,7 +1,7 @@
 # Requirements: ProStep2Market
 
 **Defined:** 2026-05-08
-**Last Updated:** 2026-05-19
+**Last Updated:** 2026-07-11
 **Core Value:** Traders improve their discipline and emotional control, leading to more consistent and profitable trading outcomes.
 
 ## v1 Requirements
@@ -156,6 +156,32 @@
 - [ ] **ADV-04**: Mobile responsive improvements (deeper mobile polish)
 - [ ] **ADV-05**: Offline support for journal entries
 
+## Audit Findings (2026-07-11)
+
+**⚠️ Important:** All 85 v1 requirements have implementation code, but the CTO audit (`REVIEW.md`) found that many implementations have critical data correctness, security, and completeness issues. The checkboxes below indicate "code exists" — not "works correctly." Cross-reference with `REVIEW.md` for actual status.
+
+### Key Implementation Gaps by Requirement
+
+| Requirement | Audit Finding | Severity |
+|-------------|--------------|----------|
+| DASH-01 to DASH-08 | Edge Score card, risk meter, weekly performance, trade stats, session heatmap all use hardcoded data in dashboard sub-pages (analytics, trader-dna, risk-guardian, etc.) — never connect to DB | Warning |
+| AUTH-01 to AUTH-05 | Admin-created users cannot authenticate (missing Prisma User record — CR-01); blank page instead of redirect when unauthenticated (CR-04) | Critical |
+| DNA-01 to DNA-10 | Dashboard/trader-dna page is hardcoded; profile form only updates user_metadata, not trader_profiles (WR-10) | Warning |
+| INTL-01 to INTL-03 | Connections page is hardcoded | Warning |
+| GRDN-01 to GRDN-09 | Risk Guardian page is hardcoded; alert acknowledge may use wrong column (CR-06); pause expiration not enforced (WR-12) | Critical/Warning |
+| EDGE-01 to EDGE-10 | Score calculation uses hardcoded 10% drawdown estimate (WR-09); user dashboard counts ALL platform trades instead of user's trades (CR-02) | Critical |
+| API-01 to API-06 | No auth ordering in quiz route (WR-06); debug routes left in production (IN-01) | Warning/Info |
+| CORE-01 to CORE-05 | Design tokens exist but landing pages use inline styles not themable via admin branding (IN-03) | Info |
+
+### Action Required
+
+Before any production launch, all 28 audit findings must be addressed. Priority order:
+1. 9 Critical issues (data correctness, auth, security)
+2. 14 Warnings (hardcoded pages, validation gaps)
+3. 5 Info items (debug routes, theming)
+
+---
+
 ## Out of Scope
 
 | Feature | Reason |
@@ -194,4 +220,4 @@
 
 ---
 *Requirements defined: 2026-05-08*
-*Last updated: 2026-05-19 — all v1 requirements marked complete per git history and SUMMARY files*
+*Last updated: 2026-07-11 — audit findings added; see REVIEW.md for implementation quality details*

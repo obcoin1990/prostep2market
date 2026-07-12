@@ -49,7 +49,7 @@ export default function ResetPasswordPage() {
           <h1 className="text-2xl font-bold text-[#0B0B0B]">Reset Password</h1>
           <p className="text-gray-600 mt-2">Enter your email to receive a reset link</p>
         </div>
-        <div className="bg-white rounded-[12px] p-6 shadow-[0_6px_18px_rgba(11,11,11,0.06)]">
+        <div className="bg-white rounded-[12px] p-6 shadow-lg">
           <form onSubmit={handleReset} className="space-y-4">
             {error && (
               <div className="p-3 bg-red-50 border border-red-200 text-red-700 rounded-md text-sm">

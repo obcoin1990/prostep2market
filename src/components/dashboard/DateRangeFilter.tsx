@@ -69,7 +69,7 @@ export function DateRangeFilter({
 
   return (
     <div className="relative">
-      <button
+<button type="button" 
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 px-3 py-2 text-sm font-medium bg-[#0A0F1C] border border-[rgba(255,255,255,0.1)] rounded-lg hover:bg-[rgba(255,255,255,0.05)] transition-colors text-white"
         aria-label="Select date range"
@@ -89,11 +89,11 @@ export function DateRangeFilter({
           />
 
           {/* Dropdown Menu */}
-          <Card className="absolute right-0 mt-2 w-64 z-50 bg-[#0A0F1C] border-[rgba(255,255,255,0.1)]">
+          <Card className="absolute right-0 mt-2 w-64 z-[600] bg-[#0A0F1C] border-[rgba(255,255,255,0.1)]">
             <CardContent className="p-4">
               <div className="space-y-2 mb-4">
                 {RANGE_OPTIONS.map((option) => (
-                  <button
+            <button type="button" 
                     key={option.value}
                     onClick={() => handleRangeSelect(option.value)}
                     className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${

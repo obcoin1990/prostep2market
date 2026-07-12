@@ -12,7 +12,7 @@ const STATUS_CONFIG: Record<
 > = {
   ACTIVE:    { label: 'In Progress', color: '#fcd535',  Icon: Clock         },
   COMPLETED: { label: 'Completed',   color: '#2E7D32',  Icon: CheckCircle2  },
-  DROPPED:   { label: 'Dropped',     color: '#707a8a',  Icon: AlertTriangle },
+  DROPPED:   { label: 'Dropped',     color: '#9ea3ad',  Icon: AlertTriangle },
   OVERDUE:   { label: 'Overdue',     color: '#f6465d',  Icon: AlertTriangle },
 };
 
@@ -53,7 +53,7 @@ export function LearningProgressWidget({ enrollments, isLoading }: LearningProgr
         ) : enrollments.length === 0 ? (
           <div className="py-6 text-center">
             <GraduationCap className="w-8 h-8 mx-auto mb-2" style={{ color: '#2b3139' }} />
-            <p className="text-xs" style={{ color: '#707a8a' }}>No courses yet.</p>
+            <p className="text-xs" style={{ color: '#9ea3ad' }}>No courses yet.</p>
             <Link
               href="/education"
               className="text-xs font-medium mt-1 inline-block transition-opacity hover:opacity-70"

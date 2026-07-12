@@ -99,7 +99,7 @@ interface ConfirmDialogProps {
 
 function ConfirmDialog({ tenant, onConfirm, onCancel, loading }: ConfirmDialogProps) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+    <div className="fixed inset-0 z-[500] flex items-center justify-center bg-black/50 p-4">
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-sm p-6">
         <h2 className="text-lg font-bold text-[#0A0F1C] mb-2">Delete Tenant</h2>
         <p className="text-sm text-gray-600 mb-1">
@@ -201,11 +201,11 @@ function TenantModal({ editingTenant, onClose, onSaved, onCreated }: TenantModal
   }, [form, editingTenant, onClose, onSaved, onCreated])
 
   const inputCls =
-    'w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#E53935]/30 focus:border-[#E53935]'
+    'w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#E53935]/60 focus:border-[#E53935]'
   const labelCls = 'block text-sm font-medium text-gray-700 mb-1'
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+    <div className="fixed inset-0 z-[500] flex items-center justify-center bg-black/50 p-4">
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-xl max-h-[92vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between p-5 border-b">

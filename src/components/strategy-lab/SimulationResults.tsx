@@ -1,14 +1,22 @@
 'use client';
 
 import { useState } from 'react';
+import dynamic from 'next/dynamic';
 import { SimulationMetrics, BehavioralImpact } from '@/types/strategy-lab';
 import { Trade } from '@/types/strategy-lab';
 import { MetricsSummary } from './MetricsSummary';
-import { EquityCurveChart } from './EquityCurveChart';
-import { DrawdownChart } from './DrawdownChart';
 import { TradeList } from './TradeList';
 import { formatCurrency, formatPercentage } from '@/lib/strategy-lab/metrics';
 import { RefreshCw, Save, Download } from 'lucide-react';
+
+const EquityCurveChart = dynamic(
+  () => import('./EquityCurveChart').then(mod => ({ default: mod.EquityCurveChart })),
+  { ssr: false }
+);
+const DrawdownChart = dynamic(
+  () => import('./DrawdownChart').then(mod => ({ default: mod.DrawdownChart })),
+  { ssr: false }
+);
 
 interface RROptimizationResult {
   rr: number;
@@ -52,7 +60,7 @@ export function SimulationResults({
       {/* Tabs */}
       <div className="flex gap-2 border-b">
         {tabs.map((tab) => (
-          <button
+<button type="button" 
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
@@ -147,7 +155,7 @@ export function SimulationResults({
       {/* Actions */}
       <div className="flex gap-4">
         {onRunNew && (
-          <button
+<button type="button" 
             onClick={onRunNew}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border hover:bg-accent"
           >

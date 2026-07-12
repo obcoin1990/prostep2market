@@ -24,13 +24,14 @@ export function RiskRuleForm({ index, control, onRemove }: RiskRuleFormProps) {
         <div className="flex-1 grid gap-4 sm:grid-cols-3">
           {/* Type */}
           <div>
-            <label className="block text-sm font-medium mb-1">Type</label>
+            <label htmlFor={`risk-type-${index}`} className="block text-sm font-medium mb-1">Type</label>
             <Controller
               name={`riskRules.${index}.type`}
               control={control}
               render={({ field }) => (
                 <select
                   {...field}
+                  id={`risk-type-${index}`}
                   className="w-full px-3 py-2 rounded-lg border bg-background"
                 >
                   {typeOptions.map((opt) => (
@@ -45,13 +46,14 @@ export function RiskRuleForm({ index, control, onRemove }: RiskRuleFormProps) {
 
           {/* Value */}
           <div>
-            <label className="block text-sm font-medium mb-1">Value</label>
+            <label htmlFor={`risk-value-${index}`} className="block text-sm font-medium mb-1">Value</label>
             <Controller
               name={`riskRules.${index}.value`}
               control={control}
               render={({ field }) => (
                 <input
                   {...field}
+                  id={`risk-value-${index}`}
                   type="number"
                   step="0.1"
                   placeholder="e.g., 2.0"
@@ -65,13 +67,14 @@ export function RiskRuleForm({ index, control, onRemove }: RiskRuleFormProps) {
 
           {/* Max Drawdown */}
           <div>
-            <label className="block text-sm font-medium mb-1">Max Drawdown %</label>
+            <label htmlFor={`risk-maxDrawdown-${index}`} className="block text-sm font-medium mb-1">Max Drawdown %</label>
             <Controller
               name={`riskRules.${index}.maxDrawdownPercent`}
               control={control}
               render={({ field }) => (
                 <input
                   {...field}
+                  id={`risk-maxDrawdown-${index}`}
                   type="number"
                   min="0"
                   max="100"
@@ -86,9 +89,10 @@ export function RiskRuleForm({ index, control, onRemove }: RiskRuleFormProps) {
         </div>
 
         {/* Remove Button */}
-        <button
+<button
           type="button"
           onClick={onRemove}
+          aria-label="Remove risk rule"
           className="p-2 text-muted-foreground hover:text-destructive"
         >
           <Trash2 className="h-4 w-4" />

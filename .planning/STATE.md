@@ -1,6 +1,6 @@
 # State: ProStep2Market
 
-**Last Updated:** 2026-05-19
+**Last Updated:** 2026-07-11
 
 ---
 
@@ -10,7 +10,7 @@ See: .planning/PROJECT.md
 
 **Core Value:** Traders improve their discipline and emotional control, leading to more consistent and profitable trading outcomes.
 
-**Current Phase:** All 8 phases complete — project delivered.
+**Current Phase:** Production Transformation Program — Phase 2 Complete ✓ (44 marketing pages built: Company 7, Product 7, Solutions 8, Resources 12, Trust 6, Conversion 4)
 
 ---
 
@@ -88,6 +88,9 @@ See: .planning/PROJECT.md
 | `PROJECT_COMPLETION.md` | Final completion declaration |
 | `PROJECT_STATISTICS.md` | Structured statistics |
 | `FINAL_SUMMARY.md` | Mid-project snapshot |
+| `REVIEW.md` | Deep CTO audit: 9 critical, 14 warning, 5 info findings |
+| `.planning/codebase/CODEBASE_INVENTORY.md` | Full route/component/API/lib inventory |
+| `PRODUCTION-TRANSFORMATION-PLAN.html` | 5-phase production roadmap: 40 KB with 130+ page site architecture |
 
 ---
 
@@ -108,6 +111,20 @@ See: .planning/PROJECT.md
 
 ---
 
+## Known Issues & Technical Debt
+
+**Source:** Full CTO audit (`REVIEW.md`) — 118 files reviewed on 2026-07-11
+
+| Severity | Count | Key Issues |
+|----------|-------|------------|
+| Critical | 9 | Admin-created users can't auth (missing Prisma record), user dashboard counts ALL trades (no user filter), demo `Math.random()` at module scope causes hydration crash, dashboard blank page when unauthenticated, auth role inconsistency (metadata vs DB), alert acknowledge wrong column, org assignment without validation, stale state after `window.location.replace`, unsafe type casting in admin users API |
+| Warning | 14 | 6 dashboard pages 100% hardcoded, admin dashboard counts all trades, demo login button doesn't set cookie, unsafe type assertions, demo start no server-side cookie, auth ordering in quiz API, org ID type validation, Prisma where clutter, hardcoded 10% drawdown, profile form misses DB updates, leaderboard type safety, pause expiration not enforced, course search no length limit, demo PnL overrides trade direction |
+| Info | 5 | Debug routes left in production, email update silently ignores Prisma failures, landing uses inline styles (no theming), no fallback when Supabase unreachable, circular dependency risk in TraderProfile imports |
+
+**Key finding:** All 85 v1 requirements are marked complete but many implementations have data correctness bugs, security gaps, or use entirely hardcoded data. Requirements must be re-verified against actual working functionality.
+
+---
+
 ## Recent Activity
 
 - **2026-05-08:** Project initialized with full specification from RESEURCES folder
@@ -120,7 +137,20 @@ See: .planning/PROJECT.md
 - **2026-05-12:** Build fixes (pdf-lib, legacy-peer-deps, async params, env vars)
 - **2026-05-12:** Corporate LMS features added then auth layer partially reverted
 - **2026-05-19:** STATE.md updated to reflect actual project completion
+- **2026-07-10:** Supabase project unpaused (was paused by Supabase), DNS restored
+- **2026-07-10:** Admin account `ob6013@gmail.com` fully configured (SUPER_ADMIN in Auth + Prisma + trader_profiles)
+- **2026-07-10:** Demo dashboard section created (`/demo/dashboard/*`) with 8 pages bypassing auth
+- **2026-07-10:** Deployed to Vercel (129 routes, build succeeds)
+- **2026-07-11:** Full CTO audit completed — 118 files reviewed, 28 findings documented in REVIEW.md
+- **2026-07-11:** Production Transformation Program launched — PRODUCTION-TRANSFORMATION-PLAN.html with 5-phase roadmap
+- **2026-07-11:** Company section (7 pages) built: About, Leadership, Mission, Careers, Press, Media Kit, Investors under /company/*
+- **2026-07-11:** Product section (7 pages) built: Overview, Features (40+), Use Cases (5 segments), Architecture, Roadmap, Integrations (25+), API Platform under /product/*, /integrations, /api
+- **2026-07-11:** Solutions section (8 pages) built: Hub, Retail Traders, Prop Firms, Trading Coaches, Brokerages, Enterprise, By Problem, Comparison under /solutions/*
+- **2026-07-11:** Resources section (12 pages) built: Hub, Blog (20 posts), Guides (10), Tutorials (10), Webinars, Whitepapers (3), Glossary (44 terms), Help Center, Getting Started, Troubleshooting, Release Notes under /resources/*, /help/*, /release-notes
+- **2026-07-11:** Trust section (6 pages) built: Hub, Security, Compliance, Data Protection, Privacy, Certifications under /trust/*
+- **2026-07-11:** Conversion section (4 pages) built: Pricing (enhanced + FAQ), ROI Calculator, Demo Request, Contact Sales under /pricing, /roi-calculator, /demo-request, /contact
+- **2026-07-11:** Production Transformation Phase 2 complete — 44 new marketing pages (171 total routes)
 
 ---
 
-*State file last updated: 2026-05-19*
+*State file last updated: 2026-07-11*

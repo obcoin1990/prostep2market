@@ -260,21 +260,23 @@ function ProfileTab({
         <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Profile</h3>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">Display Name</label>
+            <label htmlFor="display-name" className="block text-xs font-medium text-gray-700 mb-1">Display Name</label>
             <input
+              id="display-name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Full name"
-              className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E53935]/30 focus:border-[#E53935]"
+              className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E53935]/60 focus:border-[#E53935]"
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">Organization</label>
+            <label htmlFor="organization" className="block text-xs font-medium text-gray-700 mb-1">Organization</label>
             <div className="relative">
               <select
+                id="organization"
                 value={orgId}
                 onChange={(e) => setOrgId(e.target.value)}
-                className="w-full appearance-none px-3 py-2 pr-8 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E53935]/30 focus:border-[#E53935]"
+                className="w-full appearance-none px-3 py-2 pr-8 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E53935]/60 focus:border-[#E53935]"
               >
                 <option value="">— No organization —</option>
                 {organizations.map((org) => (
@@ -300,7 +302,8 @@ function ProfileTab({
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="flex-1 px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E53935]/30 focus:border-[#E53935]"
+            aria-label="Email address"
+            className="flex-1 px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E53935]/60 focus:border-[#E53935]"
           />
           <SaveButton saving={savingEmail} onClick={saveEmail} label="Update Email" />
         </div>
@@ -315,9 +318,10 @@ function ProfileTab({
         <div className="flex gap-2">
           <div className="relative flex-1">
             <select
+              aria-label="User role"
               value={role}
               onChange={(e) => setRole(e.target.value)}
-              className="w-full appearance-none px-3 py-2 pr-8 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E53935]/30 focus:border-[#E53935]"
+              className="w-full appearance-none px-3 py-2 pr-8 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E53935]/60 focus:border-[#E53935]"
             >
               <option value="LEARNER">Learner</option>
               <option value="MANAGER">Manager</option>
@@ -714,7 +718,7 @@ export function UserDetailDrawer({
       />
 
       {/* Drawer */}
-      <div className="fixed inset-y-0 right-0 z-50 w-full max-w-2xl bg-white shadow-2xl flex flex-col">
+      <div className="fixed inset-y-0 right-0 z-[400] w-full max-w-2xl bg-white shadow-2xl flex flex-col">
         {/* Header */}
         <div className="flex items-center gap-3 px-6 py-4 border-b border-gray-100 flex-shrink-0">
           <div className="w-9 h-9 rounded-full bg-[#E53935]/10 flex items-center justify-center flex-shrink-0">
@@ -726,7 +730,7 @@ export function UserDetailDrawer({
             </p>
             <p className="text-xs text-gray-400 truncate">{userEmail}</p>
           </div>
-          <button
+<button type="button" 
             onClick={onClose}
             className="p-1.5 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-all ml-auto"
           >
@@ -737,7 +741,7 @@ export function UserDetailDrawer({
         {/* Tab nav */}
         <div className="flex border-b border-gray-100 px-6 flex-shrink-0 overflow-x-auto">
           {TABS.map(({ id, label, Icon }) => (
-            <button
+  <button type="button" 
               key={id}
               onClick={() => setActiveTab(id)}
               className={`flex items-center gap-1.5 px-3 py-3 text-xs font-medium whitespace-nowrap border-b-2 transition-colors ${

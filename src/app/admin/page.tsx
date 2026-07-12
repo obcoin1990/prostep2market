@@ -23,6 +23,15 @@ import {
   Building2,
   CheckCircle2,
   ArrowRight,
+  Shield,
+  Key,
+  Lock,
+  ClipboardList,
+  Globe,
+  Server,
+  ToggleLeft,
+  Mail,
+  FileText,
 } from 'lucide-react'
 
 // ─── Types ──────────────────────────────────────────────────────────────────
@@ -51,15 +60,26 @@ interface QuickLink {
 // ─── Constants ───────────────────────────────────────────────────────────────
 
 const PROFILE_TYPE_COLORS: Record<string, string> = {
-  sniper: 'bg-[#E53935]/10 text-[#E53935] border-[#E53935]/30',
+  sniper: 'bg-red-500/10 text-red-500 border-red-500/30',
   analyst: 'bg-[#00B4D8]/10 text-[#00B4D8] border-[#00B4D8]/30',
   warrior: 'bg-orange-500/10 text-orange-400 border-orange-500/30',
-  disciplinarian: 'bg-[#2E7D32]/10 text-[#2E7D32] border-[#2E7D32]/30',
+  disciplinarian: 'bg-green-600/10 text-green-600 border-green-600/30',
   opportunist: 'bg-purple-500/10 text-purple-400 border-purple-500/30',
 }
 
 const QUICK_LINKS: QuickLink[] = [
   { label: 'Users', href: '/admin/users', icon: Users, description: 'Manage platform accounts' },
+  { label: 'Roles', href: '/admin/roles', icon: Shield, description: 'Role management & CRUD' },
+  { label: 'Permissions', href: '/admin/permissions', icon: Key, description: 'Permission matrix' },
+  { label: 'Security Center', href: '/admin/security', icon: Lock, description: 'MFA, sessions, IP allowlist' },
+  { label: 'Audit Logs', href: '/admin/audit-logs', icon: ClipboardList, description: 'Full audit trail' },
+  { label: 'Compliance', href: '/admin/compliance', icon: Globe, description: 'Regulatory compliance' },
+  { label: 'System Health', href: '/admin/health', icon: Server, description: 'Service status & uptime' },
+  { label: 'Feature Flags', href: '/admin/feature-flags', icon: ToggleLeft, description: 'Toggle management' },
+  { label: 'API Keys', href: '/admin/api-keys', icon: Key, description: 'API access tokens' },
+  { label: 'Platform Analytics', href: '/admin/analytics', icon: BarChart3, description: 'Growth & revenue' },
+  { label: 'Email Templates', href: '/admin/email', icon: Mail, description: 'Transactional emails' },
+  { label: 'Content CMS', href: '/admin/content', icon: FileText, description: 'Website content' },
   { label: 'Trader DNA', href: '/admin/trader-dna', icon: Dna, description: 'Edit DNA profiles' },
   { label: 'AI Engine', href: '/admin/ai-engine', icon: Brain, description: 'Configure AI rules' },
   { label: 'Risk Guardian', href: '/admin/risk-guardian', icon: ShieldAlert, description: 'Risk rule sets' },
@@ -114,15 +134,15 @@ export default async function AdminDashboardPage() {
       label: 'Total Trades',
       value: totalTrades ?? 0,
       icon: TrendingUp,
-      color: 'text-[#2E7D32]',
-      bg: 'bg-[#2E7D32]/10',
+      color: 'text-green-600',
+      bg: 'bg-green-600/10',
     },
     {
       label: 'Active Alerts',
       value: activeAlerts ?? 0,
       icon: Bell,
-      color: 'text-[#E53935]',
-      bg: 'bg-[#E53935]/10',
+      color: 'text-red-500',
+      bg: 'bg-red-500/10',
     },
     {
       label: 'Edge Score Records',
@@ -138,12 +158,12 @@ export default async function AdminDashboardPage() {
       {/* ── Header ── */}
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-[#0A0F1C]">Admin Dashboard</h1>
+          <h1 className="text-2xl font-bold text-gray-700">Admin Dashboard</h1>
           <p className="text-sm text-gray-500 mt-0.5">Platform overview — all systems nominal</p>
         </div>
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#2E7D32]/10 border border-[#2E7D32]/30">
-          <CheckCircle2 className="w-4 h-4 text-[#2E7D32]" />
-          <span className="text-xs font-semibold text-[#2E7D32]">Operational</span>
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-600/10 border border-green-600/30">
+          <CheckCircle2 className="w-4 h-4 text-green-600" />
+          <span className="text-xs font-semibold text-green-600">Operational</span>
         </div>
       </div>
 
@@ -159,7 +179,7 @@ export default async function AdminDashboardPage() {
                     <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">
                       {stat.label}
                     </p>
-                    <p className="text-3xl font-bold text-[#0A0F1C] mt-1">
+                    <p className="text-3xl font-bold text-gray-700 mt-1">
                       {typeof stat.value === 'number' ? stat.value.toLocaleString() : stat.value}
                     </p>
                   </div>
@@ -179,7 +199,7 @@ export default async function AdminDashboardPage() {
         {/* Recent Signups (3 cols) */}
         <Card variant="light" className="xl:col-span-3 border border-gray-200 shadow-sm">
           <CardHeader className="pb-2">
-            <CardTitle className="text-base font-semibold text-[#0A0F1C]">Recent Signups</CardTitle>
+            <CardTitle className="text-base font-semibold text-gray-700">Recent Signups</CardTitle>
             <p className="text-xs text-gray-400">Last 5 trader accounts created</p>
           </CardHeader>
           <CardContent>
@@ -241,7 +261,7 @@ export default async function AdminDashboardPage() {
             <div className="pt-3 border-t border-gray-100 mt-2">
               <Link
                 href="/admin/users"
-                className="text-xs text-[#E53935] font-medium hover:underline inline-flex items-center gap-1"
+                className="text-xs text-red-500 font-medium hover:underline inline-flex items-center gap-1"
               >
                 View all users <ArrowRight className="w-3 h-3" />
               </Link>
@@ -252,7 +272,7 @@ export default async function AdminDashboardPage() {
         {/* Quick Links (2 cols) */}
         <Card variant="light" className="xl:col-span-2 border border-gray-200 shadow-sm">
           <CardHeader className="pb-2">
-            <CardTitle className="text-base font-semibold text-[#0A0F1C]">Quick Links</CardTitle>
+            <CardTitle className="text-base font-semibold text-gray-700">Quick Links</CardTitle>
             <p className="text-xs text-gray-400">Jump to any admin module</p>
           </CardHeader>
           <CardContent>
@@ -263,11 +283,11 @@ export default async function AdminDashboardPage() {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="group flex flex-col gap-1 p-2.5 rounded-lg border border-gray-100 hover:border-[#E53935]/30 hover:bg-[#E53935]/5 transition-all"
+                    className="group flex flex-col gap-1 p-2.5 rounded-lg border border-gray-100 hover:border-red-500/30 hover:bg-red-500/5 transition-all"
                   >
                     <div className="flex items-center gap-2">
-                      <Icon className="w-3.5 h-3.5 text-gray-400 group-hover:text-[#E53935] transition-colors flex-shrink-0" />
-                      <span className="text-xs font-semibold text-[#0A0F1C] truncate">
+                      <Icon className="w-3.5 h-3.5 text-gray-400 group-hover:text-red-500 transition-colors flex-shrink-0" />
+                      <span className="text-xs font-semibold text-gray-700 truncate">
                         {link.label}
                       </span>
                     </div>

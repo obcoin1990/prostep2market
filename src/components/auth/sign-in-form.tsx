@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input, Label } from '@/components/ui/input'
@@ -14,6 +15,7 @@ export function SignInForm() {
   const [error, setError] = useState<string | null>(null)
   const supabase = createClient()
   const t = useT()
+  const router = useRouter()
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -24,11 +26,11 @@ export function SignInForm() {
 
     if (error) {
       setError(error.message)
+      setLoading(false)
     } else {
-      window.location.replace('/dashboard')
-      return
+      router.push('/dashboard')
+      router.refresh()
     }
-    setLoading(false)
   }
 
   return (

@@ -1,5 +1,6 @@
 'use client'
 
+import dynamic from 'next/dynamic'
 import { TraderProfile } from '@/types/trader-dna'
 import { Alert } from '@/types/guardian'
 import { EdgeScoreCard } from './EdgeScoreCard'
@@ -9,7 +10,6 @@ import { SessionHeatmap } from './SessionHeatmap'
 import { InsightsPanel } from './InsightsPanel'
 import { RankBadge } from './RankBadge'
 import { QuickActions } from './QuickActions'
-import { ScoreSparkline } from './ScoreSparkline'
 import { ScoreBreakdown } from './ScoreBreakdown'
 import { PauseOverlay } from './PauseOverlay'
 import {
@@ -18,6 +18,11 @@ import {
   NoInsightsEmptyState,
   NoLeaderboardRankEmptyState,
 } from './EmptyState'
+
+const ScoreSparkline = dynamic(
+  () => import('./ScoreSparkline').then(mod => ({ default: mod.ScoreSparkline })),
+  { ssr: false }
+)
 import { Skeleton } from '@/components/ui/skeleton'
 import { Card, CardContent } from '@/components/ui/card'
 import type {
@@ -305,9 +310,9 @@ export function DashboardGrid({
                   <CardContent className="pt-6 flex items-center justify-center min-h-[200px]">
                     {leaderboard.userRank ? (
                       <div className="text-center">
-                        <p className="text-sm mb-2" style={{ color: '#707a8a' }}>Your Leaderboard Position</p>
+                        <p className="text-sm mb-2" style={{ color: '#9ea3ad' }}>Your Leaderboard Position</p>
                         <p className="text-4xl font-bold mb-2" style={{ color: '#fcd535', fontFamily: 'var(--font-mono)' }}>#{leaderboard.userRank.rank}</p>
-                        <p className="text-sm" style={{ color: '#707a8a' }}>Score: {leaderboard.userRank.score.toFixed(1)}</p>
+                        <p className="text-sm" style={{ color: '#9ea3ad' }}>Score: {leaderboard.userRank.score.toFixed(1)}</p>
                       </div>
                     ) : (
                       <NoLeaderboardRankEmptyState />
@@ -341,7 +346,7 @@ export function DashboardGrid({
         <Card>
           <CardContent className="pt-6">
             <div className="text-center py-12">
-              <p style={{ color: '#707a8a' }}>No widgets to display</p>
+              <p style={{ color: '#9ea3ad' }}>No widgets to display</p>
             </div>
           </CardContent>
         </Card>

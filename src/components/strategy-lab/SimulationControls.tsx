@@ -99,8 +99,9 @@ export function SimulationControls({ onRun, isLoading = false }: SimulationContr
     <div className="space-y-6">
       {/* Trading Pair */}
       <div>
-        <label className="block text-sm font-medium mb-2">Trading Pair</label>
+        <label htmlFor="sim-pair" className="block text-sm font-medium mb-2">Trading Pair</label>
         <select
+          id="sim-pair"
           value={pair}
           onChange={(e) => setPair(e.target.value)}
           className="w-full px-3 py-2 rounded-lg border bg-background"
@@ -115,8 +116,9 @@ export function SimulationControls({ onRun, isLoading = false }: SimulationContr
 
       {/* Initial Balance */}
       <div>
-        <label className="block text-sm font-medium mb-2">Initial Balance ($)</label>
+        <label htmlFor="sim-balance" className="block text-sm font-medium mb-2">Initial Balance ($)</label>
         <input
+          id="sim-balance"
           type="number"
           value={initialBalance}
           onChange={(e) => handleBalanceChange(e.target.value)}
@@ -132,8 +134,9 @@ export function SimulationControls({ onRun, isLoading = false }: SimulationContr
       {/* Date Range */}
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium mb-2">Start Date</label>
+          <label htmlFor="sim-start-date" className="block text-sm font-medium mb-2">Start Date</label>
           <input
+            id="sim-start-date"
             type="date"
             value={startDate}
             disabled
@@ -141,8 +144,9 @@ export function SimulationControls({ onRun, isLoading = false }: SimulationContr
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-2">End Date</label>
+          <label htmlFor="sim-end-date" className="block text-sm font-medium mb-2">End Date</label>
           <input
+            id="sim-end-date"
             type="date"
             value={endDate}
             disabled
@@ -156,9 +160,9 @@ export function SimulationControls({ onRun, isLoading = false }: SimulationContr
         <label className="block text-sm font-medium mb-2">Trading Sessions (optional)</label>
         <div className="flex flex-wrap gap-2">
           {sessions.map((session) => (
-            <button
-              key={session.id}
+<button
               type="button"
+              key={session.id}
               onClick={() => toggleSession(session.id)}
               className={`px-3 py-1.5 rounded-full text-sm transition-colors ${
                 sessionFilter.includes(session.id)
@@ -181,6 +185,7 @@ export function SimulationControls({ onRun, isLoading = false }: SimulationContr
         
         {/* Add rule dropdown */}
         <select
+          aria-label="Behavioral rule"
           onChange={(e) => {
             if (e.target.value) {
               addBehaviorRule(e.target.value);
@@ -207,11 +212,12 @@ export function SimulationControls({ onRun, isLoading = false }: SimulationContr
               <input
                 type="number"
                 value={rule.value}
+                aria-label="Rule value"
                 onChange={(e) => updateBehaviorRuleValue(index, parseInt(e.target.value) || 0)}
                 className="w-20 px-2 py-1 rounded border bg-background text-sm"
                 min="1"
               />
-              <button
+  <button
                 type="button"
                 onClick={() => removeBehaviorRule(index)}
                 className="text-muted-foreground hover:text-destructive"

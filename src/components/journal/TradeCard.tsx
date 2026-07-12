@@ -178,9 +178,13 @@ export function TradeCard({ trade }: TradeCardProps) {
                 rel="noopener noreferrer"
                 className="block w-32 h-20 overflow-hidden rounded border"
               >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img 
                   src={trade.screenshotUrl} 
                   alt="Trade screenshot"
+                  width={128}
+                  height={80}
+                  loading="lazy"
                   className="w-full h-full object-cover"
                 />
               </a>

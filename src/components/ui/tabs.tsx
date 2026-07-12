@@ -28,18 +28,53 @@ const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(
 Tabs.displayName = "Tabs"
 
 const TabsList = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<"div">>(
-  ({ className, children, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={cn(
-        "inline-flex h-9 items-center justify-center rounded-lg bg-gray-100 p-1 text-muted-foreground",
-        className
-      )}
-      {...props}
-    >
-      {children}
-    </div>
-  )
+  ({ className, children, ...props }, ref) => {
+    const listRef = React.useRef<HTMLDivElement>(null)
+    const mergedRef = React.useMemo(
+      () => (node: HTMLDivElement | null) => {
+        (listRef as React.MutableRefObject<HTMLDivElement | null>).current = node
+        if (typeof ref === 'function') ref(node)
+        else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node
+      },
+      [ref],
+    )
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+      const list = listRef.current
+      if (!list) return
+      const tabs = Array.from(list.querySelectorAll<HTMLElement>('[role="tab"]:not([disabled])'))
+      const current = document.activeElement as HTMLElement
+      const idx = tabs.indexOf(current)
+      if (idx === -1) return
+
+      let next: HTMLElement | undefined
+      if (e.key === 'ArrowRight') {
+        next = tabs[(idx + 1) % tabs.length]
+      } else if (e.key === 'ArrowLeft') {
+        next = tabs[(idx - 1 + tabs.length) % tabs.length]
+      }
+      if (next) {
+        e.preventDefault()
+        next.focus()
+        next.click()
+      }
+    }
+
+    return (
+      <div
+        ref={mergedRef}
+        role="tablist"
+        className={cn(
+          "inline-flex h-9 items-center justify-center rounded-lg bg-gray-100 p-1 text-muted-foreground",
+          className
+        )}
+        onKeyDown={handleKeyDown}
+        {...props}
+      >
+        {children}
+      </div>
+    )
+  }
 )
 TabsList.displayName = "TabsList"
 

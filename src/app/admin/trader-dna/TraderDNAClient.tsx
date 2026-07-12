@@ -125,7 +125,7 @@ function EditModal({ profile, onClose, onSaved }: EditModalProps) {
   }, [form, profile.id, onClose, onSaved])
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+    <div className="fixed inset-0 z-[500] flex items-center justify-center bg-black/50 p-4">
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between p-5 border-b">
           <div>
@@ -143,11 +143,12 @@ function EditModal({ profile, onClose, onSaved }: EditModalProps) {
         <div className="p-5 space-y-5">
           {/* Profile Type */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Profile Type</label>
+            <label htmlFor="profile-type" className="block text-sm font-medium text-gray-700 mb-1.5">Profile Type</label>
             <select
+              id="profile-type"
               value={form.profile_type}
               onChange={(e) => setForm((f) => ({ ...f, profile_type: e.target.value }))}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#E53935]/30 focus:border-[#E53935]"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#E53935]/60 focus:border-[#E53935]"
             >
               <option value="">— unset —</option>
               {PROFILE_TYPES.map((t) => (
@@ -177,6 +178,7 @@ function EditModal({ profile, onClose, onSaved }: EditModalProps) {
                   step={1}
                   value={form[key] as number}
                   onChange={(e) => setScore(key, e.target.value)}
+                  aria-label="Score"
                   className="w-full h-1.5 rounded-full appearance-none cursor-pointer"
                   style={{ accentColor: color }}
                 />
@@ -187,7 +189,8 @@ function EditModal({ profile, onClose, onSaved }: EditModalProps) {
                     max={100}
                     value={form[key] as number}
                     onChange={(e) => setScore(key, e.target.value)}
-                    className="w-20 border border-gray-200 rounded px-2 py-0.5 text-xs focus:outline-none focus:ring-1 focus:ring-[#E53935]/30"
+                    aria-label="Score value"
+                    className="w-20 border border-gray-200 rounded px-2 py-0.5 text-xs focus:outline-none focus:ring-1 focus:ring-[#E53935]/60"
                   />
                 </div>
               </div>
@@ -196,11 +199,12 @@ function EditModal({ profile, onClose, onSaved }: EditModalProps) {
 
           {/* Learning Path */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Learning Path</label>
+            <label htmlFor="learning-path" className="block text-sm font-medium text-gray-700 mb-1.5">Learning Path</label>
             <select
+              id="learning-path"
               value={form.learning_path}
               onChange={(e) => setForm((f) => ({ ...f, learning_path: e.target.value }))}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#E53935]/30 focus:border-[#E53935]"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#E53935]/60 focus:border-[#E53935]"
             >
               <option value="">— unset —</option>
               {LEARNING_PATHS.map((lp) => (
@@ -211,11 +215,12 @@ function EditModal({ profile, onClose, onSaved }: EditModalProps) {
 
           {/* Admin Role */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Admin Role</label>
+            <label htmlFor="admin-role" className="block text-sm font-medium text-gray-700 mb-1.5">Admin Role</label>
             <select
+              id="admin-role"
               value={form.admin_role}
               onChange={(e) => setForm((f) => ({ ...f, admin_role: e.target.value }))}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#E53935]/30 focus:border-[#E53935]"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#E53935]/60 focus:border-[#E53935]"
             >
               {ADMIN_ROLES.map((r) => (
                 <option key={r} value={r}>{r || '— none —'}</option>
@@ -356,7 +361,7 @@ export function TraderDNAClient({ profiles: initialProfiles }: Props) {
         {/* Table */}
         <Card variant="light">
           <CardContent className="p-0 overflow-x-auto">
-            <table className="w-full min-w-[900px]">
+            <table className="w-full min-w-0">
               <thead className="border-b bg-gray-50/60">
                 <tr>
                   <th className={thCls} onClick={() => handleSort('email')}>

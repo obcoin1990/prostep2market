@@ -3,8 +3,6 @@
 import { usePathname } from 'next/navigation'
 import { Navbar } from '@/components/landing/Navbar'
 
-// Routes where the landing Navbar should NOT appear
-// (they have their own app header via DashboardLayoutClient)
 const DASHBOARD_PREFIXES = [
   '/dashboard',
   '/journal',
@@ -14,6 +12,11 @@ const DASHBOARD_PREFIXES = [
   '/analysis',
   '/profile',
   '/admin',
+  '/user',
+  '/analytics',
+  '/team',
+  '/risk-guardian',
+  '/connections',
 ]
 
 export function ConditionalNavbar() {

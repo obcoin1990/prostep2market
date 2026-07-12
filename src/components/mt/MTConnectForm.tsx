@@ -97,9 +97,9 @@ export function MTConnectForm({ onConnected }: MTConnectFormProps) {
             <label className="block text-sm font-medium text-gray-700 mb-1.5">Platform</label>
             <div className="flex gap-2">
               {(['mt4', 'mt5'] as MTPlatform[]).map((p) => (
-                <button
-                  key={p}
+<button
                   type="button"
+                  key={p}
                   onClick={() => setPlatform(p)}
                   className={`flex-1 py-2 rounded-lg text-sm font-semibold border transition-colors ${
                     platform === p

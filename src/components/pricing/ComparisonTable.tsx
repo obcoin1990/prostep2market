@@ -1,6 +1,6 @@
 "use client"
 
-import { Check, X, Minus } from "lucide-react"
+import { Check, X } from "lucide-react"
 
 interface FeatureRow {
   feature: string
@@ -20,47 +20,47 @@ export function ComparisonTable({ features }: ComparisonTableProps) {
       case "full":
         return (
           <div className="flex justify-center">
-            <Check className="w-5 h-5 text-[#2E7D32]" />
+            <Check className="w-5 h-5 text-[#0ecb81]" />
           </div>
         )
       case "no":
         return (
           <div className="flex justify-center">
-            <X className="w-5 h-5 text-gray-300" />
+            <X className="w-5 h-5 text-[#6b7280]" />
           </div>
         )
       case "limited":
         return (
           <div className="flex justify-center">
-            <span className="text-xs text-gray-500 font-medium">Limited</span>
+            <span className="text-xs text-[#848e9c] font-medium">Limited</span>
           </div>
         )
       case "preview":
         return (
           <div className="flex justify-center">
-            <span className="text-xs text-gray-500 font-medium">Preview</span>
+            <span className="text-xs text-[#848e9c] font-medium">Preview</span>
           </div>
         )
       default:
-        return <span className="text-sm text-gray-700">{value}</span>
+        return <span className="text-sm text-[#c9d1d9]">{value}</span>
     }
   }
 
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto rounded-[12px] border border-[#2b3139]">
       <table className="w-full">
         <thead>
-          <tr className="border-b border-gray-200">
-            <th className="text-left py-4 px-4 font-semibold text-[#0B0B0B] w-1/4">
+          <tr className="border-b border-[#2b3139]">
+            <th className="text-left py-4 px-4 font-semibold text-[#848e9c] w-1/4 text-xs uppercase tracking-wider">
               Feature
             </th>
-            <th className="text-center py-4 px-4 font-semibold text-[#0B0B0B]">
+            <th className="text-center py-4 px-4 font-semibold text-white text-xs uppercase tracking-wider">
               Free
             </th>
-            <th className="text-center py-4 px-4 font-semibold text-[#E53935]">
+            <th className="text-center py-4 px-4 font-semibold text-[#fcd535] text-xs uppercase tracking-wider">
               Pro
             </th>
-            <th className="text-center py-4 px-4 font-semibold text-[#0B0B0B]">
+            <th className="text-center py-4 px-4 font-semibold text-white text-xs uppercase tracking-wider">
               Enterprise
             </th>
           </tr>
@@ -69,13 +69,13 @@ export function ComparisonTable({ features }: ComparisonTableProps) {
           {features.map((row, index) => (
             <tr
               key={index}
-              className={`border-b border-gray-100 ${
-                index % 2 === 0 ? "bg-gray-50/50" : "bg-white"
+              className={`border-b border-[#2b3139] ${
+                index % 2 === 0 ? "bg-[rgba(255,255,255,0.015)]" : "bg-transparent"
               }`}
             >
-              <td className="py-3 px-4 text-sm text-gray-700">{row.feature}</td>
+              <td className="py-3 px-4 text-sm text-[#c9d1d9]">{row.feature}</td>
               <td className="py-3 px-4">{renderValue(row.free)}</td>
-              <td className="py-3 px-4 bg-red-50/30">{renderValue(row.pro)}</td>
+              <td className="py-3 px-4 bg-[rgba(252,213,53,0.04)]">{renderValue(row.pro)}</td>
               <td className="py-3 px-4">{renderValue(row.enterprise)}</td>
             </tr>
           ))}

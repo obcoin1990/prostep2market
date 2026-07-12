@@ -1,7 +1,8 @@
 // Education Path Detail Page
 import { getLearningPath, getAllPathIds } from '@/lib/education/paths';
 import { getCoursesByPath } from '@/lib/education/courses';
-import { CourseCard } from '@/components/education/CourseCard';
+import { CourseCard } from '@/components/course/CourseCard';
+import type { CourseCard as CourseCardType } from '@/types';
 import { notFound, redirect } from 'next/navigation';
 import { ArrowLeft, BookOpen } from 'lucide-react';
 import Link from 'next/link';
@@ -120,13 +121,26 @@ export default async function PathPage({ params }: PathPageProps) {
           </div>
         ) : (
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2">
-            {courses.map((course) => (
-              <CourseCard 
-                key={course.id} 
-                course={course}
-                isEnrolled={enrolledCourseIds.has(course.id)}
-              />
-            ))}
+            {courses.map((course) => {
+              const mapped: CourseCardType = {
+                id:          course.id,
+                title:       course.title,
+                description: course.description,
+                thumbnailUrl: null,
+                level:       'BEGINNER',
+                category:    course.type,
+                tags:        [],
+                durationMins: course.durationMinutes,
+                author:      { id: '', name: null, avatarUrl: null },
+                _count:      { enrollments: 0, modules: course.lessons?.length ?? 0 },
+              };
+              return (
+                <CourseCard
+                  key={course.id}
+                  course={mapped}
+                />
+              );
+            })}
           </div>
         )}
       </div>

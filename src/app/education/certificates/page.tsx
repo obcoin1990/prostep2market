@@ -36,7 +36,7 @@ export default async function CertificatesPage() {
       {/* Certificates Grid */}
       <section className="container mx-auto px-4 py-8">
         {certificates.length === 0 ? (
-          <div className="rounded-lg border bg-card p-12 text-center">
+          <div className="rounded-lg border bg-card p-6 md:p-12 text-center">
             <Award className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
             <h2 className="text-xl font-semibold mb-2">No certificates yet</h2>
             <p className="text-muted-foreground mb-6">

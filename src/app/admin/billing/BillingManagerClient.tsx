@@ -253,13 +253,14 @@ export function BillingManagerClient({ initialSubscriptions, initialTotal, initi
           <div className="mt-4 space-y-4">
             {/* Filters */}
             <div className="flex flex-wrap gap-3 items-end">
-              <div className="relative flex-1 min-w-[200px]">
+              <div className="relative flex-1 sm:min-w-[200px]">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
                   type="text"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && applyFilters()}
+                  aria-label="Search by email"
                   placeholder="Search by email..."
                   className="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#E53935]"
                 />
@@ -267,6 +268,7 @@ export function BillingManagerClient({ initialSubscriptions, initialTotal, initi
               <select
                 value={planFilter}
                 onChange={(e) => setPlanFilter(e.target.value)}
+                aria-label="Filter by plan"
                 className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#E53935]"
               >
                 <option value="all">All Plans</option>
@@ -277,6 +279,7 @@ export function BillingManagerClient({ initialSubscriptions, initialTotal, initi
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
+                aria-label="Filter by status"
                 className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#E53935]"
               >
                 <option value="all">All Statuses</option>
@@ -372,7 +375,7 @@ export function BillingManagerClient({ initialSubscriptions, initialTotal, initi
                         subscriptions.map((sub) => (
                           <tr key={sub.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
                             <td className="px-4 py-3 text-gray-700 text-xs max-w-[180px] truncate">
-                              {sub.user_email ?? sub.user_id}
+                              {sub.user_email ?? <code className="text-xs font-mono text-gray-500" title={sub.user_id}>{sub.user_id.slice(0, 8)}…</code>}
                             </td>
                             <td className="px-4 py-3">
                               {sub.plan ? (

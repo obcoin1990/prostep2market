@@ -8,7 +8,7 @@ import { createClient } from '@/lib/supabase/client'
 import type { User } from '@supabase/supabase-js'
 import {
   LayoutDashboard, BookOpen, BarChart2, Users,
-  Settings, LogOut, Sparkles, Award, Bell, User as UserIcon,
+  Settings, LogOut, Sparkles, Award, Bell, User as UserIcon, X,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -53,7 +53,12 @@ function getInitials(name?: string | null, email?: string | null): string {
   return '?'
 }
 
-export function Sidebar() {
+interface SidebarProps {
+  isOpen?: boolean
+  onClose?: () => void
+}
+
+export function Sidebar({ isOpen, onClose }: SidebarProps) {
   const pathname = usePathname()
   const router   = useRouter()
   const [user, setUser]   = useState<User | null>(null)
@@ -63,18 +68,15 @@ export function Sidebar() {
   useEffect(() => {
     const supabase = createClient()
 
-    // Load current user from Supabase session
     supabase.auth.getUser().then(({ data }) => {
       if (!data.user) return
       setUser(data.user)
-      // Role is stored in user_metadata (set at registration via admin API)
       const metaRole = data.user.user_metadata?.role as RoleKey | undefined
       if (metaRole && metaRole in NAV_ITEMS) {
         setRole(metaRole)
       }
     })
 
-    // Keep user state in sync with auth changes (e.g. sign-out in another tab)
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!session?.user) {
         setUser(null)
@@ -104,22 +106,32 @@ export function Sidebar() {
     router.push('/login')
   }
 
-  return (
-    <aside className="flex h-screen w-60 flex-col border-r border-gray-200 bg-white">
+  const sidebarContent = (
+    <div className="flex h-full w-60 flex-col border-r border-gray-200 bg-white">
       {/* Logo */}
-      <div className="flex h-16 items-center px-5 border-b border-gray-100">
-        <Sparkles className="h-5 w-5 text-brand-500 mr-2" />
-        <span className="text-lg font-bold text-gray-900">ProStep</span>
+      <div className="flex h-16 items-center justify-between px-5 border-b border-gray-100">
+        <div className="flex items-center gap-2">
+          <Sparkles className="h-5 w-5 text-brand-500" />
+          <span className="text-lg font-bold text-gray-900">ProStep</span>
+        </div>
+        {onClose && (
+          <button onClick={onClose} className="lg:hidden p-1 rounded-md hover:bg-gray-100 text-gray-400">
+            <X className="h-5 w-5" />
+          </button>
+        )}
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
+      <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-1" aria-label="Main navigation">
         {items.map((item) => {
           const active = pathname === item.href || pathname.startsWith(item.href + '/')
+          const Icon = item.icon
           return (
             <Link
               key={item.href}
               href={item.href}
+              onClick={onClose}
+              aria-current={active ? 'page' : undefined}
               className={cn(
                 'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
                 active
@@ -127,7 +139,7 @@ export function Sidebar() {
                   : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
               )}
             >
-              <item.icon className="h-4 w-4 shrink-0" />
+              <Icon className="h-4 w-4 shrink-0" />
               {item.label}
             </Link>
           )
@@ -138,17 +150,16 @@ export function Sidebar() {
       <div className="border-t border-gray-100 p-3 space-y-1">
         <Link
           href="/dashboard/notifications"
+          onClick={onClose}
           className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-gray-600 hover:bg-gray-50"
         >
           <Bell className="h-4 w-4" />
           Notifications
         </Link>
 
-        {/* User row */}
         {user && (
           <div className="flex items-center gap-2 rounded-lg px-3 py-2">
-            {/* Avatar */}
-            <div className="w-7 h-7 rounded-full overflow-hidden flex-shrink-0 bg-red-500 flex items-center justify-center">
+            <div className="w-7 h-7 rounded-full overflow-hidden flex-shrink-0 bg-red-500 flex items-center justify-center" aria-hidden="true">
               {showPhoto ? (
                 <Image
                   src={userImage!}
@@ -164,8 +175,6 @@ export function Sidebar() {
                 <UserIcon className="w-4 h-4 text-white" />
               )}
             </div>
-
-            {/* Name / email */}
             <div className="flex-1 min-w-0">
               <p className="text-xs font-semibold text-gray-800 truncate">
                 {userName ?? userEmail ?? 'Account'}
@@ -178,6 +187,7 @@ export function Sidebar() {
         )}
 
         <button
+          type="button"
           onClick={handleSignOut}
           className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-gray-600 hover:bg-red-50 hover:text-red-600"
         >
@@ -185,6 +195,22 @@ export function Sidebar() {
           Sign out
         </button>
       </div>
-    </aside>
+    </div>
+  )
+
+  return (
+    <>
+      <aside className="hidden lg:flex lg:w-60 lg:flex-col lg:shrink-0">
+        {sidebarContent}
+      </aside>
+      {isOpen && (
+        <div className="fixed inset-0 z-[400] lg:hidden">
+          <div className="absolute inset-0 bg-black/60" onClick={onClose} role="presentation" />
+          <aside className="absolute left-0 top-0 bottom-0 w-60 animate-in slide-in-from-left">
+            {sidebarContent}
+          </aside>
+        </div>
+      )}
+    </>
   )
 }

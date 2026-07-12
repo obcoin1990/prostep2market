@@ -25,6 +25,17 @@ import {
   Menu,
   X,
   Shield,
+  Key,
+  FileText,
+  Settings,
+  ToggleLeft,
+  BarChart3,
+  Mail,
+  Clock,
+  ClipboardList,
+  Globe,
+  Lock,
+  Server,
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
@@ -48,42 +59,48 @@ const NAV_SECTIONS: NavSection[] = [
     ],
   },
   {
-    title: 'User Management',
+    title: 'Core',
     items: [
       { label: 'Users', href: '/admin/users', icon: Users },
+      { label: 'Roles', href: '/admin/roles', icon: Shield },
+      { label: 'Permissions', href: '/admin/permissions', icon: Key },
       { label: 'Trader DNA Editor', href: '/admin/trader-dna', icon: Dna },
-    ],
-  },
-  {
-    title: 'Platform Settings',
-    items: [
-      { label: 'AI Engine', href: '/admin/ai-engine', icon: Brain },
-      { label: 'Risk Guardian Rules', href: '/admin/risk-guardian', icon: ShieldAlert },
-      { label: 'Education Manager', href: '/admin/education', icon: GraduationCap },
-      { label: 'Strategy Lab', href: '/admin/strategy-lab', icon: FlaskConical },
-    ],
-  },
-  {
-    title: 'Content & Market',
-    items: [
-      { label: 'Market Intelligence', href: '/admin/market-intel', icon: LineChart },
-      { label: 'SEO Manager', href: '/admin/seo', icon: Search },
-      { label: 'Notifications', href: '/admin/notifications', icon: Bell },
-    ],
-  },
-  {
-    title: 'Business',
-    items: [
-      { label: 'Branding & Theme', href: '/admin/branding', icon: Palette },
-      { label: 'Payment Gateways', href: '/admin/payments', icon: CreditCard },
-      { label: 'Billing & Subscriptions', href: '/admin/billing', icon: Receipt },
+      { label: 'Billing & Subs', href: '/admin/billing', icon: Receipt },
       { label: 'Enterprise', href: '/admin/enterprise', icon: Building2 },
     ],
   },
   {
-    title: 'System',
+    title: 'Security & Compliance',
     items: [
+      { label: 'Security Center', href: '/admin/security', icon: Lock },
+      { label: 'Audit Logs', href: '/admin/audit-logs', icon: ClipboardList },
+      { label: 'Compliance', href: '/admin/compliance', icon: Globe },
+      { label: 'Risk Guardian Rules', href: '/admin/risk-guardian', icon: ShieldAlert },
+    ],
+  },
+  {
+    title: 'Operations',
+    items: [
+      { label: 'System Health', href: '/admin/health', icon: Server },
       { label: 'Monitoring', href: '/admin/monitoring', icon: Activity },
+      { label: 'Feature Flags', href: '/admin/feature-flags', icon: ToggleLeft },
+      { label: 'API Keys', href: '/admin/api-keys', icon: Key },
+      { label: 'Platform Analytics', href: '/admin/analytics', icon: BarChart3 },
+    ],
+  },
+  {
+    title: 'Content & Config',
+    items: [
+      { label: 'Email Templates', href: '/admin/email', icon: Mail },
+      { label: 'Content CMS', href: '/admin/content', icon: FileText },
+      { label: 'Market Intelligence', href: '/admin/market-intel', icon: LineChart },
+      { label: 'SEO Manager', href: '/admin/seo', icon: Search },
+      { label: 'Notifications', href: '/admin/notifications', icon: Bell },
+      { label: 'Education Manager', href: '/admin/education', icon: GraduationCap },
+      { label: 'Strategy Lab', href: '/admin/strategy-lab', icon: FlaskConical },
+      { label: 'Branding & Theme', href: '/admin/branding', icon: Palette },
+      { label: 'Payment Gateways', href: '/admin/payments', icon: CreditCard },
+      { label: 'AI Engine', href: '/admin/ai-engine', icon: Brain },
     ],
   },
 ]
@@ -126,25 +143,28 @@ export function AdminSidebar({ userEmail, isOpen, onClose }: AdminSidebarProps) 
         </div>
         <div className="min-w-0">
           <p className="font-bold text-sm text-white leading-tight truncate">Super Admin</p>
-          <p className="text-[10px] text-white/40 truncate">ProStep2Market</p>
+          <p className="text-[10px] text-white/60 truncate">ProStep2Market</p>
         </div>
         {/* Mobile close button */}
         {onClose && (
-          <button onClick={onClose} className="ml-auto text-white/40 hover:text-white md:hidden">
+          <button type="button" onClick={onClose} className="ml-auto text-white/60 hover:text-white md:hidden">
             <X className="w-4 h-4" />
           </button>
         )}
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
+      <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-1" aria-label="Admin navigation">
         {NAV_SECTIONS.map((section) => {
           const isCollapsed = collapsedSections.has(section.title)
+          const sectionId = `section-${section.title.toLowerCase().replace(/\s+/g, '-')}`
           return (
             <div key={section.title} className="mb-2">
               <button
                 onClick={() => toggleSection(section.title)}
-                className="w-full flex items-center justify-between px-3 py-1.5 text-[10px] font-semibold text-white/40 uppercase tracking-wider hover:text-white/60 transition-colors"
+                aria-expanded={!isCollapsed}
+                aria-controls={sectionId}
+                className="w-full flex items-center justify-between px-3 py-1.5 text-[10px] font-semibold text-white/60 uppercase tracking-wider hover:text-white/60 transition-colors"
               >
                 {section.title}
                 {isCollapsed ? (
@@ -155,7 +175,7 @@ export function AdminSidebar({ userEmail, isOpen, onClose }: AdminSidebarProps) 
               </button>
 
               {!isCollapsed && (
-                <div className="space-y-0.5 mt-1">
+                <div id={sectionId} className="space-y-0.5 mt-1">
                   {section.items.map((item) => {
                     const Icon = item.icon
                     const active = isActive(item.href)
@@ -164,6 +184,7 @@ export function AdminSidebar({ userEmail, isOpen, onClose }: AdminSidebarProps) 
                         key={item.href}
                         href={item.href}
                         onClick={onClose}
+                        aria-current={active ? 'page' : undefined}
                         className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
                           active
                             ? 'bg-[#E53935]/20 text-[#E53935] border border-[#E53935]/30'
@@ -190,6 +211,7 @@ export function AdminSidebar({ userEmail, isOpen, onClose }: AdminSidebarProps) 
         </div>
 
         <button
+          type="button"
           onClick={handleSignOut}
           className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/50 hover:text-red-400 hover:bg-red-900/20 transition-all"
         >
@@ -213,8 +235,9 @@ export function AdminSidebar({ userEmail, isOpen, onClose }: AdminSidebarProps) 
           <div
             className="fixed inset-0 bg-black/50 z-40 md:hidden"
             onClick={onClose}
+            role="presentation"
           />
-          <aside className="fixed left-0 top-0 bottom-0 w-64 z-50 md:hidden">
+          <aside className="fixed left-0 top-0 bottom-0 w-64 z-[400] md:hidden">
             {sidebarContent}
           </aside>
         </>

@@ -1,9 +1,13 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { Lesson } from '@/types/education';
-import { MarkdownContent } from './MarkdownContent';
-import { VideoPlayer } from './VideoPlayer';
-import { CheckCircle } from 'lucide-react';
+import { Play, CheckCircle } from 'lucide-react';
+
+const MarkdownContent = dynamic(
+  () => import('./MarkdownContent').then(mod => ({ default: mod.MarkdownContent })),
+  { ssr: false }
+);
 
 interface LessonPlayerProps {
   lesson: Lesson;
@@ -34,10 +38,16 @@ export function LessonPlayer({ lesson, isCompleted, onMarkComplete }: LessonPlay
       {/* Lesson Content */}
       <div className="rounded-lg border bg-card p-6">
         {lesson.type === 'video' ? (
-          <VideoPlayer 
-            title={lesson.title}
-            duration={`${lesson.durationMinutes} min`}
-          />
+          <div className="relative aspect-video bg-muted rounded-lg flex items-center justify-center">
+            <div className="text-center p-8">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-muted-foreground/10 mb-4">
+                <Play className="h-8 w-8 text-muted-foreground" />
+              </div>
+              <h3 className="font-semibold mb-2">{lesson.title}</h3>
+              <p className="text-sm text-muted-foreground">Duration: {lesson.durationMinutes} min</p>
+              <p className="text-sm text-muted-foreground mt-2">Video content will be available soon</p>
+            </div>
+          </div>
         ) : lesson.type === 'reading' || lesson.type === 'interactive' ? (
           <MarkdownContent content={lesson.content} />
         ) : null}
@@ -46,7 +56,7 @@ export function LessonPlayer({ lesson, isCompleted, onMarkComplete }: LessonPlay
       {/* Mark Complete Button */}
       {!isCompleted && (
         <div className="flex justify-end">
-          <button
+          <button type="button" 
             onClick={onMarkComplete}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
           >

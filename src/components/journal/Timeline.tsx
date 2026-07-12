@@ -248,7 +248,7 @@ export function Timeline({ initialTrades = [], initialPage = 1, initialTotal = 0
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex justify-center gap-2 mt-6">
-          <button
+<button type="button" 
             onClick={() => handlePageChange(page - 1)}
             disabled={page <= 1 || loading}
             className="px-3 py-1 border border-gray-300 rounded disabled:opacity-50 disabled:cursor-not-allowed"
@@ -260,7 +260,7 @@ export function Timeline({ initialTrades = [], initialPage = 1, initialTotal = 0
             Page {page} of {totalPages}
           </span>
           
-          <button
+<button type="button" 
             onClick={() => handlePageChange(page + 1)}
             disabled={page >= totalPages || loading}
             className="px-3 py-1 border border-gray-300 rounded disabled:opacity-50 disabled:cursor-not-allowed"

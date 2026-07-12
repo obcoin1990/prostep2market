@@ -37,10 +37,10 @@ export function EmptyState({
         className="w-16 h-16 rounded-full flex items-center justify-center mb-4"
         style={{ backgroundColor: '#2b3139' }}
       >
-        <Icon className="w-8 h-8" style={{ color: '#707a8a' }} />
+        <Icon className="w-8 h-8" style={{ color: '#9ea3ad' }} />
       </div>
       <h3 className="text-lg font-semibold mb-2" style={{ color: '#eaecef' }}>{title}</h3>
-      <p className="text-sm text-center max-w-sm mb-6" style={{ color: '#707a8a' }}>{description}</p>
+      <p className="text-sm text-center max-w-sm mb-6" style={{ color: '#9ea3ad' }}>{description}</p>
       <div className="flex gap-3">
         {action && (
           <Link href={action.href}>
@@ -89,7 +89,7 @@ export function NoAlertsEmptyState() {
         </svg>
       </div>
       <p className="text-sm font-medium" style={{ color: '#eaecef' }}>All Clear</p>
-      <p className="text-xs mt-1" style={{ color: '#707a8a' }}>No active risk alerts detected</p>
+      <p className="text-xs mt-1" style={{ color: '#9ea3ad' }}>No active risk alerts detected</p>
     </div>
   )
 }
@@ -120,7 +120,7 @@ export function NoInsightsEmptyState() {
         </svg>
       </div>
       <p className="text-sm font-medium" style={{ color: '#eaecef' }}>No Insights Yet</p>
-      <p className="text-xs mt-1" style={{ color: '#707a8a' }}>Run an analysis after logging more trades</p>
+      <p className="text-xs mt-1" style={{ color: '#9ea3ad' }}>Run an analysis after logging more trades</p>
     </div>
   )
 }
@@ -137,7 +137,7 @@ export function NoLeaderboardRankEmptyState() {
         </svg>
       </div>
       <p className="text-sm font-medium" style={{ color: '#eaecef' }}>Leaderboard Rank</p>
-      <p className="text-xs mt-1" style={{ color: '#707a8a' }}>Complete your DNA assessment to see your rank</p>
+      <p className="text-xs mt-1" style={{ color: '#9ea3ad' }}>Complete your DNA assessment to see your rank</p>
     </div>
   )
 }

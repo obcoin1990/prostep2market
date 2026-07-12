@@ -53,7 +53,7 @@ export function CertificateList({ certs }: Props) {
   if (selected) {
     return (
       <div className="space-y-4">
-        <button
+<button type="button" 
           onClick={() => setSelected(null)}
           className="text-sm text-brand-500 hover:underline"
         >
@@ -76,7 +76,7 @@ export function CertificateList({ certs }: Props) {
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {certs.map((cert) => (
-        <button
+<button type="button" 
           key={cert.id}
           onClick={() => setSelected(cert)}
           className="rounded-xl border border-gray-200 bg-white p-5 text-left shadow-sm hover:border-brand-300 hover:shadow-md transition group"

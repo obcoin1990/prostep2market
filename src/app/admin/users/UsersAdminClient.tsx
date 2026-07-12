@@ -94,7 +94,7 @@ function EditModal({ user, onClose, onSaved }: EditModalProps) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+    <div className="fixed inset-0 z-[500] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl border border-gray-200">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
@@ -111,7 +111,7 @@ function EditModal({ user, onClose, onSaved }: EditModalProps) {
         <div className="px-6 py-5 space-y-4">
           <div>
             <p className="text-xs text-gray-400 mb-0.5">User ID</p>
-            <code className="text-xs font-mono text-gray-500 bg-gray-50 px-2 py-1 rounded">{user.id}</code>
+            <code className="text-xs font-mono text-gray-500 bg-gray-50 px-2 py-1 rounded" title={user.id}>{user.id.slice(0, 8)}…</code>
           </div>
           {user.email && (
             <div>
@@ -127,6 +127,7 @@ function EditModal({ user, onClose, onSaved }: EditModalProps) {
               <select
                 value={profileType}
                 onChange={(e) => setProfileType(e.target.value)}
+                aria-label="Profile Type"
                 className="w-full appearance-none px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#E53935]/40 focus:border-[#E53935] pr-8"
               >
                 {PROFILE_TYPES.map((t) => (
@@ -144,6 +145,7 @@ function EditModal({ user, onClose, onSaved }: EditModalProps) {
               <select
                 value={adminRole}
                 onChange={(e) => setAdminRole(e.target.value)}
+                aria-label="Admin Role"
                 className="w-full appearance-none px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#E53935]/40 focus:border-[#E53935] pr-8"
               >
                 <option value="">— None —</option>
@@ -213,7 +215,7 @@ function DeleteDialog({ user, onClose, onDeleted }: DeleteDialogProps) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+    <div className="fixed inset-0 z-[500] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
       <div className="w-full max-w-sm bg-white rounded-2xl shadow-2xl border border-gray-200">
         <div className="px-6 py-5">
           <div className="flex items-center gap-3 mb-3">
@@ -429,7 +431,8 @@ export function UsersAdminClient({
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by email, ID, or type…"
-            className="w-full pl-9 pr-8 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E53935]/30 focus:border-[#E53935]"
+            aria-label="Search users"
+            className="w-full pl-9 pr-8 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E53935]/60 focus:border-[#E53935]"
           />
           {search && (
             <button
@@ -465,10 +468,10 @@ export function UsersAdminClient({
                     <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">
                       Admin Role
                     </th>
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide min-w-[120px]">
+                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide ">
                       Risk Score
                     </th>
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide min-w-[120px]">
+                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide ">
                       Stability
                     </th>
                     <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">
@@ -506,12 +509,12 @@ export function UsersAdminClient({
                                 <p className="font-medium text-[#0A0F1C] text-xs truncate max-w-[180px]">
                                   {user.email}
                                 </p>
-                                <code className="text-[10px] font-mono text-gray-400">
+                                <code className="text-[10px] font-mono text-gray-400" title={user.id}>
                                   {user.id.slice(0, 8)}…
                                 </code>
                               </div>
                             ) : (
-                              <code className="text-[10px] font-mono text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded">
+                              <code className="text-[10px] font-mono text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded" title={user.id}>
                                 {user.id.slice(0, 12)}…
                               </code>
                             )}

@@ -99,11 +99,12 @@ export function CreateUserForm({ onSuccess }: CreateUserFormProps) {
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Full Name */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="full-name" className="block text-sm font-medium text-gray-700 mb-1">
               Full Name (Optional)
             </label>
             <input
               type="text"
+              id="full-name"
               name="full_name"
               value={formData.full_name}
               onChange={handleChange}
@@ -114,11 +115,12 @@ export function CreateUserForm({ onSuccess }: CreateUserFormProps) {
 
           {/* Email */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
               Email Address *
             </label>
             <input
               type="email"
+              id="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
@@ -130,11 +132,12 @@ export function CreateUserForm({ onSuccess }: CreateUserFormProps) {
 
           {/* Password */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
               Password * (min 8 characters)
             </label>
             <input
               type="password"
+              id="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
@@ -149,10 +152,11 @@ export function CreateUserForm({ onSuccess }: CreateUserFormProps) {
 
           {/* Profile Type */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-1">
               Trader Profile Type *
             </label>
             <select
+              id="role"
               name="profile_type"
               value={formData.profile_type}
               onChange={handleChange}

@@ -1,4 +1,15 @@
+import type { Metadata } from "next"
 import { FAQAccordion } from "@/components/faq/FAQAccordion"
+import { FAQJsonLd } from "@/components/seo/JsonLd"
+
+export const metadata: Metadata = {
+  title: "Frequently Asked Questions",
+  description: "Find answers to common questions about ProStep2Market — trading analytics, AI insights, data security, MT5 integration, and pricing.",
+  openGraph: {
+    title: "FAQ — ProStep2Market",
+    description: "Find answers to common questions about ProStep2Market.",
+  },
+}
 
 const faqItems = [
   {
@@ -41,6 +52,7 @@ const faqItems = [
 export default function FAQPage() {
   return (
     <div className="min-h-screen bg-[#F5F7FA]">
+      <FAQJsonLd items={faqItems} />
       <div className="max-w-3xl mx-auto px-4 py-16">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-[#0B0B0B] mb-4">

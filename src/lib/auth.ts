@@ -4,7 +4,7 @@
  * NextAuth has been removed. Supabase Auth is the single identity provider.
  * Use getPageSession() in RSC pages instead of getServerSession(authOptions).
  *
- * TODO (WR-07 resolved): Roles are now read from Prisma on every request, so
+ * NOTE (WR-07 resolved): Roles are now read from Prisma on every request, so
  * stale JWT role issues from the old NextAuth JWT strategy no longer apply.
  */
 

@@ -73,7 +73,7 @@ export function OnboardingBanner({
         <Icon className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: config.accent }} />
         <div className="min-w-0">
           <p className="text-sm font-semibold mb-1" style={{ color: '#eaecef' }}>{config.title}</p>
-          <p className="text-xs mb-3" style={{ color: '#707a8a' }}>{config.description}</p>
+          <p className="text-xs mb-3" style={{ color: '#9ea3ad' }}>{config.description}</p>
           <Link href={config.action.href}>
             <Button
               size="sm"
@@ -90,7 +90,7 @@ export function OnboardingBanner({
         <button
           onClick={onDismiss}
           className="p-1 flex-shrink-0 rounded transition-colors"
-          style={{ color: '#707a8a' }}
+          style={{ color: '#9ea3ad' }}
           aria-label="Dismiss"
         >
           <X className="w-4 h-4" />

@@ -98,7 +98,7 @@ export function CertificatePreview({
 
       {/* Actions */}
       <div className="flex gap-3 mt-4 justify-center">
-        <button
+<button type="button" 
           onClick={onDownload}
           disabled={downloading}
           className="flex items-center gap-2 rounded-lg bg-brand-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-600 disabled:opacity-60"

@@ -28,13 +28,14 @@ export function EntryRuleForm({ index, control, onRemove }: EntryRuleFormProps) 
         <div className="flex-1 grid gap-4 sm:grid-cols-3">
           {/* Condition */}
           <div>
-            <label className="block text-sm font-medium mb-1">Condition</label>
+            <label htmlFor={`entry-condition-${index}`} className="block text-sm font-medium mb-1">Condition</label>
             <Controller
               name={`entryRules.${index}.condition`}
               control={control}
               render={({ field }) => (
                 <select
                   {...field}
+                  id={`entry-condition-${index}`}
                   className="w-full px-3 py-2 rounded-lg border bg-background"
                 >
                   {conditionOptions.map((opt) => (
@@ -49,13 +50,14 @@ export function EntryRuleForm({ index, control, onRemove }: EntryRuleFormProps) 
 
           {/* Value */}
           <div>
-            <label className="block text-sm font-medium mb-1">Value</label>
+            <label htmlFor={`entry-value-${index}`} className="block text-sm font-medium mb-1">Value</label>
             <Controller
               name={`entryRules.${index}.value`}
               control={control}
               render={({ field }) => (
                 <input
                   {...field}
+                  id={`entry-value-${index}`}
                   type="text"
                   placeholder="e.g., 1.1000, 50, 14"
                   className="w-full px-3 py-2 rounded-lg border bg-background"
@@ -66,7 +68,7 @@ export function EntryRuleForm({ index, control, onRemove }: EntryRuleFormProps) 
 
           {/* Timeframes */}
           <div>
-            <label className="block text-sm font-medium mb-1">Timeframes</label>
+            <label htmlFor={`entry-timeframes-${index}`} className="block text-sm font-medium mb-1">Timeframes</label>
             <Controller
               name={`entryRules.${index}.timeframes`}
               control={control}
@@ -95,9 +97,10 @@ export function EntryRuleForm({ index, control, onRemove }: EntryRuleFormProps) 
         </div>
 
         {/* Remove Button */}
-        <button
+<button
           type="button"
           onClick={onRemove}
+          aria-label="Remove entry rule"
           className="p-2 text-muted-foreground hover:text-destructive"
         >
           <Trash2 className="h-4 w-4" />

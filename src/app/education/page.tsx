@@ -4,8 +4,12 @@ import { LearningPathCard } from '@/components/education/LearningPathCard';
 import { BookOpen, Award, TrendingUp } from 'lucide-react';
 
 export const metadata = {
-  title: 'Education Hub - Prostep2market',
+  title: 'Education Hub — ProStep2Market',
   description: 'Structured learning paths for traders. Master trading psychology, technical analysis, and strategy development.',
+  openGraph: {
+    title: 'Education Hub — ProStep2Market',
+    description: 'Structured learning paths for traders. Master trading psychology, technical analysis, and strategy development.',
+  },
 };
 
 export default async function EducationPage() {
@@ -53,7 +57,7 @@ export default async function EducationPage() {
             <LearningPathCard 
               key={path.id} 
               path={path}
-              progress={0} // TODO: Fetch user progress per path
+              progress={0}
             />
           ))}
         </div>

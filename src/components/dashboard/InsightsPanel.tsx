@@ -18,7 +18,7 @@ const typeIcons: Record<AIInsight['type'], string> = {
 const actionabilityStyles = {
   quick_fix:           { badge: 'rgba(14,203,129,0.15)',  badgeText: '#0ecb81',  label: 'Quick Fix' },
   requires_attention:  { badge: 'rgba(252,213,53,0.15)', badgeText: '#fcd535',  label: 'Needs Attention' },
-  strategic:           { badge: 'rgba(43,49,57,1)',       badgeText: '#707a8a',  label: 'Strategic' },
+  strategic:           { badge: 'rgba(43,49,57,1)',       badgeText: '#9ea3ad',  label: 'Strategic' },
 };
 
 export function InsightsPanel({ insights, onActionClick }: InsightsPanelProps) {
@@ -44,8 +44,8 @@ export function InsightsPanel({ insights, onActionClick }: InsightsPanelProps) {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
               </svg>
             </div>
-            <p className="text-sm" style={{ color: '#707a8a' }}>No insights available yet.</p>
-            <p className="text-xs mt-1" style={{ color: '#707a8a' }}>Start logging trades to receive personalized recommendations.</p>
+            <p className="text-sm" style={{ color: '#9ea3ad' }}>No insights available yet.</p>
+            <p className="text-xs mt-1" style={{ color: '#9ea3ad' }}>Start logging trades to receive personalized recommendations.</p>
           </div>
         ) : (
           sortedInsights.map((insight) => {
@@ -56,7 +56,7 @@ export function InsightsPanel({ insights, onActionClick }: InsightsPanelProps) {
                 key={insight.id}
                 className="rounded-[8px] p-4 transition-colors"
                 style={{ border: '1px solid #2b3139', backgroundColor: '#1e2329' }}
-                onMouseEnter={e => (e.currentTarget.style.borderColor = '#707a8a')}
+                onMouseEnter={e => (e.currentTarget.style.borderColor = '#9ea3ad')}
                 onMouseLeave={e => (e.currentTarget.style.borderColor = '#2b3139')}
               >
                 <div className="flex items-start justify-between mb-2">
@@ -73,10 +73,10 @@ export function InsightsPanel({ insights, onActionClick }: InsightsPanelProps) {
                 </div>
                 <p className="text-sm mb-3" style={{ color: '#eaecef' }}>{insight.description}</p>
                 <div className="flex items-center justify-between">
-                  <span className="text-xs" style={{ color: '#707a8a' }}>
+                  <span className="text-xs" style={{ color: '#9ea3ad' }}>
                     Confidence: {(insight.confidence * 100).toFixed(0)}%
                   </span>
-                  <button
+<button type="button" 
                     onClick={() => onActionClick?.(insight.id)}
                     className="px-3 py-1.5 text-xs font-semibold rounded-[6px] transition-colors"
                     style={{ backgroundColor: '#fcd535', color: '#181a20' }}

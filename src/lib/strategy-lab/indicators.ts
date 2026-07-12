@@ -4,7 +4,8 @@ import { Candle } from '@/types/strategy-lab';
 // Simple Moving Average
 export function calculateSMA(candles: Candle[], period: number): number[] {
   const sma: number[] = [];
-  
+  if (candles.length < period) return sma;
+
   for (let i = period - 1; i < candles.length; i++) {
     let sum = 0;
     for (let j = i - period + 1; j <= i; j++) {
@@ -12,29 +13,30 @@ export function calculateSMA(candles: Candle[], period: number): number[] {
     }
     sma.push(sum / period);
   }
-  
+
   return sma;
 }
 
 // Exponential Moving Average
 export function calculateEMA(candles: Candle[], period: number): number[] {
   const ema: number[] = [];
+  if (candles.length < period) return ema;
   const multiplier = 2 / (period + 1);
-  
+
   // First EMA is SMA
   let sum = 0;
   for (let i = 0; i < period; i++) {
     sum += candles[i].close;
   }
   ema.push(sum / period);
-  
+
   // Calculate EMA for remaining candles
   for (let i = period; i < candles.length; i++) {
     const prevEma = ema[ema.length - 1];
     const currentEma = (candles[i].close - prevEma) * multiplier + prevEma;
     ema.push(currentEma);
   }
-  
+
   return ema;
 }
 

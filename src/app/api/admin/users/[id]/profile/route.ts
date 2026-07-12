@@ -29,11 +29,27 @@ export async function PATCH(req: NextRequest, { params }: Params) {
   }
 
   const tasks: Array<PromiseLike<unknown>> = []
+  const admin = createAdminClient()
 
   // ── Prisma User fields ────────────────────────────────────────────────────
   const prismaData: Record<string, unknown> = {}
+  const oldUser = await prisma.user.findUnique({ where: { id }, select: { organizationId: true } })
+
   if ('name' in body) prismaData.name = body.name ?? null
-  if ('organizationId' in body) prismaData.organizationId = body.organizationId ?? null
+  if ('organizationId' in body) {
+    const orgId = body.organizationId
+    if (orgId !== null && orgId !== undefined) {
+      if (typeof orgId !== 'string') {
+        return NextResponse.json({ error: 'organizationId must be a string or null' }, { status: 400 })
+      }
+      // Validate the organization exists
+      const org = await prisma.organization.findUnique({ where: { id: orgId }, select: { id: true } })
+      if (!org) {
+        return NextResponse.json({ error: 'Organization not found' }, { status: 404 })
+      }
+    }
+    prismaData.organizationId = orgId ?? null
+  }
 
   if (Object.keys(prismaData).length > 0) {
     tasks.push(
@@ -47,8 +63,28 @@ export async function PATCH(req: NextRequest, { params }: Params) {
     )
   }
 
+  // ── Audit log for organization reassignment (CR-07) ───────────────────────
+  if ('organizationId' in body && oldUser) {
+    const newOrgId = (prismaData.organizationId as string | null) ?? null
+    if (oldUser.organizationId !== newOrgId) {
+      tasks.push(
+        admin.from('audit_logs').insert({
+          actor_id: ctx.user.id,
+          actor_email: ctx.user.email,
+          action: 'user.organization_changed',
+          target: id,
+          category: 'User Management',
+          metadata: {
+            user_id: id,
+            previous_organization_id: oldUser.organizationId,
+            new_organization_id: newOrgId,
+          },
+        })
+      )
+    }
+  }
+
   // ── trader_profiles fields ────────────────────────────────────────────────
-  const admin = createAdminClient()
   const profileData: Record<string, unknown> = {}
   if ('profileType' in body) profileData.profile_type = body.profileType ?? null
   if ('learningPath' in body) profileData.learning_path = body.learningPath ?? null

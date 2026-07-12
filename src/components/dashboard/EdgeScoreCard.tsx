@@ -7,16 +7,21 @@
  */
 
 import { useState, useEffect } from 'react'
+import dynamic from 'next/dynamic'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Skeleton } from '@/components/ui/skeleton'
 import { TrendingUp, TrendingDown, Minus, RefreshCw, ChevronDown, ChevronUp } from 'lucide-react'
-import { ScoreSparkline } from './ScoreSparkline'
 import { RankBadge, RankProgress } from './RankBadge'
 import { ScoreBreakdown, MiniBreakdown } from './ScoreBreakdown'
 import { generateQuickTips, getRankImprovementTip, type EdgeScoreBreakdown, type SparklineData, type Rank } from '@/lib/edge-score'
+
+const ScoreSparkline = dynamic(
+  () => import('./ScoreSparkline').then(mod => ({ default: mod.ScoreSparkline })),
+  { ssr: false }
+)
 
 interface ScoreData {
   disciplineScore: number
@@ -135,15 +140,15 @@ export function EdgeScoreCard({ userId, className }: EdgeScoreCardProps) {
 
   const trend = getTrend()
   const TrendIcon = trend === 'up' ? TrendingUp : trend === 'down' ? TrendingDown : Minus
-  const trendColor = trend === 'up' ? '#0ecb81' : trend === 'down' ? '#f6465d' : '#707a8a'
+  const trendColor = trend === 'up' ? '#0ecb81' : trend === 'down' ? '#f6465d' : '#9ea3ad'
 
   // Loading state
   if (loading) {
     return (
-      <Card className={className} data-tour="edge-score">
+      <Card className={className}>
         <CardHeader className="pb-2">
           <div className="flex justify-between items-center">
-          <CardTitle className="text-sm font-medium" style={{ color: '#707a8a' }}>Edge Score</CardTitle>
+          <CardTitle className="text-sm font-medium" style={{ color: '#9ea3ad' }}>Edge Score</CardTitle>
             <Skeleton className="h-6 w-20" />
           </div>
         </CardHeader>
@@ -164,9 +169,9 @@ export function EdgeScoreCard({ userId, className }: EdgeScoreCardProps) {
   // New user state
   if (isNewUser || !score) {
     return (
-      <Card className={className} data-tour="edge-score">
+      <Card className={className}>
         <CardHeader className="pb-2">
-          <CardTitle className="text-sm font-medium" style={{ color: '#707a8a' }}>Edge Score</CardTitle>
+          <CardTitle className="text-sm font-medium" style={{ color: '#9ea3ad' }}>Edge Score</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="text-center py-6 space-y-4">
@@ -214,7 +219,7 @@ export function EdgeScoreCard({ userId, className }: EdgeScoreCardProps) {
     <Card className={className} data-tour="edge-score">
       <CardHeader className="pb-2">
         <div className="flex justify-between items-center">
-          <CardTitle className="text-sm font-medium" style={{ color: '#707a8a' }}>Edge Score</CardTitle>
+          <CardTitle className="text-sm font-medium" style={{ color: '#9ea3ad' }}>Edge Score</CardTitle>
           <Button
             variant="ghost"
             size="sm"
@@ -222,7 +227,7 @@ export function EdgeScoreCard({ userId, className }: EdgeScoreCardProps) {
             disabled={isCalculating}
             className="h-8"
           >
-            <RefreshCw className={`w-4 h-4 ${isCalculating ? 'animate-spin' : ''}`} style={{ color: '#707a8a' }} />
+            <RefreshCw className={`w-4 h-4 ${isCalculating ? 'animate-spin' : ''}`} style={{ color: '#9ea3ad' }} />
           </Button>
         </div>
       </CardHeader>
@@ -230,7 +235,7 @@ export function EdgeScoreCard({ userId, className }: EdgeScoreCardProps) {
         <div className="flex items-end justify-between mb-4">
           <div className="flex items-baseline gap-2">
             <span className="text-4xl font-bold" style={{ color: '#ffffff', fontFamily: 'var(--font-mono)' }}>{score.compositeScore}</span>
-            <span className="text-sm" style={{ color: '#707a8a' }}>/100</span>
+            <span className="text-sm" style={{ color: '#9ea3ad' }}>/100</span>
           </div>
           <div className="flex items-center gap-1" style={{ color: trendColor }}>
             <TrendIcon className="w-4 h-4" />
@@ -247,7 +252,7 @@ export function EdgeScoreCard({ userId, className }: EdgeScoreCardProps) {
         <div className="space-y-3 mb-4">
           <div className="flex items-center justify-between">
             <RankBadge rank={score.rank} size="md" />
-            <span className="text-xs" style={{ color: '#707a8a' }}>
+            <span className="text-xs" style={{ color: '#9ea3ad' }}>
               {score.date && new Date(score.date).toLocaleDateString()}
             </span>
           </div>
@@ -255,7 +260,7 @@ export function EdgeScoreCard({ userId, className }: EdgeScoreCardProps) {
         </div>
 
         <div className="pt-3 mt-3" style={{ borderTop: '1px solid #2b3139' }}>
-          <button
+<button type="button" 
             onClick={() => setShowBreakdown(!showBreakdown)}
             className="w-full flex items-center justify-between text-sm font-medium mb-2"
             style={{ color: '#eaecef' }}
@@ -271,7 +276,7 @@ export function EdgeScoreCard({ userId, className }: EdgeScoreCardProps) {
         </div>
 
         <div className="mt-4 p-3 rounded-[8px] space-y-2" style={{ backgroundColor: '#2b3139' }}>
-          <p className="text-xs font-semibold uppercase tracking-wide" style={{ color: '#707a8a' }}>Quick Tips</p>
+          <p className="text-xs font-semibold uppercase tracking-wide" style={{ color: '#9ea3ad' }}>Quick Tips</p>
           {tips.slice(0, 2).map((tip, index) => (
             <p key={index} className="text-xs flex items-start gap-2" style={{ color: '#eaecef' }}>
               <span className="mt-0.5" style={{ color: '#0ecb81' }}>→</span>

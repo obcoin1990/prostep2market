@@ -14,7 +14,7 @@ export function FAQItem({ question, answer, defaultOpen = false }: FAQItemProps)
 
   return (
     <div className="border-b border-gray-200 last:border-b-0">
-      <button
+<button type="button" 
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center justify-between py-4 text-left transition-colors hover:text-[#E53935]"
         aria-expanded={isOpen}

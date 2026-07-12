@@ -5,7 +5,7 @@ const Skeleton = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
-      className={cn("animate-pulse rounded-md bg-gray-200", className)}
+      className={cn("animate-pulse rounded-md bg-[#2b3139]", className)}
       {...props}
     />
   )

@@ -16,7 +16,6 @@ import { DashboardGrid } from './DashboardGrid'
 import { OnboardingBanner } from './OnboardingBanner'
 import { DashboardTips } from './DashboardTips'
 import { DateRangeFilter, type DateRangeType } from './DateRangeFilter'
-import { OnboardingTour } from './OnboardingTour'
 import { LearningProgressWidget } from './LearningProgressWidget'
 import { CertificatesWidget } from './CertificatesWidget'
 import { OpenTradesWidget } from './OpenTradesWidget'
@@ -48,7 +47,6 @@ export function DashboardContent({
   const [isHydrated, setIsHydrated] = useState(false)
   const [dismissedBanner, setDismissedBanner] = useState(false)
   const [dateRange, setDateRange] = useState<DateRangeType>('30days')
-  const [isOnboardingComplete, setIsOnboardingComplete] = useState(false)
 
   // Calculate days from date range
   const getDaysFromRange = (range: DateRangeType): number => {
@@ -88,9 +86,6 @@ export function DashboardContent({
   // Hydration safety
   useEffect(() => {
     setIsHydrated(true)
-    // Check if tour has been completed
-    const tourCompleted = localStorage.getItem('dashboardTourCompleted')
-    setIsOnboardingComplete(!!tourCompleted)
   }, [])
 
   if (!isHydrated) {
@@ -117,18 +112,12 @@ export function DashboardContent({
 
   return (
     <div className="space-y-6">
-      {/* Onboarding Tour */}
-      <OnboardingTour
-        profile={profile}
-        isOnboardingComplete={isOnboardingComplete}
-      />
-
       {/* Header section with user greeting and controls */}
       <div className="space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="space-y-1">
             <h1 className="text-3xl font-bold" style={{ color: '#ffffff', letterSpacing: '-0.3px' }}>Dashboard</h1>
-            <p style={{ color: '#707a8a', fontSize: '14px' }}>
+            <p style={{ color: '#9ea3ad', fontSize: '14px' }}>
               Welcome back{user?.email ? `, ${user.email.split('@')[0]}` : ''}!
             </p>
           </div>
@@ -180,7 +169,7 @@ export function DashboardContent({
 
       {/* ── Second row: Learning, Certs, Trades, Strategies ── */}
       <div>
-        <h2 className="text-sm font-semibold mb-3" style={{ color: '#707a8a', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+        <h2 className="text-sm font-semibold mb-3" style={{ color: '#9ea3ad', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
           Learning &amp; Trading Activity
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">

@@ -22,7 +22,7 @@ import {
 
 const navItems = [
   { href: '/dashboard',     label: 'Dashboard',    icon: LayoutDashboard },
-  { href: '/journal',       label: 'Trade Journal', icon: FileText,     dataTour: 'sidebar-journal' },
+  { href: '/journal',       label: 'Trade Journal', icon: FileText },
   { href: '/mt-connect',    label: 'MT4/MT5 Live',  icon: Cable },
   { href: '/analysis',      label: 'AI Analysis',   icon: Brain },
   { href: '/education',     label: 'Education',     icon: GraduationCap },
@@ -94,7 +94,7 @@ export function Sidebar({
           </span>
           <span
             className="text-sm font-medium hidden lg:block"
-            style={{ color: '#707a8a' }}
+            style={{ color: '#9ea3ad' }}
           >
             ProStep2Market
           </span>
@@ -104,7 +104,7 @@ export function Sidebar({
         <button
           onClick={onClose}
           className="md:hidden p-2 -mr-1 rounded-[6px] transition-colors"
-          style={{ color: '#707a8a' }}
+          style={{ color: '#9ea3ad' }}
           onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#1e2329')}
           onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
           aria-label="Close menu"
@@ -122,7 +122,6 @@ export function Sidebar({
               key={item.href}
               href={item.href}
               onClick={onClose}
-              data-tour={item.dataTour}
               className="flex items-center gap-3 px-3 py-2.5 rounded-[6px] text-sm font-medium transition-colors"
               style={
                 isActive
@@ -131,7 +130,7 @@ export function Sidebar({
                       color: '#fcd535',
                     }
                   : {
-                      color: '#707a8a',
+                      color: '#9ea3ad',
                     }
               }
               onMouseEnter={e => {
@@ -143,13 +142,13 @@ export function Sidebar({
               onMouseLeave={e => {
                 if (!isActive) {
                   e.currentTarget.style.backgroundColor = 'transparent'
-                  e.currentTarget.style.color = '#707a8a'
+                  e.currentTarget.style.color = '#9ea3ad'
                 }
               }}
             >
               <item.icon
                 className="w-5 h-5 flex-shrink-0"
-                style={{ color: isActive ? '#fcd535' : '#707a8a' }}
+                style={{ color: isActive ? '#fcd535' : '#9ea3ad' }}
               />
               <span className="truncate">{item.label}</span>
               {/* Yellow left accent bar for active item */}
@@ -174,17 +173,17 @@ export function Sidebar({
           href="/profile"
           onClick={onClose}
           className="flex items-center gap-3 px-3 py-2.5 rounded-[6px] text-sm font-medium transition-colors"
-          style={{ color: '#707a8a' }}
+          style={{ color: '#9ea3ad' }}
           onMouseEnter={e => {
             e.currentTarget.style.backgroundColor = '#1e2329'
             e.currentTarget.style.color = '#eaecef'
           }}
           onMouseLeave={e => {
             e.currentTarget.style.backgroundColor = 'transparent'
-            e.currentTarget.style.color = '#707a8a'
+            e.currentTarget.style.color = '#9ea3ad'
           }}
         >
-          <Settings className="w-5 h-5 flex-shrink-0" style={{ color: '#707a8a' }} />
+          <Settings className="w-5 h-5 flex-shrink-0" style={{ color: '#9ea3ad' }} />
           <span className="truncate">Settings</span>
         </Link>
 
@@ -230,7 +229,7 @@ export function Sidebar({
             {userFullName && userEmail && (
               <p
                 className="text-[10px] truncate"
-                style={{ color: '#707a8a' }}
+                style={{ color: '#9ea3ad' }}
               >
                 {userEmail}
               </p>
@@ -277,7 +276,7 @@ export function Sidebar({
 
       {/* Mobile drawer */}
       <div
-        className={`fixed md:hidden inset-y-0 left-0 z-50 transform transition-transform duration-200 ease-in-out ${
+        className={`fixed md:hidden inset-y-0 left-0 z-[400] transform transition-transform duration-200 ease-in-out ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >

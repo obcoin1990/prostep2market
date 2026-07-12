@@ -6,8 +6,12 @@ import Link from 'next/link';
 import { Plus, Settings, Play, Clock } from 'lucide-react';
 
 export const metadata = {
-  title: 'Strategy Lab - Prostep2market',
+  title: 'Strategy Lab — ProStep2Market',
   description: 'Build, test, and optimize your trading strategies.',
+  openGraph: {
+    title: 'Strategy Lab — ProStep2Market',
+    description: 'Build, test, and optimize your trading strategies.',
+  },
 };
 
 export default async function StrategyLabPage() {

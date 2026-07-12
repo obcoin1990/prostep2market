@@ -30,13 +30,14 @@ export function ExitRuleForm({ index, control, onRemove }: ExitRuleFormProps) {
         <div className="flex-1 grid gap-4 sm:grid-cols-3">
           {/* Type */}
           <div>
-            <label className="block text-sm font-medium mb-1">Type</label>
+            <label htmlFor={`exit-type-${index}`} className="block text-sm font-medium mb-1">Type</label>
             <Controller
               name={`exitRules.${index}.type`}
               control={control}
               render={({ field }) => (
                 <select
                   {...field}
+                  id={`exit-type-${index}`}
                   className="w-full px-3 py-2 rounded-lg border bg-background"
                 >
                   {typeOptions.map((opt) => (
@@ -51,13 +52,14 @@ export function ExitRuleForm({ index, control, onRemove }: ExitRuleFormProps) {
 
           {/* Value */}
           <div>
-            <label className="block text-sm font-medium mb-1">Value</label>
+            <label htmlFor={`exit-value-${index}`} className="block text-sm font-medium mb-1">Value</label>
             <Controller
               name={`exitRules.${index}.value`}
               control={control}
               render={({ field }) => (
                 <input
                   {...field}
+                  id={`exit-value-${index}`}
                   type="number"
                   step="0.1"
                   placeholder="e.g., 2.0"
@@ -71,13 +73,14 @@ export function ExitRuleForm({ index, control, onRemove }: ExitRuleFormProps) {
 
           {/* Unit */}
           <div>
-            <label className="block text-sm font-medium mb-1">Unit</label>
+            <label htmlFor={`exit-unit-${index}`} className="block text-sm font-medium mb-1">Unit</label>
             <Controller
               name={`exitRules.${index}.unit`}
               control={control}
               render={({ field }) => (
                 <select
                   {...field}
+                  id={`exit-unit-${index}`}
                   className="w-full px-3 py-2 rounded-lg border bg-background"
                 >
                   {unitOptions.map((opt) => (
@@ -92,9 +95,10 @@ export function ExitRuleForm({ index, control, onRemove }: ExitRuleFormProps) {
         </div>
 
         {/* Remove Button */}
-        <button
+<button
           type="button"
           onClick={onRemove}
+          aria-label="Remove exit rule"
           className="p-2 text-muted-foreground hover:text-destructive"
         >
           <Trash2 className="h-4 w-4" />

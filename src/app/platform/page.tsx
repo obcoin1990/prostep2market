@@ -27,6 +27,10 @@ export const metadata: Metadata = {
   title: 'Platform — ProStep2Market',
   description:
     'Explore the full ProStep2Market platform: Dashboard, Trade Journal, Strategy Lab, and Trader DNA — all built to improve your trading discipline.',
+  openGraph: {
+    title: 'Platform — ProStep2Market',
+    description: 'Explore the full ProStep2Market platform: Dashboard, Trade Journal, Strategy Lab, and Trader DNA.',
+  },
 }
 
 // ── shared types ──────────────────────────────────────────────────────────────
@@ -171,9 +175,9 @@ const connections = [
 
 // ── stat bar ─────────────────────────────────────────────────────────────────
 const stats = [
-  { value: '10k+', label: 'Active traders' },
-  { value: '2.4M', label: 'Trades analysed' },
-  { value: '78%', label: 'Report better discipline' },
+  { value: 'Early Access', label: 'Active traders' },
+  { value: 'Growing', label: 'Trades analysed' },
+  { value: 'Growing', label: 'Report better discipline' },
   { value: '12 min', label: 'To your first insight' },
 ]
 
@@ -321,9 +325,9 @@ export default function PlatformPage() {
                           className="flex items-center justify-between rounded-xl border border-white/6 bg-white/4 px-4 py-3"
                         >
                           <div>
-                            <p className="text-xs text-white/40">{line.label}</p>
+                            <p className="text-xs text-white/60">{line.label}</p>
                             {line.sub && (
-                              <p className="text-xs text-white/30 mt-0.5">{line.sub}</p>
+                              <p className="text-xs text-white/50 mt-0.5">{line.sub}</p>
                             )}
                           </div>
                           <span
@@ -346,7 +350,7 @@ export default function PlatformPage() {
                         }}
                       />
                     </div>
-                    <p className="mt-2 text-right text-xs text-white/30">
+                    <p className="mt-2 text-right text-xs text-white/50">
                       {60 + index * 8}% profile complete
                     </p>
                   </div>
@@ -451,7 +455,7 @@ export default function PlatformPage() {
             Ready to trade with clarity?
           </h2>
           <p className="mb-8 text-lg text-white/50">
-            Join thousands of traders using ProStep2Market to build discipline and consistency.
+            Join traders using ProStep2Market to build discipline and consistency.
           </p>
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link href="/signup">

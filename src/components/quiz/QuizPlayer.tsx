@@ -145,13 +145,20 @@ export function QuizPlayer({ quiz, attemptsUsed, onComplete }: Props) {
             Pass mark: {quiz.passMark}% · {remaining} attempt{remaining !== 1 ? 's' : ''} remaining
           </p>
         </div>
-        <span className="text-sm font-medium text-gray-500">
+        <span className="text-sm font-medium text-gray-500" aria-live="polite">
           {current + 1} / {total}
         </span>
       </div>
 
       {/* Progress bar */}
-      <div className="h-1.5 w-full rounded-full bg-gray-100 mb-6">
+      <div 
+        className="h-1.5 w-full rounded-full bg-gray-100 mb-6"
+        role="progressbar"
+        aria-valuenow={Math.round(((current + 1) / total) * 100)}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-label="Quiz progress"
+      >
         <div
           className="h-1.5 rounded-full bg-brand-500 transition-all"
           style={{ width: `${((current + 1) / total) * 100}%` }}
@@ -177,8 +184,11 @@ export function QuizPlayer({ quiz, attemptsUsed, onComplete }: Props) {
             const isSingle  = question.type === 'SINGLE' || question.type === 'TRUE_FALSE'
 
             return (
-              <button
+<button type="button" 
                 key={option.id}
+                role={isSingle ? 'radio' : 'checkbox'}
+                aria-checked={selected}
+                aria-label={option.text}
                 onClick={() => toggleOption(question.id, option.id, isSingle)}
                 className={cn(
                   'w-full flex items-center gap-3 rounded-xl border-2 px-4 py-3 text-left text-sm transition-all',
@@ -225,6 +235,8 @@ export function QuizPlayer({ quiz, attemptsUsed, onComplete }: Props) {
             <button
               key={q.id}
               onClick={() => setCurrent(i)}
+              aria-label={`Question ${i + 1}`}
+              aria-current={i === current ? 'step' : undefined}
               className={cn(
                 'w-2 h-2 rounded-full transition-all',
                 i === current
@@ -275,6 +287,9 @@ function QuizResults({
     <div className="flex flex-col items-center text-center py-6">
       {/* Score circle */}
       <div
+        role="status"
+        aria-live="polite"
+        aria-label={`You scored ${result.score}%. ${result.passed ? 'You passed.' : 'You did not pass.'}`}
         className={cn(
           'w-28 h-28 rounded-full flex flex-col items-center justify-center mb-4 border-4',
           result.passed
@@ -290,7 +305,7 @@ function QuizResults({
 
       {result.passed ? (
         <>
-          <CheckCircle2 className="h-6 w-6 text-green-500 mb-2" />
+          <CheckCircle2 className="h-6 w-6 text-green-500 mb-2" aria-hidden="true" />
           <h2 className="text-xl font-bold text-gray-900">You Passed!</h2>
           <p className="text-sm text-gray-500 mt-1">
             Great work — you scored {result.score}%, above the {result.passMark}% pass mark.
@@ -298,7 +313,7 @@ function QuizResults({
         </>
       ) : (
         <>
-          <XCircle className="h-6 w-6 text-red-400 mb-2" />
+          <XCircle className="h-6 w-6 text-red-400 mb-2" aria-hidden="true" />
           <h2 className="text-xl font-bold text-gray-900">Not Passed</h2>
           <p className="text-sm text-gray-500 mt-1">
             You scored {result.score}% — you need {result.passMark}% to pass.
@@ -342,8 +357,8 @@ function QuizResults({
               >
                 <div className="flex items-start gap-2 mb-2">
                   {fb?.correct
-                    ? <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
-                    : <XCircle    className="h-4 w-4 text-red-400 mt-0.5 flex-shrink-0" />
+                    ? <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" aria-hidden="true" />
+                    : <XCircle    className="h-4 w-4 text-red-400 mt-0.5 flex-shrink-0" aria-hidden="true" />
                   }
                   <p className="text-sm font-medium text-gray-900">
                     Q{i + 1}: {q.text}

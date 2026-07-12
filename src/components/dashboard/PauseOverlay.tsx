@@ -33,7 +33,7 @@ export function PauseOverlay({ userId }: { userId: string }) {
   }
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50" style={{ backgroundColor: 'rgba(0,0,0,0.85)' }}>
+    <div className="fixed inset-0 flex items-center justify-center z-[500]" style={{ backgroundColor: 'rgba(0,0,0,0.85)' }} role="dialog" aria-modal="true" aria-label="Trading paused">
       <div className="rounded-[12px] p-8 max-w-md w-full mx-4 text-center" style={{ backgroundColor: '#1e2329', border: '1px solid #2b3139' }}>
         <div className="flex justify-center mb-6">
           <div className="relative">
@@ -54,13 +54,13 @@ export function PauseOverlay({ userId }: { userId: string }) {
 
         {remainingTime !== null ? (
           <div className="mb-6">
-            <p className="text-sm" style={{ color: '#707a8a' }}>Time remaining</p>
+            <p className="text-sm" style={{ color: '#9ea3ad' }}>Time remaining</p>
             <p className="text-3xl font-bold mt-1" style={{ color: '#0ecb81', fontFamily: 'var(--font-mono)' }}>
               {formatTime(remainingTime)}
             </p>
           </div>
         ) : (
-          <p className="text-sm mb-6" style={{ color: '#707a8a' }}>Pause is active until you resume.</p>
+          <p className="text-sm mb-6" style={{ color: '#9ea3ad' }}>Pause is active until you resume.</p>
         )}
 
         <button
@@ -74,7 +74,7 @@ export function PauseOverlay({ userId }: { userId: string }) {
           Resume Trading
         </button>
 
-        <p className="text-xs mt-4" style={{ color: '#707a8a' }}>
+        <p className="text-xs mt-4" style={{ color: '#9ea3ad' }}>
           You can still access Journal, Education, and Profile pages.
         </p>
       </div>

@@ -20,7 +20,8 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url)
   const category = searchParams.get('category')
   const level    = searchParams.get('level')
-  const search   = searchParams.get('q')
+  // WR-13: Limit search input length to prevent slow queries / timeouts
+  const search   = searchParams.get('q')?.slice(0, 200) ?? null
   const page     = parseInt(searchParams.get('page') ?? '1')
   const perPage  = 12
 

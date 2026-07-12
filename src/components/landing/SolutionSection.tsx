@@ -16,7 +16,7 @@ export function SolutionSection() {
   return (
     <section className="bg-gray-50 py-16 md:py-24">
       <div className="container mx-auto px-4">
-        <h2 className="mb-12 text-center text-3xl font-bold text-[#0B0B0B] md:text-4xl">
+        <h2 className="mb-8 text-center text-3xl font-bold text-[#0B0B0B] md:mb-12 md:text-4xl">
           {t('landing.solutionHeading')}
         </h2>
         <div className="mx-auto grid max-w-5xl gap-8 md:grid-cols-2 lg:grid-cols-3">

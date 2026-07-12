@@ -21,7 +21,7 @@ const variantStyles: Record<NonNullable<BadgeProps["variant"]>, string> = {
   success: "bg-[rgba(14,203,129,0.15)] text-[#0ecb81] border border-[rgba(14,203,129,0.3)]",
   warning: "bg-[rgba(252,213,53,0.15)] text-[#fcd535] border border-[rgba(252,213,53,0.3)]",
   error:   "bg-[rgba(246,70,93,0.15)] text-[#f6465d] border border-[rgba(246,70,93,0.3)]",
-  outline: "bg-transparent border border-[#2b3139] text-[#707a8a]",
+  outline: "bg-transparent border border-[#2b3139] text-[#9ea3ad]",
   info:    "bg-[rgba(59,130,246,0.15)] text-[#3b82f6] border border-[rgba(59,130,246,0.3)]",
   dark:    "bg-[#1e2329] text-[#eaecef] border border-[#2b3139]",
 }

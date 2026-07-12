@@ -56,7 +56,7 @@ export function CertificatesWidget({ certificates, isLoading }: CertificatesWidg
         ) : certificates.length === 0 ? (
           <div className="py-6 text-center">
             <Award className="w-8 h-8 mx-auto mb-2" style={{ color: '#2b3139' }} />
-            <p className="text-xs" style={{ color: '#707a8a' }}>No certificates earned yet.</p>
+            <p className="text-xs" style={{ color: '#9ea3ad' }}>No certificates earned yet.</p>
             <Link
               href="/education"
               className="text-xs font-medium mt-1 inline-block transition-opacity hover:opacity-70"
@@ -86,7 +86,7 @@ export function CertificatesWidget({ certificates, isLoading }: CertificatesWidg
                   <p className="text-xs font-semibold truncate" style={{ color: '#eaecef' }}>
                     {cert.course?.title ?? cert.title}
                   </p>
-                  <p className="text-[10px]" style={{ color: '#707a8a' }}>
+                  <p className="text-[10px]" style={{ color: '#9ea3ad' }}>
                     Issued {formatDate(cert.issueDate)}
                   </p>
                 </div>
@@ -98,7 +98,7 @@ export function CertificatesWidget({ certificates, isLoading }: CertificatesWidg
                   rel="noopener noreferrer"
                   title="Download PDF"
                   className="p-1 rounded transition-opacity hover:opacity-70 flex-shrink-0"
-                  style={{ color: '#707a8a' }}
+                  style={{ color: '#9ea3ad' }}
                 >
                   <Download className="w-3.5 h-3.5" />
                 </a>

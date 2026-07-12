@@ -141,7 +141,7 @@ export function QuickActions({ userId }: { userId: string }) {
 
       {/* Pause Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[500]">
           <div
             className="rounded-[12px] shadow-xl p-6 w-full max-w-md mx-4"
             style={{ backgroundColor: '#1e2329', border: '1px solid #2b3139' }}
@@ -162,7 +162,7 @@ export function QuickActions({ userId }: { userId: string }) {
             )}
 
             <div className="space-y-3 mb-6">
-              <p className="text-sm" style={{ color: '#707a8a' }}>Select pause duration:</p>
+              <p className="text-sm" style={{ color: '#9ea3ad' }}>Select pause duration:</p>
               <div className="grid grid-cols-2 gap-2">
                 {durationOptions.map((option) => (
                   <button

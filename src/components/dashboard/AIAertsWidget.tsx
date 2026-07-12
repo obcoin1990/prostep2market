@@ -76,11 +76,11 @@ export function AIAertsWidget({ alerts }: AIAertsWidgetProps) {
 
       {visibleAlerts.length === 0 ? (
         <div className="text-center py-8">
-          <svg className="w-12 h-12 mx-auto mb-3" style={{ color: '#2b3139' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-12 h-12 mx-auto mb-3" style={{ color: '#2b3139' }} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <p className="text-sm" style={{ color: '#707a8a' }}>No active alerts</p>
-          <p className="text-xs mt-1" style={{ color: '#707a8a' }}>Your trading looks healthy!</p>
+          <p className="text-sm" style={{ color: '#9ea3ad' }}>No active alerts</p>
+          <p className="text-xs mt-1" style={{ color: '#9ea3ad' }}>Your trading looks healthy!</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -111,7 +111,7 @@ export function AIAertsWidget({ alerts }: AIAertsWidgetProps) {
                       {alert.message}
                     </p>
                     {alert.message.length > 100 && (
-                      <button onClick={() => toggleExpand(alert.id)} className="mt-1 text-xs" style={{ color: '#fcd535' }}>
+                      <button type="button" onClick={() => toggleExpand(alert.id)} aria-expanded={isExpanded} className="mt-1 text-xs" style={{ color: '#fcd535' }}>
                         {isExpanded ? 'Show less' : 'Show more'}
                       </button>
                     )}
@@ -119,9 +119,9 @@ export function AIAertsWidget({ alerts }: AIAertsWidgetProps) {
                       <strong style={{ color: '#ffffff' }}>Action:</strong>{' '}
                       {alert.suggestedAction}
                     </div>
-                    <button onClick={() => dismissAlert(alert.id)} className="mt-2 text-xs transition-colors" style={{ color: '#707a8a' }}
+                    <button type="button" onClick={() => dismissAlert(alert.id)} className="mt-2 text-xs transition-colors" style={{ color: '#9ea3ad' }}
                       onMouseEnter={e => (e.currentTarget.style.color = '#eaecef')}
-                      onMouseLeave={e => (e.currentTarget.style.color = '#707a8a')}
+                      onMouseLeave={e => (e.currentTarget.style.color = '#9ea3ad')}
                     >
                       Dismiss
                     </button>

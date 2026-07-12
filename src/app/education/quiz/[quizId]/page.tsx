@@ -1,6 +1,6 @@
 // Quiz Page
 import { getQuizById } from '@/lib/education/courses';
-import { QuizPlayer } from '@/components/education/QuizPlayer';
+import { QuizPlayer } from '@/components/quiz/QuizPlayer';
 import { createClient } from '@/lib/supabase/server';
 import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
@@ -23,6 +23,24 @@ export default async function QuizPage({ params }: QuizPageProps) {
     notFound();
   }
 
+  const mappedQuiz = {
+    id:          quiz.id,
+    title:       `Quiz — ${quiz.courseId}`,
+    passMark:    quiz.passingScore,
+    maxAttempts: quiz.maxAttempts,
+    questions: quiz.questions.map((q, i) => ({
+      id:    q.id,
+      text:  q.text,
+      type:  'SINGLE' as const,
+      order: i,
+      options: q.options.map((opt, j) => ({
+        id:    `${q.id}-opt-${j}`,
+        text:  opt,
+        order: j,
+      })),
+    })),
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -41,9 +59,8 @@ export default async function QuizPage({ params }: QuizPageProps) {
       {/* Quiz Content */}
       <div className="container mx-auto px-4 py-8 max-w-3xl">
         <QuizPlayer
-          quizId={quiz.id}
-          passingScore={quiz.passingScore}
-          maxAttempts={quiz.maxAttempts}
+          quiz={mappedQuiz}
+          attemptsUsed={0}
         />
       </div>
     </div>

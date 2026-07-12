@@ -82,7 +82,7 @@ interface ConfirmDialogProps {
 
 function ConfirmDialog({ name, onConfirm, onCancel, loading }: ConfirmDialogProps) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+    <div className="fixed inset-0 z-[500] flex items-center justify-center bg-black/50 p-4">
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-sm p-6">
         <h2 className="text-lg font-bold text-[#0A0F1C] mb-2">Delete Template</h2>
         <p className="text-sm text-gray-600 mb-1">
@@ -115,7 +115,7 @@ interface PreviewModalProps {
 
 function PreviewModal({ template, onClose }: PreviewModalProps) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+    <div className="fixed inset-0 z-[500] flex items-center justify-center bg-black/50 p-4">
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col">
         <div className="flex items-center justify-between p-4 border-b flex-shrink-0">
           <div>
@@ -212,11 +212,11 @@ function TemplateModal({ editing, onClose, onSaved, onCreated }: TemplateModalPr
   }, [form, editing, onClose, onSaved, onCreated])
 
   const inputCls =
-    'w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#E53935]/30 focus:border-[#E53935]'
+    'w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#E53935]/60 focus:border-[#E53935]'
   const labelCls = 'block text-sm font-medium text-gray-700 mb-1'
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+    <div className="fixed inset-0 z-[500] flex items-center justify-center bg-black/50 p-4">
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[92vh] overflow-y-auto">
         <div className="flex items-center justify-between p-5 border-b">
           <h2 className="text-lg font-bold text-[#0A0F1C]">
@@ -311,7 +311,7 @@ function TemplateModal({ editing, onClose, onSaved, onCreated }: TemplateModalPr
               role="switch"
               aria-checked={form.active}
               onClick={() => set('active', !form.active)}
-              className={`relative inline-flex h-6 w-11 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#E53935]/30 ${form.active ? 'bg-emerald-500' : 'bg-gray-200'}`}
+              className={`relative inline-flex h-6 w-11 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#E53935]/60 ${form.active ? 'bg-emerald-500' : 'bg-gray-200'}`}
             >
               <span
                 className={`inline-block h-5 w-5 rounded-full bg-white shadow transform transition-transform mt-0.5 ${form.active ? 'translate-x-5.5 ml-0.5' : 'translate-x-0.5'}`}
@@ -403,7 +403,7 @@ function SendEmailTab({ templates }: SendEmailTabProps) {
   }, [selectedKey, recipientEmail, variableValues])
 
   const inputCls =
-    'w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#E53935]/30 focus:border-[#E53935]'
+    'w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#E53935]/60 focus:border-[#E53935]'
   const labelCls = 'block text-sm font-medium text-gray-700 mb-1'
 
   return (
@@ -494,8 +494,8 @@ function SendEmailTab({ templates }: SendEmailTabProps) {
               <span>
                 Email sent!{' '}
                 {lastResult.resend_id && (
-                  <span className="font-mono text-xs opacity-70">
-                    Resend ID: {lastResult.resend_id}
+                  <span className="font-mono text-xs opacity-70" title={lastResult.resend_id}>
+                    Resend ID: {lastResult.resend_id.slice(0, 12)}…
                   </span>
                 )}
               </span>
@@ -587,7 +587,7 @@ function LogsTab({ initialLogs }: LogsTabProps) {
 
       {/* Table */}
       <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white">
-        <table className="w-full min-w-[800px]">
+        <table className="w-full min-w-0">
           <thead className="border-b bg-gray-50/60">
             <tr>
               {['Template', 'Recipient', 'Subject', 'Status', 'Resend ID', 'Sent At'].map((h) => (
@@ -629,8 +629,8 @@ function LogsTab({ initialLogs }: LogsTabProps) {
                 </td>
                 <td className="px-4 py-3">
                   {log.resend_id ? (
-                    <span className="font-mono text-xs text-gray-400">
-                      {log.resend_id.slice(0, 16)}…
+                    <span className="font-mono text-xs text-gray-400" title={log.resend_id}>
+                      {log.resend_id.slice(0, 12)}…
                     </span>
                   ) : (
                     <span className="text-xs text-gray-300">—</span>
@@ -706,7 +706,7 @@ function TemplatesTab({ templates, setTemplates }: TemplatesTabProps) {
 
       {/* Table */}
       <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white">
-        <table className="w-full min-w-[800px]">
+        <table className="w-full min-w-0">
           <thead className="border-b bg-gray-50/60">
             <tr>
               {['Key', 'Name', 'Subject', 'Variables', 'Active', 'Updated', 'Actions'].map((h) => (

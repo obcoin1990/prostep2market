@@ -2,12 +2,17 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { VideoPlayer } from '@/components/lesson/VideoPlayer'
+import dynamic from 'next/dynamic'
 import { QuizPlayer } from '@/components/quiz/QuizPlayer'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { ChevronRight, HelpCircle, BookOpen, CheckCircle2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+
+const VideoPlayer = dynamic(
+  () => import('@/components/lesson/VideoPlayer').then(mod => ({ default: mod.VideoPlayer })),
+  { ssr: false }
+)
 
 interface Lesson {
   id:          string

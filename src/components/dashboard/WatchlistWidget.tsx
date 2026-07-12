@@ -58,7 +58,7 @@ export function WatchlistWidget({ strategies, isLoading }: WatchlistWidgetProps)
         ) : strategies.length === 0 ? (
           <div className="py-6 text-center">
             <FlaskConical className="w-8 h-8 mx-auto mb-2" style={{ color: '#2b3139' }} />
-            <p className="text-xs" style={{ color: '#707a8a' }}>No strategies saved yet.</p>
+            <p className="text-xs" style={{ color: '#9ea3ad' }}>No strategies saved yet.</p>
             <Link
               href="/strategy-lab/builder"
               className="text-xs font-medium mt-1 inline-block transition-opacity hover:opacity-70"
@@ -101,7 +101,7 @@ export function WatchlistWidget({ strategies, isLoading }: WatchlistWidgetProps)
                     {strategy.name}
                   </p>
                   {strategy.description && (
-                    <p className="text-[10px] truncate" style={{ color: '#707a8a' }}>
+                    <p className="text-[10px] truncate" style={{ color: '#9ea3ad' }}>
                       {strategy.description}
                     </p>
                   )}
@@ -109,8 +109,8 @@ export function WatchlistWidget({ strategies, isLoading }: WatchlistWidgetProps)
 
                 {/* Time ago */}
                 <div className="flex items-center gap-1 flex-shrink-0">
-                  <Clock className="w-3 h-3" style={{ color: '#707a8a' }} />
-                  <span className="text-[10px]" style={{ color: '#707a8a' }}>
+                  <Clock className="w-3 h-3" style={{ color: '#9ea3ad' }} />
+                  <span className="text-[10px]" style={{ color: '#9ea3ad' }}>
                     {timeAgo(strategy.created_at)}
                   </span>
                 </div>

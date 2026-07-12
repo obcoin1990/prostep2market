@@ -33,9 +33,18 @@ Thumbs.db
 
 # Testing
 coverage/
+test-results/
 
 # Misc
 *.log
 *.tsbuildinfo
 next-env.d.ts
 .vercel
+.env*.local
+
+# Test artifacts
+.vitest-cache
+*.lcov
+
+# Load test results
+load-tests/results/

@@ -25,7 +25,7 @@ function formatPnl(pnl: number | null) {
 const RESULT_CONFIG = {
   win:       { color: '#0ecb81', Icon: TrendingUp   },
   loss:      { color: '#f6465d', Icon: TrendingDown  },
-  breakeven: { color: '#707a8a', Icon: Minus         },
+  breakeven: { color: '#9ea3ad', Icon: Minus         },
 } as const;
 
 export function OpenTradesWidget({ trades, openTrades, isLoading }: OpenTradesWidgetProps) {
@@ -69,7 +69,7 @@ export function OpenTradesWidget({ trades, openTrades, isLoading }: OpenTradesWi
         ) : displayTrades.length === 0 ? (
           <div className="py-6 text-center">
             <TrendingUp className="w-8 h-8 mx-auto mb-2" style={{ color: '#2b3139' }} />
-            <p className="text-xs" style={{ color: '#707a8a' }}>No trades recorded yet.</p>
+            <p className="text-xs" style={{ color: '#9ea3ad' }}>No trades recorded yet.</p>
             <Link
               href="/journal"
               className="text-xs font-medium mt-1 inline-block transition-opacity hover:opacity-70"
@@ -83,10 +83,10 @@ export function OpenTradesWidget({ trades, openTrades, isLoading }: OpenTradesWi
             <table className="w-full text-xs">
               <thead>
                 <tr style={{ borderBottom: '1px solid #2b3139' }}>
-                  <th className="text-left py-1.5 font-medium" style={{ color: '#707a8a' }}>Symbol</th>
-                  <th className="text-right py-1.5 font-medium" style={{ color: '#707a8a' }}>Entry</th>
-                  <th className="text-right py-1.5 font-medium" style={{ color: '#707a8a' }}>P&L</th>
-                  <th className="text-right py-1.5 font-medium" style={{ color: '#707a8a' }}>Result</th>
+                  <th className="text-left py-1.5 font-medium" style={{ color: '#9ea3ad' }}>Symbol</th>
+                  <th className="text-right py-1.5 font-medium" style={{ color: '#9ea3ad' }}>Entry</th>
+                  <th className="text-right py-1.5 font-medium" style={{ color: '#9ea3ad' }}>P&L</th>
+                  <th className="text-right py-1.5 font-medium" style={{ color: '#9ea3ad' }}>Result</th>
                 </tr>
               </thead>
               <tbody>
@@ -95,12 +95,12 @@ export function OpenTradesWidget({ trades, openTrades, isLoading }: OpenTradesWi
                   const ResultIcon = cfg?.Icon;
                   const pnlColor =
                     trade.pnl === null
-                      ? '#707a8a'
+                      ? '#9ea3ad'
                       : trade.pnl > 0
                       ? '#0ecb81'
                       : trade.pnl < 0
                       ? '#f6465d'
-                      : '#707a8a';
+                      : '#9ea3ad';
 
                   return (
                     <tr
@@ -124,7 +124,7 @@ export function OpenTradesWidget({ trades, openTrades, isLoading }: OpenTradesWi
                         {ResultIcon && cfg ? (
                           <ResultIcon className="w-3.5 h-3.5 ml-auto" style={{ color: cfg.color }} />
                         ) : (
-                          <span style={{ color: '#707a8a' }}>—</span>
+                          <span style={{ color: '#9ea3ad' }}>—</span>
                         )}
                       </td>
                     </tr>

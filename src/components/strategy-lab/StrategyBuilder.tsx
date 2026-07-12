@@ -81,11 +81,12 @@ export function StrategyBuilder({
     <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-8">
       {/* Strategy Name */}
       <div className="rounded-lg border bg-card p-6">
-        <label className="block text-sm font-medium mb-2">
+        <label htmlFor="strategy-name" className="block text-sm font-medium mb-2">
           Strategy Name
         </label>
         <input
           {...register('name')}
+          id="strategy-name"
           type="text"
           placeholder="Enter a name for your strategy"
           className="w-full px-3 py-2 rounded-lg border bg-background"

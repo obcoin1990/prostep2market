@@ -124,7 +124,7 @@ export function AlertBanner({ alert, onDismiss, onAcknowledge }: AlertBannerProp
   };
 
   return (
-    <div className={`p-4 border-l-4 rounded-r-md ${severityColors[alert.severity]}`}>
+    <div role="alert" className={`p-4 border-l-4 rounded-r-md ${severityColors[alert.severity]}`}>
       <div className="flex items-start justify-between gap-2">
         <div className="flex items-start gap-3">
           <Bell className={`w-5 h-5 mt-0.5 ${severityIconColors[alert.severity]}`} />
@@ -138,7 +138,7 @@ export function AlertBanner({ alert, onDismiss, onAcknowledge }: AlertBannerProp
         </div>
         <div className="flex gap-1">
           {!alert.acknowledged && onAcknowledge && (
-            <button
+<button type="button" 
               onClick={() => onAcknowledge(alert.id)}
               className="text-xs px-2 py-1 bg-gray-200 hover:bg-gray-300 rounded text-gray-700"
             >
@@ -146,7 +146,7 @@ export function AlertBanner({ alert, onDismiss, onAcknowledge }: AlertBannerProp
             </button>
           )}
           {onDismiss && (
-            <button
+<button type="button" 
               onClick={() => onDismiss(alert.id)}
               className="p-1 hover:bg-gray-200 rounded"
             >

@@ -27,7 +27,7 @@ const TIPS_BY_CATEGORY: Record<keyof EdgeScoreBreakdown, TipCategory> = {
   disciplineScore: {
     icon: 'book-open',
     tips: {
-      critical: "Complete your pre-trade plans before entering positions. Trades without plans have a 40% lower success rate.",
+      critical: "Complete your pre-trade plans before entering positions. Traders with plans tend to execute more consistently.",
       improvement: "Try to log your trades within 24 hours to maintain journaling consistency and identify patterns.",
       good: "Your discipline is improving. Keep following your rules consistently.",
       strong: "Excellent discipline! You're well on your way to becoming a consistent trader.",
@@ -67,7 +67,7 @@ const TIPS_BY_CATEGORY: Record<keyof EdgeScoreBreakdown, TipCategory> = {
   strategyAdherenceScore: {
     icon: 'target',
     tips: {
-      critical: "Complete your pre-trade plan before entering trades. Plans improve execution quality by 35%.",
+      critical: "Complete your pre-trade plan before entering trades. Planning tends to improve execution quality.",
       improvement: "Write post-trade reviews to learn from each trade. Review completion correlates with improvement.",
       good: "Your strategy adherence is solid. Keep following your rules without exception.",
       strong: "Excellent strategy adherence! You consistently follow your trading plan.",

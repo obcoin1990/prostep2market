@@ -1,106 +1,51 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { Sidebar } from './sidebar'
-import { Header } from './header'
-import { TraderProfile } from '@/types/trader-dna'
+import { DashboardSidebar } from './DashboardSidebar'
+import { DashboardHeader } from './DashboardHeader'
 
 interface DashboardLayoutClientProps {
   children: React.ReactNode
-  profile: TraderProfile | null
   userEmail: string | null
-  userAvatarUrl: string | null
   userFullName: string | null
 }
 
-interface TouchPosition {
-  x: number
-  y: number
-}
-
-export function DashboardLayoutClient({
-  children,
-  profile,
-  userEmail,
-  userAvatarUrl,
-  userFullName,
-}: DashboardLayoutClientProps) {
+export function DashboardLayoutClient({ children, userEmail, userFullName }: DashboardLayoutClientProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const touchStartPos = useRef<TouchPosition | null>(null)
+  const touchStart = useRef<{ x: number; y: number } | null>(null)
 
-  const handleMenuClick = () => {
-    setSidebarOpen(!sidebarOpen)
-  }
-
-  const handleCloseSidebar = () => {
-    setSidebarOpen(false)
-  }
-
-  // Close sidebar on escape key
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && sidebarOpen) {
-        setSidebarOpen(false)
-      }
+      if (e.key === 'Escape') setSidebarOpen(false)
     }
     window.addEventListener('keydown', handleEscape)
     return () => window.removeEventListener('keydown', handleEscape)
-  }, [sidebarOpen])
-
-  // Handle touch swipe to close sidebar
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartPos.current = {
-      x: e.touches[0].clientX,
-      y: e.touches[0].clientY,
-    }
-  }
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (!touchStartPos.current) return
-
-    const touchEndPos = {
-      x: e.changedTouches[0].clientX,
-      y: e.changedTouches[0].clientY,
-    }
-
-    const deltaX = touchStartPos.current.x - touchEndPos.x
-    const deltaY = Math.abs(touchStartPos.current.y - touchEndPos.y)
-
-    // Detect horizontal swipe (right-to-left to close sidebar)
-    // Threshold: at least 50px horizontal movement, less than 50px vertical
-    if (deltaX > 50 && deltaY < 50 && sidebarOpen) {
-      setSidebarOpen(false)
-    }
-
-    touchStartPos.current = null
-  }
+  }, [])
 
   return (
     <div
-      className="flex h-screen overflow-hidden"
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
+      className="flex h-screen overflow-hidden bg-[#0b0e11]"
+      onTouchStart={(e) => { touchStart.current = { x: e.touches[0].clientX, y: e.touches[0].clientY } }}
+      onTouchEnd={(e) => {
+        if (!touchStart.current) return
+        const dx = touchStart.current.x - e.changedTouches[0].clientX
+        const dy = Math.abs(touchStart.current.y - e.changedTouches[0].clientY)
+        if (dx > 50 && dy < 50 && sidebarOpen) setSidebarOpen(false)
+        touchStart.current = null
+      }}
     >
-      {/* Mobile Sidebar (visible on mobile when open) */}
-      <Sidebar
-          isOpen={sidebarOpen}
-          onClose={handleCloseSidebar}
-          userEmail={userEmail}
-          userAvatarUrl={userAvatarUrl}
-          userFullName={userFullName}
-        />
-
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <Header
-          onMenuClick={handleMenuClick}
-          profile={profile}
-          userEmail={userEmail}
-          userAvatarUrl={userAvatarUrl}
-          userFullName={userFullName}
-        />
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6" style={{ backgroundColor: '#0b0e11' }}>
-          {children}
+      <DashboardSidebar
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+        userEmail={userEmail}
+        userFullName={userFullName}
+      />
+      <div className="flex flex-1 flex-col min-w-0">
+        <DashboardHeader onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
+        <main id="main-content" className="flex-1 overflow-y-auto">
+          <div className="p-4 lg:p-6">
+            {children}
+          </div>
         </main>
       </div>
     </div>

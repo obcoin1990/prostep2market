@@ -29,9 +29,11 @@ const iconColorMap = {
 
 export function Alert({ variant = "info", className = "", children, ...props }: AlertProps) {
   const Icon = iconMap[variant]
+  const alertRole = variant === "error" || variant === "warning" ? "alert" : "status"
 
   return (
     <div
+      role={alertRole}
       className={`flex items-start gap-3 p-4 rounded-[12px] border ${variantStyles[variant]} ${className}`}
       {...props}
     >

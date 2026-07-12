@@ -129,9 +129,12 @@ export function ScreenshotUpload({ onUploadComplete, initialUrl }: ScreenshotUpl
           </div>
         ) : preview ? (
           <div className="relative">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img 
               src={preview} 
               alt="Trade screenshot" 
+              width={384}
+              height={192}
               className="max-h-48 mx-auto rounded"
             />
             <button

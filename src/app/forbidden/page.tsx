@@ -26,7 +26,7 @@ export default function ForbiddenPage() {
             </div>
 
             <div className="border-t border-white/10 pt-4">
-              <p className="text-xs text-white/30 mb-5">
+              <p className="text-xs text-white/50 mb-5">
                 If you believe this is a mistake, contact your platform administrator
                 and ask them to grant you the{' '}
                 <span className="text-[#E53935] font-semibold">super_admin</span> role.
@@ -43,7 +43,7 @@ export default function ForbiddenPage() {
           </CardContent>
         </Card>
 
-        <p className="text-center text-white/20 text-xs mt-6">
+        <p className="text-center text-white/50 text-xs mt-6">
           ProStep2Market &copy; {new Date().getFullYear()}
         </p>
       </div>

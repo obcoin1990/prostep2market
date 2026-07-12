@@ -62,7 +62,7 @@ export function MTSessionHeatmap({ data }: MTSessionHeatmapProps) {
         <p className="text-[11px] text-gray-400">UTC hours × weekday</p>
       </CardHeader>
       <CardContent className="overflow-x-auto">
-        <div className="min-w-[640px]">
+        <div className="min-w-0">
           {/* Header row */}
           <div className="flex gap-0.5 mb-0.5 pl-7">
             {HOURS.map((h) => (

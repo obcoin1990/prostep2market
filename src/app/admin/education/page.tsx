@@ -62,7 +62,7 @@ export default async function EducationManagerPage() {
   }))
 
   return (
-    <div className="min-h-screen bg-[#F5F7FA] p-4 md:p-6">
+    <div className="min-h-screen bg-[#0b0e11] p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
         <EducationManagerClient
           initialCourses={enrichedCourses}

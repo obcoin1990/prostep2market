@@ -39,6 +39,8 @@ Traders improve their discipline and emotional control, which leads to more cons
 - Landing page, pricing, onboarding flows
 - Tools and API integration specs
 
+**Audit State (2026-07-11):** Full CTO audit completed — 28 findings across 118 files. All 85 v1 requirements have code but many have data correctness bugs, security gaps, or use hardcoded data. See `REVIEW.md` for details. Requirements must be re-verified before production launch.
+
 **Target Users:**
 - Retail forex traders (beginner to advanced)
 - Trading coaches and academies (Enterprise)
@@ -60,10 +62,14 @@ Traders improve their discipline and emotional control, which leads to more cons
 | Read-only MT5 | Safety and trust for users | — Pending |
 | Gamified scoring | Behavioral change through engagement | — Pending |
 | AI ensemble approach | Rule-based + LLM for robustness | — Pending |
+| Demo dashboard bypasses auth | Client walkthrough without signup friction | ✅ Implemented as `/demo/dashboard/*` route group with permissive layout |
+| Admin account as SUPER_ADMIN | Single account for platform management | ✅ `ob6013@gmail.com` — role set in Auth metadata, Prisma, trader_profiles |
+| Supabase as single identity source | Avoid dual-auth complexity (reverted NextAuth) | ✅ Supabase Auth only; auth layer was partially reverted on 2026-05-12 |
+| CTO audit before feature work | Validate existing code quality before adding new features | ✅ 28 findings documented in REVIEW.md — blocking 85 "complete" requirements from being considered production-ready |
 
 ---
 
-*Last updated: 2026-05-08 after initialization*
+*Last updated: 2026-07-11 after CTO audit*
 
 ## Evolution
 

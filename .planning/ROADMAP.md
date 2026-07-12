@@ -3,23 +3,28 @@
 **Created:** 2026-05-08
 **Granularity:** Standard (5-8 phases, 3-5 plans each)
 **Mode:** YOLO (auto-approved)
+**Updated:** 2026-07-11 — CTO audit found all phases have code but 28 implementation issues (9 critical) across every phase. Traceability updated to reflect audit reality.
 
 ---
 
 ## Phase Overview
 
-| # | Phase | Goal | Requirements | Success Criteria | Plans |
-|---|-------|------|--------------|------------------|------|
-| 1 | Foundation & Auth | Project setup, design system, auth, basic dashboard | CORE-01 to CORE-05, AUTH-01 to AUTH-05, ONBD-01 to ONBD-02, DASH-01 to DASH-02 | 12 | 4 |
-| 2 | Trader DNA | Assessment flow, profile generation, personalized dashboard | DNA-01 to DNA-10 | 10 |
-| 3 | Trade Journal | Entry, import, screenshots, AI review | INTL-01 to INTL-03, JRNL-01 to JRNL-08 | 11 |
-| 4 | AI Trade Intelligence | Analysis engine, insights, exportable reports | INTL-04 to INTL-09, DASH-04 to DASH-07 | 12 |
-| 5 | Risk Guardian | Behavioral monitoring, alerts, configurable thresholds | GRDN-01 to GRDN-09, DASH-08 | 9 |
-| 6 | Edge Score | Gamified scoring, rankings, leaderboard | EDGE-01 to EDGE-10, DASH-05 to DASH-06 | 12 |
-| 7 | Education & Strategy Lab | Courses, quizzes, strategy simulation | EDU-01 to EDU-11 | 11 |
-| 8 | Public Pages & Launch | Landing, pricing, FAQ, legal, polish | HOME-01 to HOME-07, PRIC-01, FAQ-01 to FAQ-02, API-01 to API-06 | 15 |
+| # | Phase | Goal | Requirements | Success Criteria | Plans | Audit Status |
+|---|-------|------|--------------|------------------|------|-------------|
+| 1 | Foundation & Auth | Project setup, design system, auth, basic dashboard | CORE-01 to CORE-05, AUTH-01 to AUTH-05, ONBD-01 to ONBD-02, DASH-01 to DASH-02 | 12 | 4 | 🔴 2 critical, 1 warning, 2 info |
+| 2 | Trader DNA | Assessment flow, profile generation, personalized dashboard | DNA-01 to DNA-10 | 10 | | 🟡 1 warning, 1 info |
+| 3 | Trade Journal | Entry, import, screenshots, AI review | INTL-01 to INTL-03, JRNL-01 to JRNL-08 | 11 | | 🟢 No audit findings |
+| 4 | AI Trade Intelligence | Analysis engine, insights, exportable reports | INTL-04 to INTL-09, DASH-04 to DASH-07 | 12 | | 🟢 No audit findings |
+| 5 | Risk Guardian | Behavioral monitoring, alerts, configurable thresholds | GRDN-01 to GRDN-09, DASH-08 | 9 | | 🔴 1 critical, 2 warnings |
+| 6 | Edge Score | Gamified scoring, rankings, leaderboard | EDGE-01 to EDGE-10, DASH-05 to DASH-06 | 12 | | 🔴 1 critical, 3 warnings |
+| 7 | Education & Strategy Lab | Courses, quizzes, strategy simulation | EDU-01 to EDU-11 | 11 | | 🟢 No audit findings |
+| 8 | Public Pages & Launch | Landing, pricing, FAQ, legal, polish | HOME-01 to HOME-07, PRIC-01, FAQ-01 to FAQ-02, API-01 to API-06 | 15 | | 🟡 1 warning, 1 info |
 
 **Total:** 8 phases | 85 requirements | 92 success criteria
+
+---
+
+**Note (2026-07-11):** All 8 phases have implementation code but CTO audit found issues across every phase. See `REVIEW.md` and the Traceability section below per-requirement notes.
 
 ---
 
@@ -226,101 +231,102 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CORE-01 | 1 | Pending |
-| CORE-02 | 1 | Pending |
-| CORE-03 | 1 | Pending |
-| CORE-04 | 1 | Pending |
-| CORE-05 | 1 | Pending |
-| AUTH-01 | 1 | Pending |
-| AUTH-02 | 1 | Pending |
-| AUTH-03 | 1 | Pending |
-| AUTH-04 | 1 | Pending |
-| AUTH-05 | 1 | Pending |
-| ONBD-01 | 1 | Pending |
-| ONBD-02 | 1 | Pending |
-| DASH-01 | 1 | Pending |
-| DASH-02 | 1 | Pending |
-| DNA-01 | 2 | Pending |
-| DNA-02 | 2 | Pending |
-| DNA-03 | 2 | Pending |
-| DNA-04 | 2 | Pending |
-| DNA-05 | 2 | Pending |
-| DNA-06 | 2 | Pending |
-| DNA-07 | 2 | Pending |
-| DNA-08 | 2 | Pending |
-| DNA-09 | 2 | Pending |
-| DNA-10 | 2 | Pending |
-| INTL-01 | 3 | Pending |
-| INTL-02 | 3 | Pending |
-| INTL-03 | 3 | Pending |
-| JRNL-01 | 3 | Pending |
-| JRNL-02 | 3 | Pending |
-| JRNL-03 | 3 | Pending |
-| JRNL-04 | 3 | Pending |
-| JRNL-05 | 3 | Pending |
-| INTL-04 | 4 | Pending |
-| INTL-05 | 4 | Pending |
-| INTL-06 | 4 | Pending |
-| INTL-07 | 4 | Pending |
-| INTL-08 | 4 | Pending |
-| INTL-09 | 4 | Pending |
-| DASH-04 | 4 | Pending |
-| DASH-05 | 4 | Pending |
-| DASH-06 | 4 | Pending |
-| DASH-07 | 4 | Pending |
-| GRDN-01 | 5 | Pending |
-| GRDN-02 | 5 | Pending |
-| GRDN-03 | 5 | Pending |
-| GRDN-04 | 5 | Pending |
-| GRDN-05 | 5 | Pending |
-| GRDN-06 | 5 | Pending |
-| GRDN-07 | 5 | Pending |
-| GRDN-08 | 5 | Pending |
-| GRDN-09 | 5 | Pending |
-| DASH-08 | 5 | Pending |
-| EDGE-01 | 6 | Pending |
-| EDGE-02 | 6 | Pending |
-| EDGE-03 | 6 | Pending |
-| EDGE-04 | 6 | Pending |
-| EDGE-05 | 6 | Pending |
-| EDGE-06 | 6 | Pending |
-| EDGE-07 | 6 | Pending |
-| EDGE-08 | 6 | Pending |
-| EDGE-09 | 6 | Pending |
-| EDGE-10 | 6 | Pending |
-| JRNL-06 | 6 | Pending |
-| JRNL-07 | 6 | Pending |
-| JRNL-08 | 6 | Pending |
-| EDU-01 | 7 | Pending |
-| EDU-02 | 7 | Pending |
-| EDU-03 | 7 | Pending |
-| EDU-04 | 7 | Pending |
-| EDU-05 | 7 | Pending |
-| EDU-06 | 7 | Pending |
-| EDU-07 | 7 | Pending |
-| EDU-08 | 7 | Pending |
-| EDU-09 | 7 | Pending |
-| EDU-10 | 7 | Pending |
-| EDU-11 | 7 | Pending |
-| HOME-01 | 8 | Pending |
-| HOME-02 | 8 | Pending |
-| HOME-03 | 8 | Pending |
-| HOME-04 | 8 | Pending |
-| HOME-05 | 8 | Pending |
-| HOME-06 | 8 | Pending |
-| HOME-07 | 8 | Pending |
-| PRIC-01 | 8 | Pending |
-| FAQ-01 | 8 | Pending |
-| FAQ-02 | 8 | Pending |
-| API-01 | 8 | Pending |
-| API-02 | 8 | Pending |
-| API-03 | 8 | Pending |
+| CORE-01 | 1 | ✅ Implemented |
+| CORE-02 | 1 | ✅ Implemented |
+| CORE-03 | 1 | ✅ Implemented (inline styles in landing — not themable — IN-03) |
+| CORE-04 | 1 | ✅ Implemented |
+| CORE-05 | 1 | ✅ Implemented |
+| AUTH-01 | 1 | ✅ Implemented (admin-created users fail — CR-01; blank page on unauthenticated — CR-04) |
+| AUTH-02 | 1 | ✅ Implemented |
+| AUTH-03 | 1 | ✅ Implemented |
+| AUTH-04 | 1 | ✅ Implemented |
+| AUTH-05 | 1 | ✅ Implemented (profile form misses DB update — WR-10) |
+| ONBD-01 | 1 | ✅ Implemented |
+| ONBD-02 | 1 | ✅ Implemented |
+| DASH-01 | 1 | ✅ Implemented (hardcoded data in sub-pages — WR-01) |
+| DASH-02 | 1 | ✅ Implemented (hardcoded data — WR-01) |
+| DNA-01 | 2 | ✅ Implemented |
+| DNA-02 | 2 | ✅ Implemented |
+| DNA-03 | 2 | ✅ Implemented |
+| DNA-04 | 2 | ✅ Implemented |
+| DNA-05 | 2 | ✅ Implemented |
+| DNA-06 | 2 | ✅ Implemented |
+| DNA-07 | 2 | ✅ Implemented |
+| DNA-08 | 2 | ✅ Implemented (hardcoded in dashboard/trader-dna — WR-01) |
+| DNA-09 | 2 | ✅ Implemented |
+| DNA-10 | 2 | ✅ Implemented |
+| INTL-01 | 3 | ✅ Implemented |
+| INTL-02 | 3 | ✅ Implemented |
+| INTL-03 | 3 | ✅ Implemented |
+| JRNL-01 | 3 | ✅ Implemented |
+| JRNL-02 | 3 | ✅ Implemented |
+| JRNL-03 | 3 | ✅ Implemented |
+| JRNL-04 | 3 | ✅ Implemented |
+| JRNL-05 | 3 | ✅ Implemented |
+| INTL-04 | 4 | ✅ Implemented |
+| INTL-05 | 4 | ✅ Implemented |
+| INTL-06 | 4 | ✅ Implemented |
+| INTL-07 | 4 | ✅ Implemented |
+| INTL-08 | 4 | ✅ Implemented |
+| INTL-09 | 4 | ✅ Implemented |
+| DASH-04 | 4 | ✅ Implemented |
+| DASH-05 | 4 | ✅ Implemented |
+| DASH-06 | 4 | ✅ Implemented (hardcoded — WR-01) |
+| DASH-07 | 4 | ✅ Implemented |
+| GRDN-01 | 5 | ✅ Implemented (alert acknowledge may use wrong column — CR-06) |
+| GRDN-02 | 5 | ✅ Implemented |
+| GRDN-03 | 5 | ✅ Implemented |
+| GRDN-04 | 5 | ✅ Implemented |
+| GRDN-05 | 5 | ✅ Implemented |
+| GRDN-06 | 5 | ✅ Implemented (pause expiry not enforced — WR-12) |
+| GRDN-07 | 5 | ✅ Implemented |
+| GRDN-08 | 5 | ✅ Implemented |
+| GRDN-09 | 5 | ✅ Implemented |
+| DASH-08 | 5 | ✅ Implemented |
+| EDGE-01 | 6 | ✅ Implemented (uses hardcoded 10% drawdown — WR-09) |
+| EDGE-02 | 6 | ✅ Implemented |
+| EDGE-03 | 6 | ✅ Implemented |
+| EDGE-04 | 6 | ✅ Implemented |
+| EDGE-05 | 6 | ✅ Implemented |
+| EDGE-06 | 6 | ✅ Implemented |
+| EDGE-07 | 6 | ✅ Implemented |
+| EDGE-08 | 6 | ✅ Implemented |
+| EDGE-09 | 6 | ✅ Implemented |
+| EDGE-10 | 6 | ✅ Implemented |
+| JRNL-06 | 6 | ✅ Implemented |
+| JRNL-07 | 6 | ✅ Implemented (user dashboard counts ALL trades — CR-02) |
+| JRNL-08 | 6 | ✅ Implemented |
+| EDU-01 | 7 | ✅ Implemented |
+| EDU-02 | 7 | ✅ Implemented |
+| EDU-03 | 7 | ✅ Implemented |
+| EDU-04 | 7 | ✅ Implemented |
+| EDU-05 | 7 | ✅ Implemented |
+| EDU-06 | 7 | ✅ Implemented |
+| EDU-07 | 7 | ✅ Implemented |
+| EDU-08 | 7 | ✅ Implemented |
+| EDU-09 | 7 | ✅ Implemented |
+| EDU-10 | 7 | ✅ Implemented |
+| EDU-11 | 7 | ✅ Implemented |
+| HOME-01 | 8 | ✅ Implemented |
+| HOME-02 | 8 | ✅ Implemented |
+| HOME-03 | 8 | ✅ Implemented |
+| HOME-04 | 8 | ✅ Implemented |
+| HOME-05 | 8 | ✅ Implemented |
+| HOME-06 | 8 | ✅ Implemented |
+| HOME-07 | 8 | ✅ Implemented |
+| PRIC-01 | 8 | ✅ Implemented |
+| FAQ-01 | 8 | ✅ Implemented |
+| FAQ-02 | 8 | ✅ Implemented |
+| API-01 | 8 | ✅ Implemented |
+| API-02 | 8 | ✅ Implemented |
+| API-03 | 8 | ✅ Implemented |
 
 **Coverage:**
 - v1 requirements: 85 total
 - Mapped to phases: 85
 - Unmapped: 0 ✓
+- Implemented with audit-verified issues: 14 requirements affected by 28 findings (9 critical, 14 warnings, 5 info)
 
 ---
 *Roadmap created: 2026-05-08*
-*Last updated: 2026-05-08 after roadmap creation*
+*Last updated: 2026-07-11 — traceability updated from "Pending" to "Implemented" with audit findings noted*

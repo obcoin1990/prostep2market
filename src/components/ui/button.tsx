@@ -46,11 +46,11 @@ const base =
 const variants: Record<NonNullable<ButtonProps["variant"]>, string> = {
   /* ── Primary: yellow with black text ── */
   "primary":
-    "bg-[#fcd535] text-[#181a20] rounded-[6px] hover:bg-[#f0b90b] active:bg-[#f0b90b] disabled:bg-[#3a3a1f] disabled:text-[#707a8a]",
+    "bg-[#fcd535] text-[#181a20] rounded-[6px] hover:bg-[#f0b90b] active:bg-[#f0b90b] disabled:bg-[#3a3a1f] disabled:text-[#9ea3ad]",
 
   /* ── Primary pill: top-of-page CTA ── */
   "primary-pill":
-    "bg-[#fcd535] text-[#181a20] rounded-full hover:bg-[#f0b90b] active:bg-[#f0b90b] disabled:bg-[#3a3a1f] disabled:text-[#707a8a]",
+    "bg-[#fcd535] text-[#181a20] rounded-full hover:bg-[#f0b90b] active:bg-[#f0b90b] disabled:bg-[#3a3a1f] disabled:text-[#9ea3ad]",
 
   /* ── Secondary: dark surface ── */
   "secondary":
@@ -90,7 +90,7 @@ const variants: Record<NonNullable<ButtonProps["variant"]>, string> = {
 
   /* ── Default: neutral gray ── */
   "default":
-    "bg-[#2b3139] text-[#eaecef] rounded-[6px] hover:bg-[#707a8a]",
+    "bg-[#2b3139] text-[#eaecef] rounded-[6px] hover:bg-[#9ea3ad]",
 
   /* ── Success (alias trading-up) ── */
   "success":

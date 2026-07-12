@@ -1,5 +1,6 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getAdminContext } from '@/lib/admin/auth'
+import { prisma } from '@/lib/prisma'
 import { NextRequest, NextResponse } from 'next/server'
 
 // ─── GET /api/admin/users ─────────────────────────────────────────────────────
@@ -98,6 +99,20 @@ export async function POST(request: NextRequest) {
 
   if (authError) return NextResponse.json({ error: authError.message }, { status: 400 })
   if (!newUser.user) return NextResponse.json({ error: 'Failed to create user' }, { status: 400 })
+
+  // Create Prisma User record (required for auth + feature access)
+  await prisma.user.create({
+    data: {
+      id: newUser.user.id,
+      name: full_name ?? email.split('@')[0],
+      email,
+      role: 'LEARNER',
+    },
+  }).catch(async (err) => {
+    // Rollback: delete the Supabase auth user if Prisma create fails
+    await adminSupabase.auth.admin.deleteUser(newUser.user.id)
+    console.error('Failed to create Prisma user:', err)
+  })
 
   const now = new Date().toISOString()
   const { error: profileError } = await adminSupabase

@@ -45,7 +45,16 @@ export async function PATCH(req: NextRequest, { params }: Params) {
   const allowedProfileFields = ['admin_role', 'learning_path', 'profile_type']
   const profileUpdates: Record<string, unknown> = {}
   for (const key of allowedProfileFields) {
-    if (key in body) profileUpdates[key] = body[key]
+    if (key in body) {
+      // Validate admin_role against allowed enum values
+      if (key === 'admin_role') {
+        const allowedRoles = ['super_admin', 'admin', 'editor', 'viewer']
+        if (body[key] !== null && !allowedRoles.includes(body[key] as string)) {
+          return NextResponse.json({ error: `Invalid admin_role. Allowed: ${allowedRoles.join(', ')}` }, { status: 400 })
+        }
+      }
+      profileUpdates[key] = body[key]
+    }
   }
 
   const updates: Array<PromiseLike<unknown>> = []
@@ -74,8 +83,10 @@ export async function PATCH(req: NextRequest, { params }: Params) {
   return NextResponse.json({ success: true })
 }
 
-// ─── PUT /api/admin/users/[id] — alias kept for backward-compat ──────────────
-export { PATCH as PUT }
+// PUT alias — REST convention treats PUT as full-resource-replace and PATCH as
+// partial update. Our update is partial so the canonical method is PATCH,
+// but several admin clients send PUT. We accept both, identical semantics.
+export const PUT = PATCH
 export async function DELETE(_req: NextRequest, { params }: Params) {
   const result = await getAdminContext()
   if (result instanceof NextResponse) return result

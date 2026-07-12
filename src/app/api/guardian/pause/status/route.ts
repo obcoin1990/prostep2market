@@ -29,7 +29,21 @@ export async function GET(request: Request) {
       return NextResponse.json({ pauseMode: null });
     }
 
-    return NextResponse.json({ 
+    // WR-12: Check if the pause has expired based on duration_minutes + started_at.
+    // If expired, treat as no active pause and flip the DB flag to inactive.
+    if (pauseMode.duration_minutes && pauseMode.started_at) {
+      const startedAt = new Date(pauseMode.started_at).getTime()
+      const expiresAt = startedAt + pauseMode.duration_minutes * 60_000
+      if (Date.now() >= expiresAt) {
+        await supabase
+          .from('pause_mode')
+          .update({ active: false })
+          .eq('id', pauseMode.id)
+        return NextResponse.json({ pauseMode: null })
+      }
+    }
+
+    return NextResponse.json({
       pauseMode: {
         id: pauseMode.id,
         active: pauseMode.active,

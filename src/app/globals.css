@@ -7,55 +7,167 @@
    ─────────────────────────────────────────────────────────────────────────── */
 
 @theme {
-  /* Brand & Accent */
-  --color-primary:           #fcd535;  /* Binance Yellow — all primary CTAs */
-  --color-primary-active:    #f0b90b;  /* Hover / press */
-  --color-primary-disabled:  #3a3a1f;  /* Disabled over dark canvas */
-  --color-on-primary:        #181a20;  /* Black text on yellow CTA */
+  /* ─── Brand & Accent ─────────────────────────────────────────────────── */
+  --color-primary:           #fcd535;
+  --color-primary-active:    #f0b90b;
+  --color-primary-disabled:  #3a3a1f;
+  --color-on-primary:        #181a20;
 
-  /* Dark canvas (marketing / dashboard default) */
+  /* ─── Semantic color scale (50–950) ─── Yellow (primary) ─────────────── */
+  --color-primary-50:   #fefce8;
+  --color-primary-100:  #fef9c3;
+  --color-primary-200:  #fef08a;
+  --color-primary-300:  #fde047;
+  --color-primary-400:  #fcd535;   /* brand */
+  --color-primary-500:  #f0b90b;   /* active */
+  --color-primary-600:  #ca8a04;
+  --color-primary-700:  #a16207;
+  --color-primary-800:  #713f12;
+  --color-primary-900:  #422006;
+  --color-primary-950:  #1a0f00;
+
+  /* ─── Semantic color scale — gray ────────────────────────────────────── */
+  --color-gray-50:   #f7f7f8;
+  --color-gray-100:  #eaecef;
+  --color-gray-200:  #c1c5cc;
+  --color-gray-300:  #9ea3ad;
+  --color-gray-400:  #848e9c;
+  --color-gray-500:  #707a8a;
+  --color-gray-600:  #565e6b;
+  --color-gray-700:  #3d434d;
+  --color-gray-800:  #2b3139;
+  --color-gray-900:  #1e2329;
+  --color-gray-950:  #0b0e11;
+
+  /* ─── Semantic color scale — slate ───────────────────────────────────── */
+  --color-slate-50:   #f5f7fa;
+  --color-slate-100:  #eef2f6;
+  --color-slate-200:  #d5dce6;
+  --color-slate-300:  #b3bdc9;
+  --color-slate-400:  #8592a4;
+  --color-slate-500:  #606c80;
+  --color-slate-600:  #475569;
+  --color-slate-700:  #334155;
+  --color-slate-800:  #1e293b;
+  --color-slate-900:  #0f172a;
+  --color-slate-950:  #020617;
+
+  /* ─── Semantic color scale — red (trading-down / destructive) ────────── */
+  --color-red-50:   #fef2f2;
+  --color-red-100:  #fee2e2;
+  --color-red-200:  #fecaca;
+  --color-red-300:  #fca5a5;
+  --color-red-400:  #fc8181;
+  --color-red-500:  #f6465d;   /* trading-down */
+  --color-red-600:  #dc2626;
+  --color-red-700:  #b91c1c;
+  --color-red-800:  #991b1b;
+  --color-red-900:  #7f1d1d;
+  --color-red-950:  #450a0a;
+
+  /* ─── Semantic color scale — green (trading-up / success) ────────────── */
+  --color-green-50:   #f0fdf4;
+  --color-green-100:  #dcfce7;
+  --color-green-200:  #bbf7d0;
+  --color-green-300:  #86efac;
+  --color-green-400:  #4ade80;
+  --color-green-500:  #0ecb81;   /* trading-up */
+  --color-green-600:  #16a34a;
+  --color-green-700:  #15803d;
+  --color-green-800:  #166534;
+  --color-green-900:  #14532d;
+  --color-green-950:  #052e16;
+
+  /* ─── Semantic color scale — blue (info / accent) ────────────────────── */
+  --color-blue-50:   #eff6ff;
+  --color-blue-100:  #dbeafe;
+  --color-blue-200:  #bfdbfe;
+  --color-blue-300:  #93c5fd;
+  --color-blue-400:  #60a5fa;
+  --color-blue-500:  #3b82f6;   /* info */
+  --color-blue-600:  #2563eb;
+  --color-blue-700:  #1d4ed8;
+  --color-blue-800:  #1e40af;
+  --color-blue-900:  #1e3a8a;
+  --color-blue-950:  #172554;
+
+  /* ─── Canvas surfaces ────────────────────────────────────────────────── */
   --color-canvas-dark:          #0b0e11;
   --color-surface-card-dark:    #1e2329;
   --color-surface-elevated-dark:#2b3139;
-
-  /* Light canvas (transactional: login, forms) */
   --color-canvas-light:         #ffffff;
   --color-surface-soft-light:   #fafafa;
   --color-surface-strong-light: #f5f5f5;
 
-  /* Text */
+  /* ─── Text ───────────────────────────────────────────────────────────── */
   --color-on-dark:         #ffffff;
-  --color-body-dark:       #ffffff;   /* Pure white on dark canvas */
-  --color-ink:             #000000;   /* Pure black on light surfaces */
-  --color-muted:           #ffffff;   /* All muted text → white on dark */
-  --color-muted-strong:    #ffffff;   /* All helper text → white on dark */
+  --color-body-dark:       #ffffff;
+  --color-ink:             #000000;
+  --color-muted:           #ffffff;
+  --color-muted-strong:    #ffffff;
 
-  /* Hairlines & borders */
-  --color-hairline-dark:   #334155;   /* Input/card borders — slate-700, more visible depth */
+  /* ─── Hairlines & borders ────────────────────────────────────────────── */
+  --color-hairline-dark:   #334155;
   --color-hairline-light:  #eaecef;
   --color-border-strong:   #cdd1d6;
 
-  /* Soft interactive red (hover states — less aggressive than trading-down) */
-  --color-redsoft:         #fc8181;   /* 5.1:1 on canvas, 4.6:1 on card */
+  /* ─── Soft interactive red ───────────────────────────────────────────── */
+  --color-redsoft:         #fc8181;
 
-  /* Trading semantics */
-  --color-trading-up:      #0ecb81;  /* Price up / Buy / Long */
-  --color-trading-down:    #f6465d;  /* Price down / Sell / Short */
+  /* ─── Trading semantics ──────────────────────────────────────────────── */
+  --color-trading-up:      #0ecb81;
+  --color-trading-down:    #f6465d;
 
-  /* Accent (single-product, use sparingly) */
+  /* ─── Accents ────────────────────────────────────────────────────────── */
   --color-accent-turquoise:#2dbdb6;
-
-  /* Navy — pale blue light surface */
+  --color-accent-cyan:     #00B4D8;
+  --color-brand-red:       #E53935;
+  --color-admin-bg:        #0A0F1C;
   --color-navy:            #e8f0fe;
-
-  /* Info / Focus ring */
   --color-info:            #3b82f6;
 
-  /* Font stacks */
+  /* ─── Font stacks ────────────────────────────────────────────────────── */
   --font-sans:  var(--font-inter, 'Inter'), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-mono:  var(--font-plex, 'IBM Plex Mono'), 'JetBrains Mono', monospace;
 
-  /* Border radius scale */
+  /* ─── Typographic scale (major-second 1.125) ─────────────────────────── */
+  --text-xs:    0.75rem;   /* 12px */
+  --text-xs--line-height: 1rem;
+  --text-sm:    0.875rem;  /* 14px */
+  --text-sm--line-height: 1.25rem;
+  --text-base:  1rem;      /* 16px */
+  --text-base--line-height: 1.5rem;
+  --text-lg:    1.125rem;  /* 18px */
+  --text-lg--line-height: 1.75rem;
+  --text-xl:    1.25rem;   /* 20px */
+  --text-xl--line-height: 1.75rem;
+  --text-2xl:   1.5rem;    /* 24px */
+  --text-2xl--line-height: 2rem;
+  --text-3xl:   1.875rem;  /* 30px */
+  --text-3xl--line-height: 2.25rem;
+  --text-4xl:   2.25rem;   /* 36px */
+  --text-4xl--line-height: 2.5rem;
+  --text-5xl:   3rem;      /* 48px */
+  --text-5xl--line-height: 1.1;
+  --text-6xl:   3.75rem;   /* 60px */
+  --text-6xl--line-height: 1.1;
+  --text-7xl:   4.5rem;    /* 72px */
+  --text-7xl--line-height: 1.1;
+
+  /* ─── Font weight ──────────────────────────────────────────────────── */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* ─── Letter spacing ─────────────────────────────────────────────────── */
+  --tracking-tight:   -0.02em;
+  --tracking-normal:  0em;
+  --tracking-wide:    0.02em;
+  --tracking-wider:   0.05em;
+  --tracking-widest:  0.1em;
+
+  /* ─── Border radius scale ────────────────────────────────────────────── */
   --radius-xs:   2px;
   --radius-sm:   4px;
   --radius-md:   6px;
@@ -63,9 +175,7 @@
   --radius-xl:   12px;
   --radius-pill: 9999px;
 
-  /* Spacing scale (4px base)
-     NOTE: --spacing-{name} also generates max-w-{name} in Tailwind v4.
-     We define --max-width-* below to restore the standard container widths. */
+  /* ─── Spacing scale (4px base) ───────────────────────────────────────── */
   --spacing-xxs: 4px;
   --spacing-xs:  8px;
   --spacing-sm:  12px;
@@ -75,19 +185,63 @@
   --spacing-xxl: 48px;
   --spacing-section: 80px;
 
-  /* Container max-widths — must be explicit because --spacing-{sm/md/lg/xl}
-     above would otherwise override max-w-sm/md/lg/xl with tiny pixel values. */
-  --max-width-xs:  20rem;    /*  320px */
-  --max-width-sm:  24rem;    /*  384px */
-  --max-width-md:  28rem;    /*  448px */
-  --max-width-lg:  32rem;    /*  512px */
-  --max-width-xl:  36rem;    /*  576px */
-  --max-width-2xl: 42rem;    /*  672px */
-  --max-width-3xl: 48rem;    /*  768px */
-  --max-width-4xl: 56rem;    /*  896px */
-  --max-width-5xl: 64rem;    /* 1024px */
-  --max-width-6xl: 72rem;    /* 1152px */
-  --max-width-7xl: 80rem;    /* 1280px */
+  /* ─── Shadow / elevation system ──────────────────────────────────────── */
+  --shadow-xs:    0 0 2px 0 rgba(0,0,0,0.05);
+  --shadow-sm:    0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px -1px rgba(0,0,0,0.1);
+  --shadow-md:    0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+  --shadow-lg:    0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1);
+  --shadow-xl:    0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
+  --shadow-2xl:   0 25px 50px -12px rgba(0,0,0,0.25);
+  --shadow-inner: inset 0 2px 4px 0 rgba(0,0,0,0.05);
+  --shadow-glow:  0 0 8px rgba(252,213,53,0.3);       /* yellow glow for focus / active elements */
+  --shadow-glow-up: 0 0 8px rgba(14,203,129,0.3);     /* green glow for up indicators */
+  --shadow-glow-down: 0 0 8px rgba(246,70,93,0.3);    /* red glow for down indicators */
+
+  /* ─── Motion / transition tokens ─────────────────────────────────────── */
+  --transition-fast:     150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal:   250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow:     400ms cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-default:        cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-in:             cubic-bezier(0.4, 0, 1, 1);
+  --ease-out:            cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out:         cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring:         cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-bounce:         cubic-bezier(0.68, -0.55, 0.27, 1.55);
+
+  /* ─── Z-index scale ──────────────────────────────────────────────────── */
+  --z-base:       0;
+  --z-dropdown:   100;
+  --z-sticky:     200;
+  --z-fixed:      300;
+  --z-drawer:     400;
+  --z-modal:      500;
+  --z-popover:    600;
+  --z-toast:      700;
+  --z-tooltip:    800;
+  --z-max:        9999;
+
+  /* ─── Data viz palette (accessible, colorblind-friendly) ─────────────── */
+  --chart-1:  #fcd535;   /* yellow — primary metric */
+  --chart-2:  #3b82f6;   /* blue — secondary metric */
+  --chart-3:  #0ecb81;   /* green — positive */
+  --chart-4:  #f6465d;   /* red — negative */
+  --chart-5:  #a78bfa;   /* violet — auxiliary */
+  --chart-6:  #2dd4bf;   /* teal — auxiliary */
+  --chart-7:  #fb923c;   /* orange — auxiliary */
+  --chart-8:  #e879f9;   /* fuchsia — auxiliary */
+
+  /* ─── Container max-widths ────────────────────────────────────────────── */
+  --max-width-xs:  20rem;
+  --max-width-sm:  24rem;
+  --max-width-md:  28rem;
+  --max-width-lg:  32rem;
+  --max-width-xl:  36rem;
+  --max-width-2xl: 42rem;
+  --max-width-3xl: 48rem;
+  --max-width-4xl: 56rem;
+  --max-width-5xl: 64rem;
+  --max-width-6xl: 72rem;
+  --max-width-7xl: 80rem;
   --max-width-screen-sm:  640px;
   --max-width-screen-md:  768px;
   --max-width-screen-lg:  1024px;
@@ -96,12 +250,16 @@
   --max-width-prose:      65ch;
   --max-width-full:       100%;
   --max-width-none:       none;
+
+  /* ─── Accordion animation tokens ──────────────────────────────────────── */
+  --animate-accordion-down: accordion-down 200ms ease-out;
+  --animate-accordion-up:   accordion-up 200ms ease-out;
 }
 
 /* ─── CSS custom properties (HSL bridge for legacy component references) ─── */
 @layer base {
   :root {
-    /* Map Binance tokens → HSL vars for backwards-compat */
+    /* Dark mode (default) — Map Binance tokens → HSL vars */
     --background:        0 0% 7%;          /* canvas-dark #0b0e11 */
     --foreground:        0 0% 100%;        /* pure white */
     --card:              220 14% 15%;      /* surface-card-dark #1e2329 */
@@ -131,6 +289,42 @@
     --warning:           47 97% 59%;       /* primary yellow used for warnings */
     --error:             353 91% 65%;      /* trading-down */
     --info:              214 89% 60%;      /* info #3b82f6 */
+
+    /* Data viz palette */
+    --chart-1:  #fcd535;
+    --chart-2:  #3b82f6;
+    --chart-3:  #0ecb81;
+    --chart-4:  #f6465d;
+    --chart-5:  #a78bfa;
+    --chart-6:  #2dd4bf;
+    --chart-7:  #fb923c;
+    --chart-8:  #e879f9;
+  }
+
+  /* Light mode overrides — applied when <html data-theme="light"> or prefers-color-scheme */
+  :root:not(.dark),
+  [data-theme="light"] {
+    --background:        220 14% 96%;      /* light canvas #f5f7fa */
+    --foreground:        222 12% 11%;      /* near-black #181a20 */
+    --card:              0 0% 100%;        /* pure white */
+    --card-foreground:   222 12% 11%;
+    --primary:           47 97% 59%;       /* same yellow */
+    --primary-foreground:222 12% 11%;
+    --secondary:         220 14% 90%;      /* light elevated surface */
+    --secondary-foreground: 222 12% 11%;
+    --muted:             220 14% 90%;
+    --muted-foreground:  220 14% 40%;
+    --accent:            47 97% 59%;
+    --accent-foreground: 222 12% 11%;
+    --border:            220 14% 85%;
+    --input:             220 14% 90%;
+    --ring:              47 97% 59%;
+
+    --background-alt:    220 14% 90%;
+    --text-primary:      222 12% 11%;
+    --text-secondary:    220 14% 30%;
+    --text-muted:        220 14% 45%;
+    --border-color:      220 14% 85%;
   }
 }
 
@@ -145,7 +339,8 @@
     background-color: #0b0e11;
     color: #ffffff;
     font-family: var(--font-sans);
-    font-size: 14px;
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-normal);
     line-height: 1.5;
   }
 
@@ -154,6 +349,12 @@
   }
 
   /* Scrollbar — Binance style (thin, dark) */
+  /* Firefox */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #2b3139 #0b0e11;
+  }
+  /* Chromium + Safari */
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -175,12 +376,18 @@
     outline-offset: 2px;
   }
 
-  /* Headings inherit BinanceNova (Inter) */
+  /* Headings inherit BinanceNova (Inter) — fluid type scale */
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-sans);
     color: #ffffff;
     line-height: 1.2;
   }
+  h1 { font-size: clamp(1.875rem, 4vw, var(--text-5xl)); font-weight: 700; letter-spacing: -0.02em; }
+  h2 { font-size: clamp(1.5rem, 3vw, var(--text-4xl)); font-weight: 700; letter-spacing: -0.02em; }
+  h3 { font-size: clamp(1.25rem, 2vw, var(--text-3xl)); font-weight: 600; }
+  h4 { font-size: clamp(1.125rem, 1.5vw, var(--text-2xl)); font-weight: 600; }
+  h5 { font-size: var(--text-lg); font-weight: 600; }
+  h6 { font-size: var(--text-base); font-weight: 600; }
 
   /* Links */
   a {
@@ -194,6 +401,37 @@
   /* Price / number elements use IBM Plex Mono */
   .font-mono, [data-price], [data-stat] {
     font-family: var(--font-mono);
+  }
+
+  /* Responsive tables — horizontal scroll on small screens */
+  .table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .table-responsive table {
+    width: 100%;
+    min-width: 520px;
+  }
+
+  /* Code blocks — horizontal scroll on small screens */
+  pre, code {
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .code-block-responsive {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Prevent horizontal overflow on mobile */
+  img, video, iframe, embed, object {
+    max-width: 100%;
+    height: auto;
   }
 }
 
@@ -410,6 +648,65 @@
   .text-foreground { color: #ffffff; }
   .text-muted-foreground { color: #ffffff; }
   .border-border  { border-color: #334155; }
+
+  /* ── Data viz chart colors ───────────────────────────────────────────── */
+  .chart-primary   { color: #fcd535; fill: #fcd535; }
+  .chart-secondary { color: #3b82f6; fill: #3b82f6; }
+  .chart-positive  { color: #0ecb81; fill: #0ecb81; }
+  .chart-negative  { color: #f6465d; fill: #f6465d; }
+
+  /* ── Motion / transition utilities ───────────────────────────────────── */
+  .motion-safe  { @media (prefers-reduced-motion: no-preference) { transition-duration: 250ms; } }
+  .motion-reduce { transition: none !important; animation: none !important; }
+  .fade-in      { animation: fadeIn 250ms var(--ease-out); }
+  .slide-up     { animation: slideUp 250ms var(--ease-out); }
+  .slide-in-left  { animation: slideInLeft 250ms var(--ease-out); }
+  .slide-in-right { animation: slideInRight 250ms var(--ease-out); }
+  .scale-in     { animation: scaleIn 200ms var(--ease-spring); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes accordion-down {
+  from { height: 0; }
+  to   { height: var(--radix-accordion-content-height); }
+}
+
+@keyframes accordion-up {
+  from { height: var(--radix-accordion-content-height); }
+  to   { height: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* ─── Global text-contrast overrides ────────────────────────────────────────
@@ -436,6 +733,8 @@
   .text-neutral-400, .text-neutral-500, .text-neutral-600 { color: #ffffff; }
 
   /* ── Rule B: light surface override → pure black ── */
+  a { color: #000000; }
+  .text-\\[\\#fcd535\\] { color: #854d0e !important; }
 
   /* white panels (admin, trader-dna forms) */
   .bg-white .text-gray-100, .bg-white .text-gray-200, .bg-white .text-gray-300,

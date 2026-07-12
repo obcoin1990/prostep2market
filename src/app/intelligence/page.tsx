@@ -25,6 +25,10 @@ export const metadata: Metadata = {
   title: 'Intelligence — ProStep2Market',
   description:
     'AI Analysis, Risk Guardian, and Edge Score — the three intelligence engines that help you trade with discipline and clarity.',
+  openGraph: {
+    title: 'Intelligence — ProStep2Market',
+    description: 'AI Analysis, Risk Guardian, and Edge Score — the three intelligence engines that help you trade with discipline.',
+  },
 }
 
 // ── AI loop steps ─────────────────────────────────────────────────────────────
@@ -110,10 +114,10 @@ const analysisFeatures = [
 
 // ── stats bar ─────────────────────────────────────────────────────────────────
 const stats = [
-  { value: '94%', label: 'Alert accuracy rate' },
+  { value: 'Low', label: 'Alert latency' },
   { value: '3 ms', label: 'Alert response time' },
   { value: '18+', label: 'Behavioral patterns tracked' },
-  { value: '2.4M', label: 'Trades analysed to date' },
+  { value: 'Growing', label: 'Trades analysed to date' },
 ]
 
 export default function IntelligencePage() {
@@ -195,7 +199,7 @@ export default function IntelligencePage() {
               <div key={step.label} className="relative flex flex-col gap-4 rounded-2xl border border-white/8 bg-white/4 p-6">
                 {/* connector arrow for desktop */}
                 {i < loop.length - 1 && (
-                  <span className="absolute -right-3 top-1/2 -translate-y-1/2 hidden lg:block text-white/20 text-lg">›</span>
+                  <span className="absolute -right-3 top-1/2 -translate-y-1/2 hidden lg:block text-white/50 text-lg">›</span>
                 )}
                 <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#00B4D8]/15">
                   <step.icon className="h-5 w-5 text-[#00B4D8]" />
@@ -263,7 +267,7 @@ export default function IntelligencePage() {
                 {/* Trade row */}
                 <div className="mb-4 rounded-xl border border-white/6 bg-white/3 px-4 py-3">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs text-white/40">GBP/USD Long · May 11</span>
+                    <span className="text-xs text-white/60">GBP/USD Long · May 11</span>
                     <span className="text-xs font-semibold text-[#2E7D32]">+2.1R</span>
                   </div>
                   <div className="flex items-center gap-2">
@@ -272,7 +276,7 @@ export default function IntelligencePage() {
                     </div>
                     <span className="text-sm font-bold text-[#00B4D8]">88</span>
                   </div>
-                  <p className="mt-1.5 text-xs text-white/40">Trade quality score</p>
+                  <p className="mt-1.5 text-xs text-white/60">Trade quality score</p>
                 </div>
 
                 {/* AI feedback */}
@@ -446,11 +450,11 @@ export default function IntelligencePage() {
                 <div className="mb-6 flex items-end justify-between">
                   <div>
                     <p className="text-6xl font-bold text-white">78</p>
-                    <p className="mt-1 text-sm text-white/40">Overall Edge Score</p>
+                    <p className="mt-1 text-sm text-white/60">Overall Edge Score</p>
                   </div>
                   <div className="text-right">
                     <p className="text-sm font-semibold text-[#8A2BE2]">Top 20%</p>
-                    <p className="text-xs text-white/40">of all traders</p>
+                    <p className="text-xs text-white/60">of all traders</p>
                     <p className="mt-1 text-xs text-[#2E7D32]">▲ +2 this week</p>
                   </div>
                 </div>

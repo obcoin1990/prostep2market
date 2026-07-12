@@ -100,7 +100,7 @@ export function LessonSidebar({
 
           return (
             <div key={module.id}>
-              <button
+<button type="button" 
                 onClick={() => toggleModule(module.id)}
                 className="flex w-full items-center justify-between px-4 py-2.5 text-left hover:bg-gray-50 transition"
               >
@@ -173,7 +173,7 @@ export function LessonSidebar({
       {/* Mobile toggle */}
       <button
         onClick={() => setSidebarOpen(v => !v)}
-        className="fixed bottom-4 right-4 z-50 lg:hidden flex items-center gap-2 rounded-full bg-brand-500 px-4 py-2.5 text-sm font-semibold text-white shadow-lg"
+        className="fixed bottom-4 right-4 z-[400] lg:hidden flex items-center gap-2 rounded-full bg-brand-500 px-4 py-2.5 text-sm font-semibold text-white shadow-lg"
       >
         {sidebarOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
         {sidebarOpen ? 'Close' : 'Lessons'}

@@ -27,6 +27,10 @@ export const metadata: Metadata = {
   title: 'Risk Guardian — ProStep2Market',
   description:
     'Real-time behavioral monitoring that catches revenge trading, overtrading, and fatigue before they cost you money.',
+  openGraph: {
+    title: 'Risk Guardian — ProStep2Market',
+    description: 'Real-time behavioral monitoring that catches revenge trading, overtrading, and fatigue before they cost you money.',
+  },
 }
 
 // ── How it monitors ──────────────────────────────────────────────────────────
@@ -145,10 +149,10 @@ const settings = [
 
 // ── Stats ────────────────────────────────────────────────────────────────────
 const stats = [
-  { value: '94%', label: 'Alert accuracy', sub: 'Verified against outcomes' },
+  { value: 'Low',  label: 'Alert latency', sub: 'From signal to alert' },
   { value: '3ms',  label: 'Response time',  sub: 'From signal to alert' },
   { value: '18',   label: 'Risk patterns',  sub: 'Monitored simultaneously' },
-  { value: '67%',  label: 'Loss reduction', sub: 'In flagged sessions' },
+  { value: 'Real-time', label: 'Risk monitoring', sub: 'Continuous protection' },
 ]
 
 export default function RiskGuardianPage() {
@@ -207,7 +211,7 @@ export default function RiskGuardianPage() {
               <div key={s.label} className="text-center">
                 <p className="text-3xl font-bold text-[#E53935]">{s.value}</p>
                 <p className="mt-0.5 text-sm font-medium text-white">{s.label}</p>
-                <p className="text-xs text-white/40">{s.sub}</p>
+                <p className="text-xs text-white/60">{s.sub}</p>
               </div>
             ))}
           </div>
@@ -230,7 +234,7 @@ export default function RiskGuardianPage() {
             {monitorSteps.map((step, i) => (
               <div key={step.title} className="relative flex flex-col gap-4 rounded-2xl border border-white/8 bg-white/4 p-6">
                 {i < monitorSteps.length - 1 && (
-                  <span className="absolute -right-3 top-1/2 -translate-y-1/2 hidden lg:block text-white/20 text-lg">›</span>
+                  <span className="absolute -right-3 top-1/2 -translate-y-1/2 hidden lg:block text-white/50 text-lg">›</span>
                 )}
                 <span className="flex h-10 w-10 items-center justify-center rounded-xl" style={{ background: `${step.color}18` }}>
                   <step.icon className="h-5 w-5" style={{ color: step.color }} />
@@ -283,15 +287,15 @@ export default function RiskGuardianPage() {
                 {/* Detail rows */}
                 <div className="space-y-2.5 text-xs">
                   <div className="flex gap-2">
-                    <span className="shrink-0 font-semibold text-white/40 w-20">Trigger</span>
+                    <span className="shrink-0 font-semibold text-white/60 w-20">Trigger</span>
                     <span className="text-white/60">{a.trigger}</span>
                   </div>
                   <div className="flex gap-2">
-                    <span className="shrink-0 font-semibold text-white/40 w-20">Impact</span>
+                    <span className="shrink-0 font-semibold text-white/60 w-20">Impact</span>
                     <span className="text-white/60">{a.impact}</span>
                   </div>
                   <div className="flex gap-2">
-                    <span className="shrink-0 font-semibold text-white/40 w-20">Action</span>
+                    <span className="shrink-0 font-semibold text-white/60 w-20">Action</span>
                     <span className="text-white/60">{a.intervention}</span>
                   </div>
                 </div>
@@ -384,7 +388,7 @@ export default function RiskGuardianPage() {
                     className="flex items-start gap-3 rounded-xl border p-4"
                     style={{ background: item.bg, borderColor: item.border }}
                   >
-                    <span className="text-xs text-white/30 shrink-0 w-10 pt-0.5">{item.time}</span>
+                    <span className="text-xs text-white/50 shrink-0 w-10 pt-0.5">{item.time}</span>
                     <span
                       className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg"
                       style={{ background: `${item.color}22` }}
@@ -417,7 +421,7 @@ export default function RiskGuardianPage() {
                   {settings.map((s) => (
                     <div key={s.label} className="flex items-center justify-between gap-3 rounded-xl border border-white/6 bg-white/3 px-3 py-2.5">
                       <div className="flex items-center gap-2.5">
-                        <s.icon className="h-4 w-4 text-white/40 shrink-0" />
+                        <s.icon className="h-4 w-4 text-white/60 shrink-0" />
                         <span className="text-xs text-white/70">{s.label}</span>
                       </div>
                       {/* Toggle visual */}

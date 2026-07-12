@@ -47,7 +47,7 @@ export function SessionHeatmap({ data }: SessionHeatmapProps) {
         <table className="w-full">
           <thead>
             <tr>
-              <th className="text-left p-2 w-12 text-xs font-medium" style={{ color: '#707a8a' }}></th>
+              <th className="text-left p-2 w-12 text-xs font-medium" style={{ color: '#9ea3ad' }}></th>
               {SESSIONS.map((s) => (
                 <th key={s} className="text-center p-2 min-w-[80px] text-xs font-medium capitalize" style={{ color: '#eaecef' }}>
                   {s}
@@ -58,7 +58,7 @@ export function SessionHeatmap({ data }: SessionHeatmapProps) {
           <tbody>
             {grid.map((row, i) => (
               <tr key={i}>
-                <td className="text-sm font-medium p-2" style={{ color: '#707a8a' }}>{row[0].day}</td>
+                <td className="text-sm font-medium p-2" style={{ color: '#9ea3ad' }}>{row[0].day}</td>
                 {row.map((cell, j) => (
                   <td key={j} className="p-1">
                     <div
@@ -81,7 +81,7 @@ export function SessionHeatmap({ data }: SessionHeatmapProps) {
                           </div>
                         </div>
                       ) : (
-                        <span className="text-xs" style={{ color: '#707a8a' }}>-</span>
+                        <span className="text-xs" style={{ color: '#9ea3ad' }}>-</span>
                       )}
                     </div>
                   </td>
@@ -101,15 +101,15 @@ export function SessionHeatmap({ data }: SessionHeatmapProps) {
       <div className="flex items-center justify-center mt-4 gap-6">
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 rounded" style={{ backgroundColor: 'rgba(246,70,93,0.4)' }}></div>
-          <span className="text-xs" style={{ color: '#707a8a' }}>Loss</span>
+          <span className="text-xs" style={{ color: '#9ea3ad' }}>Loss</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 rounded" style={{ backgroundColor: '#2b3139' }}></div>
-          <span className="text-xs" style={{ color: '#707a8a' }}>Breakeven</span>
+          <span className="text-xs" style={{ color: '#9ea3ad' }}>Breakeven</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 rounded" style={{ backgroundColor: 'rgba(14,203,129,0.4)' }}></div>
-          <span className="text-xs" style={{ color: '#707a8a' }}>Profit</span>
+          <span className="text-xs" style={{ color: '#9ea3ad' }}>Profit</span>
         </div>
       </div>
     </div>

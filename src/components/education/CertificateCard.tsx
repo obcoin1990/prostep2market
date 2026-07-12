@@ -56,14 +56,14 @@ export function CertificateCard({
 
       {/* Actions */}
       <div className="flex gap-2">
-        <button
+<button type="button" 
           onClick={handleDownload}
           className="flex-1 inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 text-sm"
         >
           <Download className="h-4 w-4" />
           Download
         </button>
-        <button
+<button type="button" 
           onClick={handleShare}
           className="inline-flex items-center justify-center px-3 py-2 rounded-lg border hover:bg-accent text-sm"
         >

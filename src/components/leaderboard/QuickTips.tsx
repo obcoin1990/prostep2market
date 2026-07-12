@@ -88,7 +88,7 @@ function TipItem({ message, category, level, onAction }: TipItemProps) {
           </div>
           <p className="text-sm">{message}</p>
           {onAction && (
-            <button
+<button type="button" 
               onClick={onAction}
               className="mt-2 text-xs font-medium flex items-center gap-1 hover:underline"
             >

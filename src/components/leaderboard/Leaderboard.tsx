@@ -179,10 +179,14 @@ export function Leaderboard({ className }: LeaderboardProps) {
                 {/* Trader name */}
                 <div className="col-span-7 flex items-center gap-2">
                   {entry.avatarUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
                     <img 
                       src={entry.avatarUrl} 
                       alt="" 
                       className="w-6 h-6 rounded-full"
+                      width={24}
+                      height={24}
+                      loading="lazy"
                     />
                   ) : (
                     <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-xs">

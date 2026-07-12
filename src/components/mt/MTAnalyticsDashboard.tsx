@@ -1,14 +1,22 @@
 'use client'
 
 import React, { useCallback, useEffect, useState } from 'react'
-import { MTEquityCurve }        from '@/components/mt/MTEquityCurve'
+import dynamic from 'next/dynamic'
 import { MTSessionHeatmap }     from '@/components/mt/MTSessionHeatmap'
-import { MTSymbolBreakdown }    from '@/components/mt/MTSymbolBreakdown'
 import { MTPerformanceMetrics } from '@/components/mt/MTPerformanceMetrics'
 import { MTMistakesPanel }      from '@/components/mt/MTMistakesPanel'
 import { MTTraderDNAPanel }     from '@/components/mt/MTTraderDNAPanel'
 import type { AnalyticsResult } from '@/lib/mt-analytics/compute'
 import type { DNAScores }       from '@/lib/trader-dna/auto-builder'
+
+const MTEquityCurve = dynamic(
+  () => import('@/components/mt/MTEquityCurve').then(mod => ({ default: mod.MTEquityCurve })),
+  { ssr: false }
+)
+const MTSymbolBreakdown = dynamic(
+  () => import('@/components/mt/MTSymbolBreakdown').then(mod => ({ default: mod.MTSymbolBreakdown })),
+  { ssr: false }
+)
 
 type Tab = 'overview' | 'sessions' | 'symbols' | 'dna' | 'mistakes'
 
@@ -78,7 +86,7 @@ export function MTAnalyticsDashboard({ connectionId, currency = 'USD' }: MTAnaly
       {/* Tab bar */}
       <div className="flex gap-1 bg-gray-100 p-1 rounded-lg w-full overflow-x-auto">
         {TABS.map((t) => (
-          <button
+<button type="button" 
             key={t.id}
             onClick={() => setTab(t.id)}
             className={`flex-1 min-w-max py-1.5 px-3 rounded-md text-sm font-medium transition-colors whitespace-nowrap ${
